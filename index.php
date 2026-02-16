@@ -1,3 +1,4 @@
+<?php require_once 'includes/api.php'; ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -8,12 +9,12 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div id="header"></div>
+    <?php include 'includes/header.php'; ?>
 
     <h1>Главная страница</h1>
 
-    <script src="/js/api.js"></script>
-    <script src="/js/components/header.js"></script>
+    <?php // include 'includes/footer.php'; ?>
+
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
