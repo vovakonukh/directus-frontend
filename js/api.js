@@ -1,4 +1,4 @@
-const API_URL = 'http://188.225.86.133:8055';
+const API_URL = 'http://176.53.162.57:8055';
 
 async function fetchItems(collection, params = {}) {
     const query = new URLSearchParams(params).toString();
