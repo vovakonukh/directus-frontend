@@ -1,16 +1,16 @@
 <?php
-
 $contacts = fetchItems('contacts', [
     'fields' => 'phone,address_spb,address_msk,telegram_message,whatsapp,vk_group,youtube,telegram_channel'
 ]);
-
 ?>
-
+<?php
+    $breadcrumbs = [
+        ['title' => 'Контакты']
+    ];
+    include 'includes/breadcrumbs.php';
+?>
 <section class="page__wrap">
-    <div class="breadcrumbs">
-        <a href="/">Главная /</a>
-        <a href="/contacts">Контакты</a>
-    </div>
+    
     <h1>Контакты</h1>
     <div class="contacts__columns">
         <div>
@@ -67,3 +67,5 @@ $contacts = fetchItems('contacts', [
         </div>
     </div>
 </section>
+
+<?php include 'includes/footer.php'; ?>
