@@ -219,5 +219,3 @@ $seo_text = is_array($homepage) && isset($homepage[0]) ? $homepage[0]['seo_text'
         <?= $seo_text ?>
     </div>
 </section>
-
-<?php include 'includes/footer.php'; ?>

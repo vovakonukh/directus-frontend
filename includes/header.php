@@ -1,5 +1,4 @@
 <?php
-$contacts = fetchItems('contacts');
 $header = fetchItems('header', ['fields' => '*,form.bitrix_code']);
 $menu = fetchItems('menu', [
     'fields' => '*,parent.label',

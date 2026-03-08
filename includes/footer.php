@@ -1,5 +1,4 @@
 <?php
-$contacts = fetchItems('contacts', ['fields' => '*']);
 $footer_form = fetchItems('forms', [
     'fields' => 'bitrix_code',
     'filter[id][_eq]' => 1
