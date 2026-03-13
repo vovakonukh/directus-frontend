@@ -206,24 +206,10 @@ include 'includes/breadcrumbs.php';
 
             <div class="finished_info_box_cta_wrap">
                 <span>Задать вопрос по проекту</span>
-                <?php if (!empty($contacts)): ?>
-                    <?php foreach ($contacts as $contact): ?>
-                        <?php if ($contact['type'] === 'phone'): ?>
-                            <a class="finished__info_box_phone" href="tel:<?= preg_replace('/[^+0-9]/', '', $contact['value']) ?>"><?= htmlspecialchars($contact['value']) ?></a>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <a class="finished__info_box_phone" href="tel:<?= preg_replace('/[^+0-9]/', '', $contacts['phone'] ?? '') ?>"><?= htmlspecialchars($contacts['phone'] ?? '') ?></a>
                 <div class="finished__info_box_msg_wrap">
-                    <?php if (!empty($contacts)): ?>
-                        <?php foreach ($contacts as $contact): ?>
-                            <?php if ($contact['type'] === 'telegram'): ?>
-                                <span>в </span><a href="<?= htmlspecialchars($contact['value']) ?>">Telegram</a>
-                            <?php endif; ?>
-                            <?php if ($contact['type'] === 'whatsapp'): ?>
-                                <span> или в </span><a href="<?= htmlspecialchars($contact['value']) ?>">WhatsApp</a>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <span>в </span><a href="<?= htmlspecialchars($contacts['telegram_message'] ?? '') ?>">Telegram</a>
+                    <span> или в </span><a href="<?= htmlspecialchars($contacts['whatsapp'] ?? '') ?>">WhatsApp</a>
                 </div>
                 <?php
                     $form = fetchItems('forms', [

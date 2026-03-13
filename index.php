@@ -25,11 +25,33 @@ switch (true) {
         $page = 'finished';
         $title = 'Построенные дома | Строительная компания Класс Хаус';
         break;
+    case preg_match('#^finished/([a-z0-9_-]+)$#', $uri, $m) === 1:
+        $page = 'finished_item';
+        $slug = $m[1];
+        $title = 'Построенный дом | Строительная компания Класс Хаус';
+        break;
     case preg_match('#^projects/([a-z0-9_-]+)$#', $uri, $m) === 1:
         $page = 'projects_item';
         $slug = $m[1];
         $title = 'Проект | Строительная компания Класс Хаус';
         break;
+    case $uri === 'video':
+        $page = 'video';
+        $title = 'Видео | Строительная компания Класс Хаус';
+        break;
+    case preg_match('#^video/([a-z0-9_-]+)$#', $uri, $m) === 1:
+        $page = 'video_item';
+        $slug = $m[1];
+        $title = 'Видео | Строительная компания Класс Хаус';
+        break;
+    case $uri === 'ipoteka':
+        $page = 'ipoteka';
+        $title = 'Ипотека на строительство дома | Строительная компания Класс Хаус';
+        break;
+    case $uri === 'services/stroitelstvo':
+            $page = 'services/stroitelstvo';
+            $title = 'Строительство домов | Строительная компания Класс Хаус';
+            break;
     default:
         $page = '404';
         $title = 'Страница не найдена';
@@ -71,6 +93,21 @@ $contacts = fetchItems('contacts', ['fields' => '*']);
             break;
         case 'finished':
             include 'pages/finished.php';
+            break;
+        case 'finished_item':
+            include 'pages/finished_item.php';
+            break;
+        case 'video':
+            include 'pages/video.php';
+            break;
+        case 'video_item':
+            include 'pages/video_item.php';
+            break;
+        case 'ipoteka':
+            include 'pages/ipoteka.php';
+            break;
+        case 'services/stroitelstvo':
+            include 'pages/services/stroitelstvo.php';
             break;
         default:
             echo '<section class="page__wrap"><h1>404 — Страница не найдена</h1></section>';
