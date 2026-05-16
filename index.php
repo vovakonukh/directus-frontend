@@ -51,7 +51,45 @@ switch (true) {
     case $uri === 'services/stroitelstvo':
             $page = 'services/stroitelstvo';
             $title = 'Строительство домов | Строительная компания Класс Хаус';
+            $bodyClass = 'page__stroitelstvo';
             break;
+    case $uri === 'services/inzhenerka':
+        $page = 'services/inzhenerka';
+        $title = 'Инженерные сети | Строительная компания Класс Хаус';
+        $bodyClass = 'page__stroitelstvo';
+        break;
+    case $uri === 'feedback':
+        $page = 'feedback';
+        $title = 'Отзывы | Строительная компания Класс Хаус';
+        $bodyClass = 'feedback-page';
+        break;
+    case $uri === 'blog':
+        $page = 'blog';
+        $title = 'Блог | Строительная компания Класс Хаус';
+        break;
+    case preg_match('#^blog/([a-z0-9_-]+)$#', $uri, $m) === 1:
+        $page = 'blog_item';
+        $slug = $m[1];
+        $title = 'Статья | Строительная компания Класс Хаус';
+        $bodyClass = 'page__blog_item';
+        break;
+    case $uri === 'services':
+        $page = 'services';
+        $title = 'Услуги | Строительная компания Класс Хаус';
+        break;
+    case $uri === 'services/fundament':
+        $page = 'services/fundament';
+        $title = 'Фундаменты | Строительная компания Класс Хаус';
+        $bodyClass = 'page__service';
+        break;
+    case $uri === 'postavshhikam':
+        $page = 'postavshhikam';
+        $title = 'Поставщикам | Строительная компания Класс Хаус';
+        break;
+    case $uri === 'policy':
+        $page = 'policy';
+        $title = 'Политика обработки персональных данных';
+        break;
     default:
         $page = '404';
         $title = 'Страница не найдена';
@@ -74,7 +112,7 @@ switch (true) {
 $contacts = fetchItems('contacts', ['fields' => '*']);
 ?>
 
-<body>
+<body class="<?= $bodyClass ?? '' ?>">
     <?php include 'includes/header.php'; ?>
 
     <?php
@@ -108,6 +146,30 @@ $contacts = fetchItems('contacts', ['fields' => '*']);
             break;
         case 'services/stroitelstvo':
             include 'pages/services/stroitelstvo.php';
+            break;
+        case 'services/inzhenerka':
+            include 'pages/services/inzhenerka.php';
+            break;
+        case 'feedback':
+            include 'pages/feedback.php';
+            break;
+        case 'blog':
+            include 'pages/blog.php';
+            break;
+        case 'blog_item':
+            include 'pages/blog_item.php';
+            break;
+        case 'services':
+            include 'pages/services.php';
+            break;
+        case 'services/fundament':
+            include 'pages/services/fundament.php';
+            break;
+        case 'postavshhikam':
+            include 'pages/postavshhikam.php';
+            break;
+        case 'policy':
+            include 'pages/policy.php';
             break;
         default:
             echo '<section class="page__wrap"><h1>404 — Страница не найдена</h1></section>';
