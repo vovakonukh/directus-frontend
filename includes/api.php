@@ -1,5 +1,5 @@
 <?php
-define('API_URL', 'http://176.53.162.57:8055');
+define('API_URL', 'https://api.class-house.ru');
 
 function fetchItems($collection, $params = []) {
     $query = http_build_query($params);
