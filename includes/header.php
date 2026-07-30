@@ -12,8 +12,19 @@ $children = array_filter($menu, fn($item) => $item['parent'] !== null);
     <div class="header_info">
 
         <div class="header_info__logo_wrap">
-            <a href="/"><img src="/assets/logo/logo-colored.svg" /></a>
-            <span>Санкт-Петербург <br/> Москва</span>
+            <a href="/"><img src="assets/images/logo/logo-colored.svg" /></a>
+            <!--<span>
+                Санкт-Петербург <br />
+                Москва
+            </span>-->
+            <div class="header_info__domrf">
+                <div><span><?= $header['domrf_deals'] ?? '' ?></span></div>
+                <div>
+                    сделок по эскроу<br>
+                    на строим.дом.рф
+                </div>
+                
+            </div>
         </div>
 
         <div class="header_info__rating_wrap">
@@ -39,7 +50,7 @@ $children = array_filter($menu, fn($item) => $item['parent'] !== null);
             <div class="header_info__messengers">
                 <a href="<?= $contacts['vk_message'] ?? '' ?>"><img src="/assets/icons/vk-colored-bg.webp" /></a>
                 <a href="<?= $contacts['telegram_message'] ?? '' ?>"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
-                <a href="<?= $contacts['whatsapp'] ?? '' ?>"><img src="/assets/icons/whatsapp-colored-bg.svg" /></a>
+                <a href="<?= $contacts['max'] ?? '' ?>"><img src="/assets/icons/max.svg" /></a>
             </div>
         </div>
 
@@ -110,7 +121,7 @@ $children = array_filter($menu, fn($item) => $item['parent'] !== null);
         <div class="header_info__messengers">
             <a href="<?= $contacts['vk_message'] ?? '' ?>"><img src="/assets/icons/vk-colored-bg.webp" /></a>
             <a href="<?= $contacts['telegram_message'] ?? '' ?>"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
-            <a href="<?= $contacts['whatsapp'] ?? '' ?>"><img src="/assets/icons/whatsapp-colored-bg.svg" /></a>
+            <a href="<?= $contacts['max'] ?? '' ?>"><img src="/assets/icons/max.svg" /></a>
         </div>
     </div>
 </section>

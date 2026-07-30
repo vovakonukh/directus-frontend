@@ -569,6 +569,34 @@
 			}
 		}
 
+		.header_info__domrf {
+		    display: flex;
+		    flex-direction: row;
+		    padding: 10px;
+		    font-size: 14px;
+			font-weight: 300;
+			align-items: center;
+			background-color: #02C39A17;
+			border: 2px solid #02C39A82;
+			border-radius: 8px;
+			@media (max-width: 767px) {
+				display: none;
+			}
+		}
+		
+		.header_info__domrf > div {
+		    display: flex;
+		    flex-direction: column;
+		}
+		
+		.header_info__domrf > div > span {
+		    font-size: 26px;
+			font-weight: 700;
+			margin-right: 10px;
+			line-height: 1.2;
+			margin-bottom: -2px;
+		}
+
 		.header_info__online_wrap {
 			display: flex;
 			flex-direction: row;
@@ -690,8 +718,7 @@
 				display: block;
 			}
 
-			.header_menu__dropdown {
-			}
+
 
 			.header_menu__dropdown:hover .header_menu__dropdown_content {
 				display: flex;
@@ -1131,10 +1158,6 @@
 		.jumbo_button > span {
 			font-size: 22px;
 			font-weight: 700;
-		}
-
-		.jumbo_button > span + span {
-			
 		}
 
 	/* ---------- Main advantages ---------- */
@@ -1989,10 +2012,6 @@
 			.project__plan_tab_btn_active {
 				border-bottom: 2px solid #06435B;
 				font-weight: 600;
-			}
-
-			.project__plan_tabs_content {
-
 			}
 
 			 .project__plan_tabs_pane:not(.project__plan_tabs_pane_show) {
@@ -3133,9 +3152,6 @@
 				display: block;
 				margin-right: 15px;
 				width: 100px;
-			}
-
-			.service__compare_list_item p {
 			}
 
 		/* --- service calculator --- */
