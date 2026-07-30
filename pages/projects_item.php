@@ -151,16 +151,16 @@ include 'includes/breadcrumbs.php';
             <div class="project__info_params_wrap">
                 <?php
                 $params = [
-                    ['icon' => 'square.svg', 'label' => 'Площадь', 'value' => $project['square'] . ' м²'],
-                    ['icon' => 'dimensions.svg', 'label' => 'Габариты', 'value' => formatDimension($project['length']) . '⨉' . formatDimension($project['width'])],
-                    ['icon' => 'bedrooms.svg', 'label' => 'Спален', 'value' => $project['bedrooms']],
-                    ['icon' => 'wc.svg', 'label' => 'Санузлов', 'value' => $project['wc']],
-                    ['icon' => 'bedrooms.svg', 'label' => 'Второй свет', 'value' => $project['second_light'] ? 'Да' : 'Нет'],
-                    ['icon' => 'bedrooms.svg', 'label' => 'Высота потолков', 'value' => ($project['ceiling_height'] ?? '—') . ' м'],
+                    ['icon' => 'square_icon.png', 'label' => 'Площадь', 'value' => $project['square'] . ' м²'],
+                    ['icon' => 'size_icon.png', 'label' => 'Габариты', 'value' => formatDimension($project['length']) . '⨉' . formatDimension($project['width'])],
+                    ['icon' => 'bedrooms_icon.png', 'label' => 'Спален', 'value' => $project['bedrooms']],
+                    ['icon' => 'wc_icon.png', 'label' => 'Санузлов', 'value' => $project['wc']],
+                    ['icon' => 'bedrooms_icon.png', 'label' => 'Второй свет', 'value' => $project['second_light'] ? 'Да' : 'Нет'],
+                    ['icon' => 'bedrooms_icon.png', 'label' => 'Высота потолков', 'value' => ($project['ceiling_height'] ?? '—') . ' м'],
                 ];
                 foreach ($params as $p): ?>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/<?= $p['icon'] ?>" />
+                    <img src="/assets/icons/project_icons/<?= $p['icon'] ?>" />
                     <div class="project__info_params_item_text">
                         <span><?= $p['label'] ?></span>
                         <span><?= $p['value'] ?></span>
