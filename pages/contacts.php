@@ -27,7 +27,7 @@
             </div>
             <div>
                 <div class="row margin-bottom-30">
-                    <a class="contacts__messenger_button telegram" href="<?= htmlspecialchars($contacts['telegram_message']) ?>">
+                    <a class="contacts__messenger_button telegram" href="<?= htmlspecialchars($shiftTelegram) ?>">
                         <img src="/assets/icons/telegram-white.svg" />
                         <span>Написать в Телеграм</span>
                     </a>

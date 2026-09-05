@@ -111,6 +111,7 @@ switch (true) {
 
 <?php
 $contacts = fetchItems('contacts', ['fields' => '*']);
+$shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://t.me/classhouse');
 ?>
 
 <body class="<?= $bodyClass ?? '' ?>">

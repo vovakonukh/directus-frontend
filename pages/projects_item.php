@@ -20,7 +20,9 @@ $prices = $pricesData; // singleton возвращает объект, не ма
 
 $priceSvai = ($prices['pile_price'] ?? 0) * ($project['piles_amount'] ?? 0);
 $pricePlita = ($prices['plita_price'] ?? 0) * $project['square'];
-$priceInzhenerka = ($prices['inzhenerka_kvm_price'] ?? 0) * $project['square'];
+$priceInzhenerka = !empty($project['price_inzhenerka'])
+    ? $project['price_inzhenerka']
+    : ($prices['inzhenerka_kvm_price'] ?? 0) * $project['square'];
 
 // Галереи из junction-таблицы
 $allFiles = fetchItems('projects_files', [
@@ -156,7 +158,7 @@ include 'includes/breadcrumbs.php';
                     ['icon' => 'bedrooms_icon.png', 'label' => 'Спален', 'value' => $project['bedrooms']],
                     ['icon' => 'wc_icon.png', 'label' => 'Санузлов', 'value' => $project['wc']],
                     ['icon' => 'bedrooms_icon.png', 'label' => 'Второй свет', 'value' => $project['second_light'] ? 'Да' : 'Нет'],
-                    ['icon' => 'bedrooms_icon.png', 'label' => 'Высота потолков', 'value' => ($project['ceiling_height'] ?? '—') . ' м'],
+                    ['icon' => 'bedrooms_icon.png', 'label' => 'Высота потолков', 'value' => (isset($project['ceiling_height']) ? formatDimension($project['ceiling_height']) : '—') . ' м'],
                 ];
                 foreach ($params as $p): ?>
                 <div class="project__info_params_item">
