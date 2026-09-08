@@ -157,8 +157,8 @@ include 'includes/breadcrumbs.php';
                     ['icon' => 'size_icon.png', 'label' => 'Габариты', 'value' => formatDimension($project['length']) . '⨉' . formatDimension($project['width'])],
                     ['icon' => 'bedrooms_icon.png', 'label' => 'Спален', 'value' => $project['bedrooms']],
                     ['icon' => 'wc_icon.png', 'label' => 'Санузлов', 'value' => $project['wc']],
-                    ['icon' => 'bedrooms_icon.png', 'label' => 'Второй свет', 'value' => $project['second_light'] ? 'Да' : 'Нет'],
-                    ['icon' => 'bedrooms_icon.png', 'label' => 'Высота потолков', 'value' => (isset($project['ceiling_height']) ? formatDimension($project['ceiling_height']) : '—') . ' м'],
+                    ['icon' => 'second_light.svg', 'label' => 'Второй свет', 'value' => $project['second_light'] ? 'Да' : 'Нет'],
+                    ['icon' => 'ceiling.svg', 'label' => 'Высота потолков', 'value' => (isset($project['ceiling_height']) ? formatDimension($project['ceiling_height']) : '—') . ' м'],
                 ];
                 foreach ($params as $p): ?>
                 <div class="project__info_params_item">

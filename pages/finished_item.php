@@ -192,21 +192,21 @@ include 'includes/breadcrumbs.php';
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
+                    <img src="/assets/icons/project_icons/second_light.svg" />
                     <div class="project__info_params_item_text">
                         <span>Второй свет</span>
                         <span><?= $item['second_light'] ? 'Есть' : 'Нет' ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
+                    <img src="/assets/icons/project_icons/clock.svg" />
                     <div class="project__info_params_item_text">
                         <span>Срок строительства</span>
                         <span><?= htmlspecialchars($item['construction_period']) ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
+                    <img src="/assets/icons/project_icons/geo.svg" />
                     <div class="project__info_params_item_text">
                         <span>Местоположение</span>
                         <span><?= htmlspecialchars($item['location']) ?></span>
