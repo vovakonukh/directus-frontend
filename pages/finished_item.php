@@ -76,37 +76,47 @@ include 'includes/breadcrumbs.php';
             <?php if (!empty($item['original_project'])):
                 $project = fetchItems('projects', [
                     'filter[id][_eq]' => $item['original_project'],
-                    'fields' => 'id,name,slug,main_plan,price_tk,gallery.directus_files_id',
+                    'fields' => 'id,name,slug,main_plan,price_tk,price_inzhenerka,price_otdelka',
                     'limit' => 1
                 ]);
                 if (!empty($project)):
                     $project = $project[0];
+                    $origProjectVisuals = fetchItems('projects_files', [
+                        'filter[projects_id][_eq]' => $project['id'],
+                        'filter[type][_eq]' => 'visual',
+                        'fields' => 'directus_files_id',
+                        'sort' => 'sort'
+                    ]);
             ?>
                 <h2>Построен по проекту <a class="finished__original_project_header_link" href="/projects/<?= $project['slug'] ?>"><?= htmlspecialchars($project['name']) ?></a></h2>
                 <div class="finished__original_project_card">
                     <div class="finished__original_project_info_wrap">
+                        <div class="finished__original_project_prices">
+                            <?php if (!empty($project['price_tk'])): ?>
+                            <div class="finished__original_project_price"><span>Теплый контур:</span> от <?= number_format($project['price_tk'], 0, '', ' ') ?> ₽</div>
+                            <?php endif; ?>
+                            <?php if (!empty($project['price_inzhenerka'])): ?>
+                            <div class="finished__original_project_price"><span>Инженерные сети:</span> от <?= number_format($project['price_inzhenerka'], 0, '', ' ') ?> ₽</div>
+                            <?php endif; ?>
+                            <?php if (!empty($project['price_otdelka'])): ?>
+                            <div class="finished__original_project_price"><span>Внутренняя отделка:</span> от <?= number_format($project['price_otdelka'], 0, '', ' ') ?> ₽</div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="finished__original_project_gallery">
                         <?php if (!empty($project['main_plan'])): ?>
                         <a href="<?= getAssetUrl($project['main_plan']) ?>" data-fancybox="original_project">
                             <img src="<?= getAssetUrl($project['main_plan']) ?>" alt="<?= htmlspecialchars($project['name']) ?>" />
                         </a>
                         <?php endif; ?>
-                        <?php if (!empty($project['price_tk'])): ?>
-                        <div class="finished__original_project_prices">
-                            <div class="finished__original_project_price">
-                                <span>от <?= number_format($project['price_tk'], 0, '', ' ') ?> ₽</span>
-                            </div>
-                        </div>
+                        <?php if (!empty($origProjectVisuals)): ?>
+                            <?php foreach (array_slice($origProjectVisuals, 0, 3) as $img): ?>
+                                <a href="<?= getAssetUrl($img['directus_files_id']) ?>" data-fancybox="original_project">
+                                    <img src="<?= getAssetUrl($img['directus_files_id']) ?>" alt="" />
+                                </a>
+                            <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
-                    <?php if (!empty($project['gallery'])): ?>
-                    <div class="finished__original_project_gallery">
-                        <?php foreach (array_slice($project['gallery'], 0, 4) as $img): ?>
-                            <a href="<?= getAssetUrl($img['directus_files_id']) ?>" data-fancybox="original_project">
-                                <img src="<?= getAssetUrl($img['directus_files_id']) ?>" alt="" />
-                            </a>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php endif; ?>
                 </div>
             <?php endif; endif; ?>
 
@@ -154,49 +164,49 @@ include 'includes/breadcrumbs.php';
 
             <div class="project__info_params_wrap">
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/square.svg" />
+                    <img src="/assets/icons/project_icons/square_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Площадь</span>
                         <span><?= $item['square'] ?> м²</span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/dimensions.svg" />
+                    <img src="/assets/icons/project_icons/size_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Габариты</span>
                         <span><?= formatDimension($item['length']) ?>⨉<?= formatDimension($item['width']) ?> м</span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/bedrooms.svg" />
+                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Спален</span>
                         <span><?= $item['bedrooms'] ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/wc.svg" />
+                    <img src="/assets/icons/project_icons/wc_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Санузлов</span>
                         <span><?= $item['wc'] ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/bedrooms.svg" />
+                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Второй свет</span>
                         <span><?= $item['second_light'] ? 'Есть' : 'Нет' ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/bedrooms.svg" />
+                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Срок строительства</span>
                         <span><?= htmlspecialchars($item['construction_period']) ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/bedrooms.svg" />
+                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
                     <div class="project__info_params_item_text">
                         <span>Местоположение</span>
                         <span><?= htmlspecialchars($item['location']) ?></span>
