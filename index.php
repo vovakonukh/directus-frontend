@@ -90,6 +90,10 @@ switch (true) {
         $page = 'policy';
         $title = 'Политика обработки персональных данных';
         break;
+    case $uri === 'thank-you':
+        $page = 'thank-you';
+        $title = 'Спасибо за заявку | Строительная компания Класс Хаус';
+        break;
     default:
         $page = '404';
         $title = 'Страница не найдена';
@@ -172,6 +176,9 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
             break;
         case 'policy':
             include 'pages/policy.php';
+            break;
+        case 'thank-you':
+            include 'pages/thank-you.php';
             break;
         default:
             echo '<section class="page__wrap"><h1>404 — Страница не найдена</h1></section>';
