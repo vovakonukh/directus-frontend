@@ -12,6 +12,11 @@ if (is_array($fundament) && isset($fundament[0])) {
 $tiles = array_map(function($t) {
     return $t['tiles_id'];
 }, $fundament['tiles'] ?? []);
+
+$heroForm = null;
+if (!empty($fundament['hero_form'])) {
+    $heroForm = fetchItems('forms/' . $fundament['hero_form']);
+}
 ?>
 
 <style>
@@ -27,6 +32,7 @@ $tiles = array_map(function($t) {
         <div class="jumbo_content_wrap">
             <p class="jumbo_header"><?= htmlspecialchars($fundament['hero_header'] ?? '') ?></p>
             <p class="jumbo_description"><?= nl2br(htmlspecialchars($fundament['hero_description'] ?? '')) ?></p>
+            <?= $heroForm['bitrix_code'] ?? '' ?>
             <a href="<?= htmlspecialchars($fundament['hero_link'] ?? '#') ?>" class="button double">
                 <span>Рассчитать стоимость</span>
                 <span>под свой проект</span>

@@ -38,7 +38,7 @@ if (!empty($inzhenerka['hero_form'])) {
             <p class="jumbo_header"><?= htmlspecialchars($inzhenerka['hero_header'] ?? '') ?></p>
             <p class="jumbo_description"><?= htmlspecialchars($inzhenerka['hero_description'] ?? '') ?></p>
             <?= $heroForm['bitrix_code'] ?? '' ?>
-            <a class="jumbo_button">
+            <a href="<?= htmlspecialchars($inzhenerka['hero_link'] ?? '#') ?>" class="jumbo_button">
                 <span><?= htmlspecialchars($inzhenerka['hero_button_text'] ?? '') ?></span>
             </a>
             

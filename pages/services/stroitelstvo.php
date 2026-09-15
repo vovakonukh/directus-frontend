@@ -18,6 +18,11 @@ $hero = [
 $tiles = array_map(function($t) {
     return $t['tiles_id'];
 }, $stroitelstvo['tiles'] ?? []);
+
+$heroForm = null;
+if (!empty($stroitelstvo['hero_form'])) {
+    $heroForm = fetchItems('forms/' . $stroitelstvo['hero_form']);
+}
 ?>
 
 <style>
@@ -32,6 +37,7 @@ $tiles = array_map(function($t) {
         <div class="jumbo_content_wrap">
             <p class="jumbo_header"><?= $hero['header'] ?></p>
             <p class="jumbo_description"><?= $hero['description'] ?></p>
+            <?= $heroForm['bitrix_code'] ?? '' ?>
             <a href="<?= $hero['link'] ?>" class="jumbo_button">
                 <span>Рассчитать стоимость</span>
             </a>
