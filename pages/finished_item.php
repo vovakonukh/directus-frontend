@@ -218,8 +218,8 @@ include 'includes/breadcrumbs.php';
                 <span>Задать вопрос по проекту</span>
                 <a class="finished__info_box_phone" href="tel:<?= preg_replace('/[^+0-9]/', '', $contacts['phone'] ?? '') ?>"><?= htmlspecialchars($contacts['phone'] ?? '') ?></a>
                 <div class="finished__info_box_msg_wrap">
-                    <span>в </span><a href="<?= htmlspecialchars($contacts['telegram_message'] ?? '') ?>">Telegram</a>
-                    <span> или в </span><a href="<?= htmlspecialchars($contacts['whatsapp'] ?? '') ?>">WhatsApp</a>
+                    <span>в </span><a href="<?= htmlspecialchars($shiftTelegram ?? '') ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;">Telegram</a>
+                    <span> или в </span><a href="<?= htmlspecialchars($contacts['whatsapp'] ?? '') ?>" onclick="ym(62605987, 'reachGoal', 'messenger-whatsapp'); return true;">WhatsApp</a>
                 </div>
                 <?php
                     $form = fetchItems('forms', [

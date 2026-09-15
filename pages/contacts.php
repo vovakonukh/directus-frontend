@@ -27,11 +27,11 @@
             </div>
             <div>
                 <div class="row margin-bottom-30">
-                    <a class="contacts__messenger_button telegram" href="<?= htmlspecialchars($shiftTelegram) ?>">
+                    <a class="contacts__messenger_button telegram" href="<?= htmlspecialchars($shiftTelegram) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;">
                         <img src="/assets/icons/telegram-white.svg" />
                         <span>Написать в Телеграм</span>
                     </a>
-                    <a class="contacts__messenger_button whatsapp" href="<?= htmlspecialchars($contacts['whatsapp']) ?>">
+                    <a class="contacts__messenger_button whatsapp" href="<?= htmlspecialchars($contacts['whatsapp']) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-whatsapp'); return true;">
                         <img src="/assets/icons/whatsapp-white.svg" />
                         <span>Написать в WhatsApp</span>
                     </a>

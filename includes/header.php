@@ -95,9 +95,9 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
                 <span class="header_info__online_label">Пишите, мы онлайн</span>
             </div>
             <div class="header_info__messengers">
-                <a href="<?= $contacts['vk_message'] ?? '' ?>"><img src="/assets/icons/vk-colored-bg.webp" /></a>
-                <a href="<?= $shiftTelegram ?>"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
-                <a href="<?= $contacts['max'] ?? '' ?>"><img src="/assets/icons/max.svg" /></a>
+                <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="/assets/icons/vk-colored-bg.webp" /></a>
+                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
+                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="/assets/icons/max.svg" /></a>
             </div>
         </div>
 
@@ -166,9 +166,9 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
         </div>
         <div class="button margin-bottom-20">Заказать звонок</div>
         <div class="header_info__messengers">
-            <a href="<?= $contacts['vk_message'] ?? '' ?>"><img src="/assets/icons/vk-colored-bg.webp" /></a>
-            <a href="<?= $shiftTelegram ?>"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
-            <a href="<?= $contacts['max'] ?? '' ?>"><img src="/assets/icons/max.svg" /></a>
+            <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="/assets/icons/vk-colored-bg.webp" /></a>
+            <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
+            <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="/assets/icons/max.svg" /></a>
         </div>
     </div>
 </section>
