@@ -30,7 +30,7 @@ $feedbacks = fetchItems('feedback', [
                             <?php foreach ($item['images'] as $img): ?>
                                 <?php $file = $img['directus_files_id']; ?>
                                 <a href="<?= getAssetUrl($file['id']) ?>" data-fancybox="feedback-<?= $item['id'] ?>">
-                                    <img src="<?= getAssetUrl($file['id']) ?>?width=300&height=300&fit=cover" alt="" />
+                                    <img class="feedback__image" src="<?= getAssetUrl($file['id']) ?>?width=300&height=300&fit=cover" alt="" />
                                 </a>
                             <?php endforeach; ?>
                         </div>

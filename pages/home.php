@@ -111,7 +111,7 @@ if (!empty($projects)):
 			<div class="ipoteka_conditions_wrap">
 				<div class="ipoteka_conditions_item">
 					<span>Ставка</span>
-					<span>от 3%</span>
+					<span>от 6%</span>
 				</div>
 
 				<div class="ipoteka_conditions_item">
