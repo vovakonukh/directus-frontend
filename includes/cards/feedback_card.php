@@ -11,7 +11,7 @@
         <div class="feedback__images_collection">
             <?php foreach ($item['images'] as $img): ?>
                 <a href="<?= getAssetUrl($img['directus_files_id']) ?>" data-fancybox="feedback_<?= $item['id'] ?>">
-                    <img class="feedback__image" src="<?= getAssetUrl($img['directus_files_id']) ?>" />
+                    <img class="feedback__image" src="<?= getAssetUrl($img['directus_files_id']) ?>?width=300&height=300&fit=cover" />
                 </a>
             <?php endforeach; ?>
         </div>

@@ -2994,20 +2994,22 @@
 		.feedback__images_collection {
 			display: flex;
 			flex-direction: row;
+			flex-wrap: wrap;
 			align-items: flex-start;
+			gap: 10px;
 			margin-top: 10px;
 			margin-bottom: 10px;
 		}
 
 		.feedback__images_collection > a {
 			display: block;
-			width: 15%;
-			margin-right: 10px;
 		}
 
 		.feedback__image {
 			display: block;
-			width:100%;
+			width: 90px;
+			height: 90px;
+			object-fit: cover;
 			border-radius: 5px;
 		}
 
