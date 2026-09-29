@@ -99,6 +99,21 @@ switch (true) {
         $title = 'Страница не найдена';
         break;
 }
+
+// SEO для страниц-списков из коллекции pages_seo (route = $uri)
+$seo = null;
+if (!isset($slug) && $page !== '404') {
+    $seo = fetchItems('pages_seo', [
+        'filter[route][_eq]' => $uri,
+        'fields' => 'h1,seo_title,seo_description,seo_image,seo_noindex,seo_text',
+        'limit' => 1
+    ])[0] ?? null;
+}
+if (!empty($seo['seo_title'])) $title = $seo['seo_title'];
+$description = $seo['seo_description'] ?? '';
+$ogImage = !empty($seo['seo_image']) ? getAssetUrl($seo['seo_image']) . '?width=1200&height=630&fit=cover' : '';
+$siteUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+$canonical = $siteUrl . '/' . $uri;
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -106,6 +121,23 @@ switch (true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title) ?></title>
+<?php if ($description): ?>
+    <meta name="description" content="<?= htmlspecialchars($description) ?>">
+<?php endif; ?>
+<?php if (!empty($seo['seo_noindex'])): ?>
+    <meta name="robots" content="noindex, follow">
+<?php endif; ?>
+    <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Класс Хаус">
+    <meta property="og:title" content="<?= htmlspecialchars($title) ?>">
+<?php if ($description): ?>
+    <meta property="og:description" content="<?= htmlspecialchars($description) ?>">
+<?php endif; ?>
+    <meta property="og:url" content="<?= htmlspecialchars($canonical) ?>">
+<?php if ($ogImage): ?>
+    <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>">
+<?php endif; ?>
     <link rel="icon" href="/assets/icons/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">

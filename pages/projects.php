@@ -12,7 +12,7 @@ include 'includes/breadcrumbs.php';
 ?>
 
 <section class="page__wrap">
-    <h1>Проекты каркасных домов</h1>
+    <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : 'Проекты каркасных домов') ?></h1>
 
     <div class="projects__filters_section" x-data="projectsFilter()">
         <div class="projects__filters">
@@ -122,6 +122,10 @@ include 'includes/breadcrumbs.php';
     </div>
 
     <div id="no-results" class="hidden">Ничего не найдено</div>
+
+    <?php if (!empty($seo['seo_text'])): ?>
+        <div class="blog__content"><?= $seo['seo_text'] ?></div>
+    <?php endif; ?>
 </section>
 
 <script>

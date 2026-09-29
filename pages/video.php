@@ -14,7 +14,7 @@ include __DIR__ . '/../includes/breadcrumbs.php';
 ?>
 
 <section>
-    <h1>Видео</h1>
+    <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : 'Видео') ?></h1>
     <div class="video_gallery">
         <?php if (!empty($videos)): ?>
             <?php foreach ($videos as $video): ?>
@@ -27,4 +27,7 @@ include __DIR__ . '/../includes/breadcrumbs.php';
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
+    <?php if (!empty($seo['seo_text'])): ?>
+        <div class="blog__content"><?= $seo['seo_text'] ?></div>
+    <?php endif; ?>
 </section>

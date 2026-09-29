@@ -7,7 +7,7 @@ $feedbacks = fetchItems('feedback', [
 ?>
 
 <section class="page__wrap">
-    <h1>Отзывы</h1>
+    <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : 'Отзывы') ?></h1>
     <div class="feedback__page_inner">
         <div class="feedback_gallery">
             <?php foreach ($feedbacks as $item): ?>
@@ -48,4 +48,7 @@ $feedbacks = fetchItems('feedback', [
 
         <div class="feedback_rating_sticky"></div>
     </div>
+    <?php if (!empty($seo['seo_text'])): ?>
+        <div class="blog__content"><?= $seo['seo_text'] ?></div>
+    <?php endif; ?>
 </section>
