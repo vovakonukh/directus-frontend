@@ -2725,6 +2725,109 @@
 			margin-top: 4px;
 		}
 
+	/* ---------- Links ---------- */
+
+		.links__group {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 40px;
+		}
+
+		.links__collection {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 20px;
+
+			@media (max-width: 991px) {
+				grid-template-columns: repeat(2, 1fr);
+			}
+
+			@media (max-width: 767px) {
+				grid-template-columns: 1fr;
+				gap: 12px;
+			}
+		}
+
+		.links__card {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			box-sizing: border-box;
+			padding: 18px 22px;
+			background-color: white;
+			border-radius: 20px;
+			box-shadow: var(--box-shadow-big);
+			text-decoration: none;
+			transition: box-shadow 0.3s;
+		}
+
+		.links__card:hover {
+			box-shadow: 0 2px 15px #00000020;
+		}
+
+		.links__card_icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			width: 52px;
+			height: 52px;
+			margin-right: 18px;
+			border-radius: 14px;
+			overflow: hidden;
+			background-color: var(--accent-color);
+		}
+
+		.links__card_icon img {
+			display: block;
+			width: 28px;
+			height: 28px;
+		}
+
+		.links__card_icon.telegram { background-color: #08c; }
+		.links__card_icon.whatsapp { background-color: #32b040; }
+		.links__card_icon.vk { background-color: #0077ff; }
+		.links__card_icon.youtube { background-color: #ff0000; }
+		.links__card_icon.instagram { background: linear-gradient(45deg, #f9ce34, #ee2a7b, #6228d7); }
+
+		.links__card_icon.max img {
+			width: 100%;
+			height: 100%;
+		}
+
+		.links__card_text {
+			display: flex;
+			flex-direction: column;
+			flex-grow: 1;
+			min-width: 0;
+		}
+
+		.links__card_text > span {
+			font-size: 20px;
+			font-weight: 700;
+		}
+
+		.links__card_text > span + span {
+			margin-top: 3px;
+			font-size: 17px;
+			font-weight: 300;
+			color: #888;
+		}
+
+		.links__card_arrow {
+			display: block;
+			flex-shrink: 0;
+			width: 20px;
+			margin-left: 15px;
+			opacity: 0.5;
+			transition: all 0.3s;
+		}
+
+		.links__card:hover .links__card_arrow {
+			opacity: 1;
+			transform: translateX(4px);
+		}
+
 	/* ---------- Blog ---------- */
 
 	    /* blog index */

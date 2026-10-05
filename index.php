@@ -17,6 +17,10 @@ switch (true) {
         $page = 'contacts';
         $title = 'Контакты | Строительная компания Класс Хаус';
         break;
+    case $uri === 'links':
+        $page = 'links';
+        $title = 'Ссылки | Строительная компания Класс Хаус';
+        break;
     case $uri === 'projects':
         $page = 'projects';
         $title = 'Каталог проектов | Строительная компания Класс Хаус';
@@ -160,6 +164,9 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
             break;
         case 'contacts':
             include 'pages/contacts.php';
+            break;
+        case 'links':
+            include 'pages/links.php';
             break;
         case 'projects':
             include 'pages/projects.php';
