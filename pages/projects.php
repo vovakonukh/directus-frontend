@@ -124,7 +124,7 @@ include 'includes/breadcrumbs.php';
     <div id="no-results" class="hidden">Ничего не найдено</div>
 
     <?php if (!empty($seo['seo_text'])): ?>
-        <div class="blog__content"><?= $seo['seo_text'] ?></div>
+        <div class="seo_text"><?= $seo['seo_text'] ?></div>
     <?php endif; ?>
 </section>
 
