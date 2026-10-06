@@ -27,7 +27,5 @@ include __DIR__ . '/../includes/breadcrumbs.php';
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-    <?php if (!empty($seo['seo_text'])): ?>
-        <div class="blog__content"><?= $seo['seo_text'] ?></div>
-    <?php endif; ?>
+    <?php include 'includes/seo_text.php'; ?>
 </section>

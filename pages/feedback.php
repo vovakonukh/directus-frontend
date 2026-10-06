@@ -48,7 +48,5 @@ $feedbacks = fetchItems('feedback', [
 
         <div class="feedback_rating_sticky"></div>
     </div>
-    <?php if (!empty($seo['seo_text'])): ?>
-        <div class="blog__content"><?= $seo['seo_text'] ?></div>
-    <?php endif; ?>
+    <?php include 'includes/seo_text.php'; ?>
 </section>
