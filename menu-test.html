@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Тест мобильного меню</title>
+
+	<style>
+		/* ---------- База (копия из main_styles.css, чтобы файл был самодостаточным) ---------- */
+
+		@font-face {
+			font-family: "Circe";
+			font-style: normal;
+			font-weight: 400;
+			src: local("Circe-Regular"), url("/assets/fonts/Circe-Regular.woff") format("woff");
+		}
+
+		@font-face {
+			font-family: "Circe";
+			font-style: normal;
+			font-weight: 700;
+			src: local("Circe-Bold"), url("/assets/fonts/Circe-Bold.woff") format("woff");
+		}
+
+		:root {
+			--accent-color: #02c39a;
+			--text-color: #06435b;
+
+			--bottom-bar-height: 62px;
+			--bottom-bar-gap: 12px;
+		}
+
+		html {
+			font-family: "Circe", sans-serif;
+			color: var(--text-color);
+			line-height: 1.2;
+		}
+
+		body {
+			margin: 0;
+			background-color: #f4f6f7;
+			/* место под нижнее меню, чтобы оно не перекрывало контент */
+			padding-bottom: calc(var(--bottom-bar-height) + var(--bottom-bar-gap) * 2 + env(safe-area-inset-bottom));
+		}
+
+		[x-cloak] {
+			display: none !important;
+		}
+
+		/* ---------- Тестовый контент страницы ---------- */
+
+		.test_header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 20px;
+			background-color: white;
+		}
+
+		.test_header img {
+			display: block;
+			height: 40px;
+		}
+
+		.test_header a {
+			color: var(--accent-color);
+			font-weight: 700;
+			text-decoration: none;
+		}
+
+		.test_content {
+			padding: 20px;
+		}
+
+		.test_block {
+			background-color: white;
+			border-radius: 15px;
+			padding: 20px;
+			margin-bottom: 15px;
+		}
+
+		.test_block h2 {
+			margin: 0 0 10px;
+			font-size: 22px;
+		}
+
+		.test_block p {
+			margin: 0;
+			line-height: 1.4;
+		}
+
+		/* ---------- BOTTOM MENU ---------- */
+
+		/* Затемнение фона */
+
+		.bottom_menu__backdrop {
+			position: fixed;
+			inset: 0;
+			background-color: #06435b80;
+			z-index: 1000;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.25s ease-out;
+		}
+
+		.bottom_menu__backdrop.active {
+			opacity: 1;
+			pointer-events: auto;
+		}
+
+		/* Всплывающее окно с полным меню */
+
+		.bottom_menu__popup {
+			box-sizing: border-box;
+			position: fixed;
+			left: var(--bottom-bar-gap);
+			right: var(--bottom-bar-gap);
+			bottom: calc(var(--bottom-bar-gap) * 2 + var(--bottom-bar-height) + env(safe-area-inset-bottom));
+			max-width: 480px;
+			max-height: calc(100dvh - var(--bottom-bar-gap) * 3 - var(--bottom-bar-height) - env(safe-area-inset-bottom));
+			margin: 0 auto;
+			padding: 8px 20px 18px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			/* на совсем низких экранах прокрутка остаётся, но без полосы */
+			scrollbar-width: none;
+			background-color: white;
+			border-radius: 28px;
+			box-shadow: 0 8px 30px #06435b33;
+			z-index: 1001;
+			/* закрытое состояние */
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(20px) scale(0.96);
+			transform-origin: bottom right;
+			transition: opacity 0.25s ease-out, transform 0.25s ease-out, visibility 0s 0.25s;
+		}
+
+		.bottom_menu__popup::-webkit-scrollbar {
+			display: none;
+		}
+
+		.bottom_menu__popup.active {
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+		}
+
+		.bottom_menu__nav {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			margin-bottom: 14px;
+		}
+
+		.bottom_menu__nav a {
+			color: var(--text-color);
+			font-size: 17px;
+			font-weight: 700;
+			text-decoration: none;
+		}
+
+		.bottom_menu__nav > a,
+		.bottom_menu__dropdown {
+			padding: 8px 5px;
+			border-bottom: 1px solid #e8edef;
+		}
+
+		.bottom_menu__dropdown {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.bottom_menu__dropdown_icon {
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			width: 60px;
+			height: 20px;
+			cursor: pointer;
+		}
+
+		.bottom_menu__dropdown_icon > img {
+			display: block;
+			width: 16px;
+			transition: transform 0.2s ease-out;
+		}
+
+		.bottom_menu__dropdown_icon.active > img {
+			transform: rotate(180deg);
+		}
+
+		.bottom_menu__dropdown_list {
+			display: flex;
+			flex-direction: column;
+			padding: 3px 0 3px 20px;
+			border-bottom: 1px solid #e8edef;
+		}
+
+		.bottom_menu__dropdown_list > a {
+			padding: 6px 5px;
+			font-size: 16px;
+			font-weight: 400;
+		}
+
+		/* Телефон и почта слева, мессенджеры справа */
+
+		.bottom_menu__contacts_row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			margin-bottom: 14px;
+		}
+
+		.bottom_menu__contacts {
+			display: flex;
+			flex-direction: column;
+			padding-left: 5px;
+		}
+
+		.bottom_menu__contacts > a {
+			font-size: 20px;
+			color: var(--accent-color);
+			font-weight: 700;
+			text-decoration: none;
+			margin-bottom: 4px;
+		}
+
+		.bottom_menu__contacts > a + a {
+			font-size: 15px;
+			color: var(--text-color);
+			font-weight: 400;
+			margin-bottom: 0;
+		}
+
+		.bottom_menu__messengers {
+			display: flex;
+			gap: 10px;
+		}
+
+		.bottom_menu__messengers img {
+			display: block;
+			width: 36px;
+			height: 36px;
+		}
+
+		.bottom_menu__button {
+			box-sizing: border-box;
+			width: 100%;
+			padding: 9px 20px;
+			background-color: var(--accent-color);
+			border-radius: 50px;
+			box-shadow: 1px 1px 6px 0 #02c39aaa;
+			color: white;
+			font-size: 17px;
+			text-align: center;
+			cursor: pointer;
+		}
+
+		/* Парящая нижняя полоса */
+
+		.bottom_menu__bar {
+			box-sizing: border-box;
+			position: fixed;
+			left: var(--bottom-bar-gap);
+			right: var(--bottom-bar-gap);
+			bottom: calc(var(--bottom-bar-gap) + env(safe-area-inset-bottom));
+			max-width: 480px;
+			height: var(--bottom-bar-height);
+			margin: 0 auto;
+			padding: 0 8px;
+			display: grid;
+			grid-template-columns: repeat(5, 1fr);
+			background-color: white;
+			border: 1px solid #06435b14;
+			border-radius: 100px;
+			box-shadow: 0 6px 24px #06435b33;
+			z-index: 1002;
+		}
+
+		.bottom_menu__item {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 4px;
+			padding: 0;
+			border: none;
+			background: none;
+			font-family: inherit;
+			font-size: 12px;
+			line-height: 1;
+			color: var(--text-color);
+			text-decoration: none;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		.bottom_menu__item svg {
+			display: block;
+			width: 24px;
+			height: 24px;
+			fill: none;
+			stroke: currentColor;
+			stroke-width: 1.7;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.bottom_menu__item.active {
+			color: var(--accent-color);
+			font-weight: 700;
+		}
+
+		/* Центральная кнопка «Заявка» */
+
+		.bottom_menu__item.accent {
+			gap: 2px;
+			color: var(--accent-color);
+			font-weight: 700;
+		}
+
+		.bottom_menu__item.accent .bottom_menu__item_icon {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 36px;
+			height: 36px;
+			border-radius: 50%;
+			background-color: var(--accent-color);
+			box-shadow: 1px 1px 6px 0 #02c39aaa;
+			color: white;
+		}
+
+		.bottom_menu__item.accent svg {
+			width: 20px;
+			height: 20px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- ---------- Тестовый контент ---------- -->
+
+	<header class="test_header">
+		<a href="/"><img src="/assets/logo/logo-colored.svg" alt="Класс Хаус"></a>
+		<a href="tel:+78124139940">+7 812 413 99 40</a>
+	</header>
+
+	<main class="test_content">
+		<div class="test_block">
+			<h2>Тест нижнего меню</h2>
+			<p>Нажмите «Раскрыть» в нижней полосе — откроется полное меню. Чтобы закрыть: нажмите «Закрыть» или на затемнённый фон.</p>
+		</div>
+		<div class="test_block"><h2>Блок 1</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 2</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 3</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 4</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 5</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 6</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 7</h2><p>Последний блок — он должен быть виден целиком над меню.</p></div>
+	</main>
+
+	<!-- ---------- Нижнее меню ---------- -->
+
+	<div class="bottom_menu" x-data="{ open: false }" x-effect="document.body.style.overflow = open ? 'hidden' : ''" @keydown.escape.window="open = false">
+
+		<div class="bottom_menu__backdrop" :class="{ 'active': open }" @click="open = false"></div>
+
+		<!-- Всплывающее окно с полным меню -->
+		<div class="bottom_menu__popup" :class="{ 'active': open }">
+
+			<nav class="bottom_menu__nav">
+				<a href="/">Главная</a>
+				<a href="/projects">Каталог проектов</a>
+				<a href="/finished">Построенные дома</a>
+				<a href="/ipoteka">Ипотека</a>
+				<div x-data="{ dropdownOpen: false }">
+					<div class="bottom_menu__dropdown">
+						<a href="/services">Услуги</a>
+						<span class="bottom_menu__dropdown_icon" :class="{ 'active': dropdownOpen }" @click="dropdownOpen = !dropdownOpen">
+							<img src="/assets/icons/dropdown_arrow.svg" alt="">
+						</span>
+					</div>
+					<div class="bottom_menu__dropdown_list" x-show="dropdownOpen" x-cloak>
+						<a href="/services/stroitelstvo">Строительство</a>
+						<a href="/services/inzhenerka">Инженерные сети</a>
+						<a href="/services/fundament">Фундаменты</a>
+					</div>
+				</div>
+				<a href="/video">Видео</a>
+				<a href="/feedback">Отзывы</a>
+				<a href="/blog">Блог</a>
+				<a href="/contacts">Контакты</a>
+				<a href="/postavshhikam">Поставщикам</a>
+			</nav>
+
+			<div class="bottom_menu__contacts_row">
+				<div class="bottom_menu__contacts">
+					<a href="tel:+78124139940">+7 812 413 99 40</a>
+					<a href="mailto:mail@class-house.ru">mail@class-house.ru</a>
+				</div>
+				<div class="bottom_menu__messengers">
+					<a href="https://vk.me/klass.house"><img src="/assets/icons/vk-colored-bg.webp" alt="VK"></a>
+					<a href="https://t.me/classhouse"><img src="/assets/icons/telegram-colored-bg.svg" alt="Telegram"></a>
+					<a href="https://max.ru/id7840095917_bot"><img src="/assets/icons/max.svg" alt="MAX"></a>
+				</div>
+			</div>
+
+			<!-- заглушка: при интеграции сюда подключится форма Bitrix24 -->
+			<div class="bottom_menu__button" @click="alert('Здесь откроется форма Bitrix24')">Заказать звонок</div>
+
+		</div>
+
+		<!-- Нижняя полоса -->
+		<nav class="bottom_menu__bar">
+			<a class="bottom_menu__item" href="/projects">
+				<svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5.5h4V20"/></svg>
+				<span>Проекты</span>
+			</a>
+			<a class="bottom_menu__item" href="/finished">
+				<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="m4 17 5-4.5 3.5 3 3-2.5L20 17"/></svg>
+				<span>Работы</span>
+			</a>
+			<!-- заглушка: при интеграции сюда подключится форма Bitrix24 -->
+			<button class="bottom_menu__item accent" type="button" @click="alert('Здесь откроется форма Bitrix24')">
+				<span class="bottom_menu__item_icon">
+					<svg viewBox="0 0 24 24"><path d="M5 4h3l1.6 4.2-2 1.4a11.5 11.5 0 0 0 6.8 6.8l1.4-2L20 16v3a1.8 1.8 0 0 1-2 1.8A15.8 15.8 0 0 1 3.2 6 1.8 1.8 0 0 1 5 4Z"/></svg>
+				</span>
+				<span>Заявка</span>
+			</button>
+			<a class="bottom_menu__item" href="/contacts">
+				<svg viewBox="0 0 24 24"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+				<span>Контакты</span>
+			</a>
+			<button class="bottom_menu__item" type="button" :class="{ 'active': open }" :aria-expanded="open" @click="open = !open">
+				<svg viewBox="0 0 24 24" x-show="!open"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+				<svg viewBox="0 0 24 24" x-show="open" x-cloak><path d="m6 6 12 12M18 6 6 18"/></svg>
+				<span x-text="open ? 'Закрыть' : 'Раскрыть'">Раскрыть</span>
+			</button>
+		</nav>
+
+	</div>
+
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>

@@ -145,8 +145,8 @@ $canonical = $siteUrl . '/' . $uri;
     <link rel="icon" href="/assets/icons/favicon.ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
-    <link rel="stylesheet" href="/css/main_styles.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/main_styles.css?v=<?= filemtime(__DIR__ . '/css/main_styles.css') ?>">
+    <link rel="stylesheet" href="/css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
 </head>
 
 <?php
