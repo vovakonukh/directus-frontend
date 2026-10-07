@@ -54,19 +54,54 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding: 15px 20px;
+			padding: 8px 20px;
 			background-color: white;
 		}
 
-		.test_header img {
+		.test_header > a > img {
 			display: block;
-			height: 40px;
+			height: 50px;
 		}
 
-		.test_header a {
-			color: var(--accent-color);
-			font-weight: 700;
-			text-decoration: none;
+		/* Блок «Пишите, мы онлайн» (копия стилей десктопной шапки) */
+
+		.header_info__socials_wrap {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+		}
+
+		.header_info__online_wrap {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			margin-bottom: 5px;
+		}
+
+		.header_info__online_circle {
+			width: 8px;
+			height: 8px;
+			border-radius: 50px;
+			background-color: #03c55a;
+			margin-right: 4px;
+		}
+
+		.header_info__online_label {
+			display: block;
+			font-size: 14px;
+		}
+
+		.header_info__messengers {
+			display: flex;
+			flex-direction: row;
+			gap: 5px;
+		}
+
+		.header_info__messengers img {
+			display: block;
+			width: 33px;
+			height: 33px;
+			border-radius: 50px;
 		}
 
 		.test_content {
@@ -88,6 +123,71 @@
 		.test_block p {
 			margin: 0;
 			line-height: 1.4;
+		}
+
+		/* ---------- Имитация панели с ценой со страницы проекта (.project__pane) ---------- */
+
+		.test_option {
+			display: flex;
+			justify-content: space-between;
+			padding: 14px 0;
+			border-bottom: 1px solid #e8edef;
+		}
+
+		.test_toggle {
+			margin-top: 15px;
+			padding: 10px 20px;
+			border: 1px solid var(--accent-color);
+			border-radius: 50px;
+			background: none;
+			font-family: inherit;
+			font-size: 16px;
+			color: var(--accent-color);
+			cursor: pointer;
+		}
+
+		.project__pane {
+			box-sizing: border-box;
+			position: sticky;
+			bottom: calc(var(--bottom-bar-gap) + env(safe-area-inset-bottom));
+			z-index: 10;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 15px;
+			margin-top: 20px;
+			padding: 20px 15px;
+			background-color: #E6F8F2;
+			border-radius: 20px;
+			box-shadow: 0px 2px 6px #00000020;
+			text-align: center;
+		}
+
+		.project__pane_sentinel {
+			height: 1px;
+		}
+
+		.project__pane_price_wrap {
+			font-size: 20px;
+			font-weight: 600;
+			padding-bottom: 5px;
+		}
+
+		.project__pane_ipoteka_wrap {
+			font-size: 16px;
+			color: #999;
+			font-weight: 300;
+		}
+
+		.project__pane_button {
+			padding: 10px 15px;
+			background-color: var(--accent-color);
+			border-radius: 50px;
+			box-shadow: 1px 1px 6px 0 #02c39aaa;
+			color: white;
+			font-size: 17px;
+			cursor: pointer;
 		}
 
 		/* ---------- BOTTOM MENU ---------- */
@@ -283,6 +383,13 @@
 			border-radius: 100px;
 			box-shadow: 0 6px 24px #06435b33;
 			z-index: 1002;
+			transition: transform 0.3s ease-out;
+		}
+
+		/* Полоса уезжает вниз, пока на экране другая прилипающая панель */
+
+		.bottom_menu__bar.hidden {
+			transform: translateY(calc(100% + var(--bottom-bar-gap) * 2 + env(safe-area-inset-bottom)));
 		}
 
 		.bottom_menu__item {
@@ -352,7 +459,17 @@
 
 	<header class="test_header">
 		<a href="/"><img src="/assets/logo/logo-colored.svg" alt="Класс Хаус"></a>
-		<a href="tel:+78124139940">+7 812 413 99 40</a>
+		<div class="header_info__socials_wrap">
+			<div class="header_info__online_wrap">
+				<div class="header_info__online_circle"></div>
+				<span class="header_info__online_label">Пишите, мы онлайн</span>
+			</div>
+			<div class="header_info__messengers">
+				<a href="https://vk.me/klass.house"><img src="/assets/icons/vk-colored-bg.webp" alt="VK"></a>
+				<a href="https://t.me/classhouse"><img src="/assets/icons/telegram-colored-bg.svg" alt="Telegram"></a>
+				<a href="https://max.ru/id7840095917_bot"><img src="/assets/icons/max.svg" alt="MAX"></a>
+			</div>
+		</div>
 	</header>
 
 	<main class="test_content">
@@ -364,14 +481,63 @@
 		<div class="test_block"><h2>Блок 2</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
 		<div class="test_block"><h2>Блок 3</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
 		<div class="test_block"><h2>Блок 4</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+
+		<!-- Имитация секции комплектации со страницы проекта -->
+		<section class="test_block"
+			x-data="{ total: 5450000, paneVisible: false, paneReleased: false }"
+			x-effect="$dispatch(paneVisible && !paneReleased ? 'bottom-menu-hide' : 'bottom-menu-show')">
+			<h2>Комплектация (имитация)</h2>
+			<p>Пока панель с ценой прилипла к низу экрана, нижнее меню прячется. Когда панель отлипнет и поедет вверх — меню вернётся.</p>
+			<div class="test_option"><span>Фундамент</span><span>650 000 ₽</span></div>
+			<div class="test_option"><span>Стены</span><span>1 800 000 ₽</span></div>
+			<div class="test_option"><span>Перекрытия</span><span>420 000 ₽</span></div>
+			<div class="test_option"><span>Кровля</span><span>780 000 ₽</span></div>
+			<div class="test_option"><span>Окна и двери</span><span>560 000 ₽</span></div>
+			<div class="test_option"><span>Фасад</span><span>490 000 ₽</span></div>
+			<div class="test_option"><span>Инженерные сети</span><span>750 000 ₽</span></div>
+			<div class="test_option"><span>Лестница</span><span>180 000 ₽</span></div>
+			<div class="test_option"><span>Терраса</span><span>240 000 ₽</span></div>
+			<div class="test_option"><span>Отделка</span><span>1 200 000 ₽</span></div>
+			<div class="test_option"><span>Электрика</span><span>310 000 ₽</span></div>
+			<div class="test_option"><span>Доставка</span><span>90 000 ₽</span></div>
+
+			<!-- на реальной странице панель появляется только когда выбрана комплектация (total > 0) -->
+			<button class="test_toggle" type="button" @click="total = total > 0 ? 0 : 5450000" x-text="total > 0 ? 'Сбросить комплектацию (скрыть панель)' : 'Выбрать комплектацию (показать панель)'"></button>
+
+			<div class="project__pane"
+				:style="total > 0 ? '' : 'display:none'"
+				x-intersect:enter="paneVisible = true"
+				x-intersect:leave="paneVisible = false">
+				<div>
+					<div class="project__pane_price_wrap">Общая стоимость: <span x-text="total.toLocaleString('ru-RU')"></span> ₽</div>
+					<div class="project__pane_ipoteka_wrap">Стоимость в ипотеку уточняйте у менеджера</div>
+				</div>
+				<div class="project__pane_button" @click="alert('Здесь откроется форма Bitrix24')">Оставить заявку</div>
+			</div>
+
+			<!-- Метка на «родном» месте панели: когда она поднялась на 90px над низом экрана,
+			     панель уже отлипла и уехала вверх — меню можно вернуть.
+			     Третье число в margin (-90px) — на сколько панель должна подняться. -->
+			<div class="project__pane_sentinel"
+				x-intersect:enter.margin.99999px.0px.-90px.0px="paneReleased = true"
+				x-intersect:leave.margin.99999px.0px.-90px.0px="paneReleased = false"></div>
+		</section>
+
 		<div class="test_block"><h2>Блок 5</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
 		<div class="test_block"><h2>Блок 6</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
-		<div class="test_block"><h2>Блок 7</h2><p>Последний блок — он должен быть виден целиком над меню.</p></div>
+		<div class="test_block"><h2>Блок 7</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 8</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 9</h2><p>Контент для проверки прокрутки страницы под меню.</p></div>
+		<div class="test_block"><h2>Блок 10</h2><p>Последний блок — он должен быть виден целиком над меню.</p></div>
 	</main>
 
 	<!-- ---------- Нижнее меню ---------- -->
 
-	<div class="bottom_menu" x-data="{ open: false }" x-effect="document.body.style.overflow = open ? 'hidden' : ''" @keydown.escape.window="open = false">
+	<div class="bottom_menu" x-data="{ open: false, hidden: false }"
+		x-effect="document.body.style.overflow = open ? 'hidden' : ''"
+		@keydown.escape.window="open = false"
+		@bottom-menu-hide.window="hidden = true"
+		@bottom-menu-show.window="hidden = false">
 
 		<div class="bottom_menu__backdrop" :class="{ 'active': open }" @click="open = false"></div>
 
@@ -421,7 +587,7 @@
 		</div>
 
 		<!-- Нижняя полоса -->
-		<nav class="bottom_menu__bar">
+		<nav class="bottom_menu__bar" :class="{ 'hidden': hidden }">
 			<a class="bottom_menu__item" href="/projects">
 				<svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 9.8V20h13V9.8"/><path d="M10 20v-5.5h4V20"/></svg>
 				<span>Проекты</span>
@@ -450,6 +616,8 @@
 
 	</div>
 
+	<!-- плагин Intersect подключается до ядра Alpine -->
+	<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
 	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
