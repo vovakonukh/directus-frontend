@@ -123,7 +123,7 @@ $canonical = $siteUrl . '/' . $uri;
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title><?= htmlspecialchars($title) ?></title>
 <?php if ($description): ?>
     <meta name="description" content="<?= htmlspecialchars($description) ?>">
@@ -225,7 +225,10 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
     ?>
 
     <?php include 'includes/footer.php'; ?>
+    <?php include 'includes/bottom_menu.php'; ?>
 
+    <!-- плагин Intersect подключается до ядра Alpine -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.umd.js"></script>

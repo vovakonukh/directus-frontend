@@ -131,10 +131,6 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
 
         <?= $header['form']['bitrix_code'] ?? '' ?>
         <div class="button header_info__button"><?= $header['button_text'] ?? '' ?></div>
-
-        <div class="header_info__burger_menu" x-data @click="$dispatch('toggle-mobile-menu')">
-            <img src="/assets/icons/burger_menu.svg" />
-        </div>
     </div>
 
     <!-- Десктопное меню -->
@@ -157,41 +153,4 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
             <?php endforeach; ?>
         </ul>
     </nav>
-
-    <!-- Мобильное меню (Alpine только для открытия/закрытия) -->
-    <div class="header_mobile_menu" x-data="{ open: false }" @toggle-mobile-menu.window="open = true" :class="{ 'active': open }">
-        <div class="header_mobile_menu__close_button" @click="open = false">
-            <img src="/assets/icons/close_cross.svg" />
-        </div>
-        <?php foreach ($topItems as $item): ?>
-            <?php $subs = array_filter($children, fn($child) => $child['parent']['label'] === $item['label']); ?>
-            <?php if (!empty($subs)): ?>
-                <div x-data="{ dropdownOpen: false }">
-                    <div class="header_mobile_menu__dropdown">
-                        <a href="<?= $item['url'] ?>"><?= $item['label'] ?></a>
-                        <span class="header_mobile_menu__dropdown_icon" @click="dropdownOpen = !dropdownOpen" style="cursor:pointer;">
-                            <img src="/assets/icons/dropdown_arrow.svg" :style="dropdownOpen ? 'transform:rotate(180deg)' : ''" />
-                        </span>
-                    </div>
-                    <div class="header_mobile_menu__dropdown_list" :style="dropdownOpen ? 'display:flex' : 'display:none'">
-                        <?php foreach ($subs as $sub): ?>
-                            <a href="<?= $sub['url'] ?>"><?= $sub['label'] ?></a>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php else: ?>
-                <a href="<?= $item['url'] ?>"><?= $item['label'] ?></a>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <div class="header_mobile_menu__contacts__wrap margin-bottom-30">
-            <a href="tel:<?= $contacts['phone'] ?? '' ?>"><?= $contacts['phone'] ?? '' ?></a>
-            <a href="mailto:<?= $contacts['email'] ?? '' ?>"><?= $contacts['email'] ?? '' ?></a>
-        </div>
-        <div class="button margin-bottom-20">Заказать звонок</div>
-        <div class="header_info__messengers">
-            <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="/assets/icons/vk-colored-bg.webp" /></a>
-            <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
-            <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="/assets/icons/max.svg" /></a>
-        </div>
-    </div>
 </section>

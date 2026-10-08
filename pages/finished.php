@@ -126,8 +126,6 @@ include 'includes/breadcrumbs.php';
     <?php include 'includes/seo_text.php'; ?>
 </section>
 
-<?php include 'includes/footer.php'; ?>
-
 <script>
     function projectsFilter() {
         return {

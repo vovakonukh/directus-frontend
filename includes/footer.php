@@ -42,17 +42,17 @@ $footer_form_code = $footer_form[0]['bitrix_code'] ?? '';
         <a class="footer__link" href="/video">Видео</a>
         <a class="footer__link" href="/ipoteka">Строительство в ипотеку</a>
         <span class="footer__header">Услуги</span>
-        <a class="footer__link" href="#">Проектирование</a>
-        <a class="footer__link" href="#">Фундаменты</a>
-        <a class="footer__link" href="/stroitelstvo">Строительство</a>
-        <a class="footer__link" href="/inzhenerka">Инженерные системы</a>
-        <a class="footer__link" href="#">Вентиляция</a>
+        <!--<a class="footer__link" href="#">Проектирование</a>-->
+        <a class="footer__link" href="/services/fundament">Фундаменты</a>
+        <a class="footer__link" href="/services/stroitelstvo">Строительство</a>
+        <a class="footer__link" href="/services/inzhenerka">Инженерные системы</a>
+        <!--<a class="footer__link" href="#">Вентиляция</a>-->
     </div>
     <div class="footer__column">
         <?= $footer_form_code ?>
         <div class="button footer__button" data-b24-form="click/6/t86koa">Заказать звонок</div>
         <span class="footer__header">Разное</span>
-        <a class="footer__link" href="#">Работа у нас</a>
+        <!--<a class="footer__link" href="#">Работа у нас</a>-->
         <a class="footer__link" href="/postavshhikam">Поставщикам</a>
         <a class="footer__link" href="/policy">Конфиденциальность</a>
         <a class="footer__link" href="/blog">Блог</a>

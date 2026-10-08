@@ -387,7 +387,10 @@ include 'includes/breadcrumbs.php';
     </div>
 
     <!-- Плавающая панель с ценой -->
-    <div class="project__pane" :style="total > 0 ? 'display:flex; position:sticky; bottom:30px;' : 'display:none'">
+    <div class="project__pane"
+        :style="total > 0 ? 'display:flex' : 'display:none'"
+        x-intersect:enter="$dispatch('sticky-pane-visible', true)"
+        x-intersect:leave="$dispatch('sticky-pane-visible', false)">
         <div>
             <div class="project__pane_price_wrap">
                 Общая стоимость: <span x-text="totalFormatted"></span> ₽
@@ -397,6 +400,12 @@ include 'includes/breadcrumbs.php';
         <?= $formCode ?>
         <div class="button big">Оставить заявку</div>
     </div>
+
+    <!-- Метка на «родном» месте панели: когда она поднялась на 90px над низом экрана,
+         панель уже отлипла — нижнее мобильное меню возвращается -->
+    <div class="project__pane_sentinel"
+        x-intersect:enter.margin.99999px.0px.-90px.0px="$dispatch('sticky-pane-released', true)"
+        x-intersect:leave.margin.99999px.0px.-90px.0px="$dispatch('sticky-pane-released', false)"></div>
 </section>
 
 <!-- Дополнения -->
