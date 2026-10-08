@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div>
-                <div class="row margin-bottom-30">
+                <div class="row contacts__messenger_buttons margin-bottom-30">
                     <a class="contacts__messenger_button telegram" href="<?= htmlspecialchars($shiftTelegram) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;">
                         <img src="/assets/icons/telegram-white.svg" />
                         <span>Написать в Телеграм</span>
@@ -37,7 +37,7 @@
                     </a>
                 </div>
                 <span class="contacts__subheader">Следите за нами в соцсетях</span>
-                <div class="row">
+                <div class="row contacts__socials">
                     <div class="column">
                         <a class="contacts__element" href="<?= htmlspecialchars($contacts['vk_group']) ?>">
                             <img src="/assets/icons/vk-colored.svg" />

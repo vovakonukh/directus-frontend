@@ -3013,6 +3013,26 @@
 			font-size: 20px;
 		}
 
+		/* на мобильных кнопки мессенджеров идут друг под другом */
+		.contacts__messenger_buttons {
+			@media (max-width: 767px) {
+				flex-direction: column;
+			}
+		}
+
+		/* соцсети переносятся на новую строку, если не помещаются */
+		.contacts__socials {
+			@media (max-width: 767px) {
+				flex-wrap: wrap;
+			}
+		}
+
+		.contacts__socials .contacts__element {
+			@media (max-width: 767px) {
+				margin-right: 25px;
+			}
+		}
+
 		.contacts__messenger_button {
 		  border-radius: 8px;
 		  align-items: center;
@@ -3021,6 +3041,11 @@
 		  text-decoration: none;
 		  display: flex;
 		  width: fit-content;
+
+		  @media (max-width: 767px) {
+		  	margin: 0 0 12px 0;
+		  	padding: 8px 18px 10px 14px;
+		  }
 		}
 
 		.contacts__messenger_button.telegram {
@@ -3036,12 +3061,23 @@
 			width:35px;
 			height: 30px;
 			margin-right: 15px;
+
+			@media (max-width: 767px) {
+				width: 26px;
+				height: 22px;
+				margin-right: 12px;
+			}
 		}
 
 		.contacts__messenger_button span {
 			color:white;
 			font-size: 20px;
 			margin-top: 4px;
+
+			@media (max-width: 767px) {
+				font-size: 17px;
+				margin-top: 3px;
+			}
 		}
 
 	/* ---------- Links ---------- */
