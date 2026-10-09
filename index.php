@@ -7,6 +7,24 @@ require_once 'includes/helpers.php';
 // Получаем путь из URL
 $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 
+// sitemap.xml генерируется на лету, без HTML-обёртки
+if ($uri === 'sitemap.xml') {
+    require 'includes/sitemap.php';
+    exit;
+}
+
+// robots.txt тоже динамический — чтобы домен в ссылке на sitemap подставлялся сам
+if ($uri === 'robots.txt') {
+    $siteUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+    header('Content-Type: text/plain; charset=utf-8');
+    echo "User-agent: *\n";
+    echo "Disallow: /thank-you\n";
+    echo "Disallow: /links\n";
+    echo "\n";
+    echo "Sitemap: $siteUrl/sitemap.xml\n";
+    exit;
+}
+
 // Роутинг
 switch (true) {
     case $uri === '':
