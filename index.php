@@ -25,6 +25,25 @@ if ($uri === 'robots.txt') {
     exit;
 }
 
+// Сброс кэша API — вызывается из Directus Flow при изменении записей.
+// Ключ лежит в includes/cache_key.php (не в git); без файла адрес не работает.
+if ($uri === 'cache-clear') {
+    $keyFile = __DIR__ . '/includes/cache_key.php';
+    $key = is_file($keyFile) ? require $keyFile : '';
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: no-store');
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !is_string($key) || $key === ''
+        || !hash_equals($key, $_SERVER['HTTP_X_CACHE_KEY'] ?? '')) {
+        http_response_code(403);
+        echo "forbidden\n";
+        exit;
+    }
+    $files = glob(API_CACHE_DIR . '/*.json') ?: [];
+    array_map('unlink', $files);
+    echo 'cleared: ' . count($files) . "\n";
+    exit;
+}
+
 // Роутинг
 switch (true) {
     case $uri === '':
