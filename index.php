@@ -136,6 +136,12 @@ $description = $seo['seo_description'] ?? '';
 $ogImage = !empty($seo['seo_image']) ? getAssetUrl($seo['seo_image']) . '?width=1200&height=630&fit=cover' : '';
 $siteUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 $canonical = $siteUrl . '/' . $uri;
+
+// Браузерный кэш HTML: 60 с без запроса к серверу, затем до 10 минут — сохранённая копия
+// с обновлением в фоне. На localhost выключен (как и кэш API).
+if (API_CACHE_TTL > 0 && !in_array($page, ['404', 'thank-you'], true)) {
+    header('Cache-Control: max-age=60, stale-while-revalidate=600');
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -161,8 +167,8 @@ $canonical = $siteUrl . '/' . $uri;
     <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>">
 <?php endif; ?>
     <link rel="icon" href="/assets/icons/favicon.ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/carousel/carousel.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css">
     <link rel="stylesheet" href="/css/main_styles.css?v=<?= filemtime(__DIR__ . '/css/main_styles.css') ?>">
     <link rel="stylesheet" href="/css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
 </head>
@@ -246,10 +252,10 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
     <?php include 'includes/bottom_menu.php'; ?>
 
     <!-- плагин Intersect подключается до ядра Alpine -->
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/carousel/carousel.umd.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.17.4/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/carousel/carousel.umd.js"></script>
     <script>Fancybox.bind('[data-fancybox]');</script>
 </body>
 </html>
