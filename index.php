@@ -228,6 +228,7 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
 
 <body class="<?= $bodyClass ?? '' ?>">
     <?php include 'includes/header.php'; ?>
+    <?php if ($page === 'home' || $page === 'contacts') include 'includes/schema_organization.php'; ?>
 
     <?php
     switch ($page) {
