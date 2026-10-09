@@ -124,7 +124,30 @@ $breadcrumbs = [
     ['title' => 'Каркасный дом ' . formatDimension($project['length']) . '×' . formatDimension($project['width']) . ' «' . $project['name'] . '»']
 ];
 include 'includes/breadcrumbs.php';
+
+// Микроразметка Product + Offer (JSON-LD): название, фото и цена — те же, что видны на странице.
+// Цена в разметке = цена «Тёплого контура» (она же «от …» в карточке параметров).
+$ldImages = array_map('getAssetUrl', array_slice($gallery ?: array_filter([$project['main_image']]), 0, 5));
+$ldProduct = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Product',
+    'name' => end($breadcrumbs)['title'],
+    'description' => 'Проект каркасного дома «' . $project['name'] . '»: площадь ' . $project['square'] . ' м², габариты '
+        . formatDimension($project['length']) . '×' . formatDimension($project['width']) . ' м, спален — ' . $project['bedrooms']
+        . ', санузлов — ' . $project['wc'] . '.',
+    'image' => $ldImages,
+    'brand' => ['@type' => 'Brand', 'name' => 'Класс Хаус'],
+    'offers' => [
+        '@type' => 'Offer',
+        'url' => $canonical,
+        'price' => (int) $project['price_tk'],
+        'priceCurrency' => 'RUB',
+        'availability' => 'https://schema.org/InStock',
+        'seller' => ['@type' => 'Organization', '@id' => $siteUrl . '/#organization', 'name' => 'Класс Хаус'],
+    ],
+];
 ?>
+<script type="application/ld+json"><?= json_encode($ldProduct, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
 
 
 
