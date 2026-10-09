@@ -2,7 +2,7 @@
 define('API_URL', 'https://api.class-house.ru');
 define('API_CACHE_DIR', __DIR__ . '/../cache/api');
 // на localhost кэш не используется, чтобы правки из Directus были видны сразу
-define('API_CACHE_TTL', strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') === 0 ? 0 : 300); // секунд
+define('API_CACHE_TTL', strpos($_SERVER['HTTP_HOST'] ?? '', 'localhost') === 0 ? 0 : 86400); // секунд (сутки); при правках в Directus кэш сбрасывает Flow через /cache-clear
 
 function fetchItems($collection, $params = []) {
     static $ch = null; // одно соединение на все запросы страницы (keep-alive)
