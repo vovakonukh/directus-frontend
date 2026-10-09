@@ -122,9 +122,38 @@ switch (true) {
         break;
 }
 
+// Страницы элементов: существование записи проверяем до вывода HTML,
+// иначе код ответа 404 уже не отправить
+$itemCollections = [
+    'projects_item' => 'projects',
+    'finished_item' => 'finished',
+    'blog_item'     => 'blog',
+    'video_item'    => 'video',
+];
+if (isset($itemCollections[$page])) {
+    $exists = fetchItems($itemCollections[$page], [
+        'filter[slug][_eq]' => $slug,
+        'filter[status][_eq]' => 'published',
+        'fields' => 'id',
+        'limit' => 1
+    ]);
+    if ($exists === null) {
+        // API недоступен и копии в кэше нет — временная ошибка, а не «страницы не существует»
+        http_response_code(503);
+        header('Retry-After: 3600');
+    } elseif (empty($exists)) {
+        $page = '404';
+        $title = 'Страница не найдена';
+    }
+}
+if ($page === '404') {
+    http_response_code(404);
+}
+
 // SEO для страниц-списков из коллекции pages_seo (route = $uri)
 $seo = null;
-if (!isset($slug) && $page !== '404') {
+// у главной route пустой — фильтр по пустой строке Directus отклоняет с ошибкой 400
+if (!isset($slug) && $page !== '404' && $uri !== '') {
     $seo = fetchItems('pages_seo', [
         'filter[route][_eq]' => $uri,
         'fields' => 'h1,seo_title,seo_description,seo_image,seo_noindex,seo_text',
@@ -139,7 +168,7 @@ $canonical = $siteUrl . '/' . $uri;
 
 // Браузерный кэш HTML: 60 с без запроса к серверу, затем до 10 минут — сохранённая копия
 // с обновлением в фоне. На localhost выключен (как и кэш API).
-if (API_CACHE_TTL > 0 && !in_array($page, ['404', 'thank-you'], true)) {
+if (API_CACHE_TTL > 0 && http_response_code() === 200 && $page !== 'thank-you') {
     header('Cache-Control: max-age=60, stale-while-revalidate=600');
 }
 ?>
