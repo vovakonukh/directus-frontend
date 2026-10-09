@@ -143,17 +143,19 @@ switch (true) {
 
 // Страницы элементов: существование записи проверяем до вывода HTML,
 // иначе код ответа 404 уже не отправить
+// Заодно запрашиваем поля, из которых ниже собираются title и description.
 $itemCollections = [
-    'projects_item' => 'projects',
-    'finished_item' => 'finished',
-    'blog_item'     => 'blog',
-    'video_item'    => 'video',
+    'projects_item' => ['projects', 'id,name,length,width,square,floors,bedrooms,wc,price_tk'],
+    'finished_item' => ['finished', 'id,length,width,square,floors,bedrooms,wc,location,construction_period'],
+    'blog_item'     => ['blog', 'id,pagetitle,seo_title,description,content'],
+    'video_item'    => ['video', 'id,title,description'],
 ];
+$itemDescription = '';
 if (isset($itemCollections[$page])) {
-    $exists = fetchItems($itemCollections[$page], [
+    $exists = fetchItems($itemCollections[$page][0], [
         'filter[slug][_eq]' => $slug,
         'filter[status][_eq]' => 'published',
-        'fields' => 'id',
+        'fields' => $itemCollections[$page][1],
         'limit' => 1
     ]);
     if ($exists === null) {
@@ -169,6 +171,38 @@ if ($page === '404') {
     http_response_code(404);
 }
 
+// Title и description страниц элементов — по шаблону из полей записи
+if (isset($itemCollections[$page]) && !empty($exists)) {
+    $it = $exists[0];
+    $floorsAdj = [1 => 'одноэтажн', 2 => 'двухэтажн'][(int) ($it['floors'] ?? 0)] ?? '';
+    $rooms = ($it['bedrooms'] ?? 0) . ' ' . pluralRu($it['bedrooms'] ?? 0, ['спальня', 'спальни', 'спален'])
+        . ', ' . ($it['wc'] ?? 0) . ' ' . pluralRu($it['wc'] ?? 0, ['санузел', 'санузла', 'санузлов']);
+    switch ($page) {
+        case 'projects_item':
+            $size = formatDimension($it['length']) . '×' . formatDimension($it['width']);
+            $title = "Каркасный дом $size «{$it['name']}», {$it['square']} м² — проект и цена | Класс Хаус";
+            $itemDescription = 'Проект ' . ($floorsAdj ? $floorsAdj . 'ого ' : '') . "каркасного дома «{$it['name']}» {$it['square']} м²: $rooms."
+                . ' Цена от ' . number_format($it['price_tk'], 0, '', ' ') . ' ₽. Планировка, комплектация, расчёт стоимости.';
+            break;
+        case 'finished_item':
+            $size = formatDimension($it['length']) . '×' . formatDimension($it['width']);
+            $place = trim($it['location'] ?? '') !== '' ? ', ' . trim($it['location']) : '';
+            $house = ($floorsAdj ? $floorsAdj . 'ый дом' : 'дом');
+            $title = 'Построенный ' . $house . " $size, {$it['square']} м²$place — фото | Класс Хаус";
+            $itemDescription = 'Фото построенного ' . ($floorsAdj ? $floorsAdj . 'ого ' : '') . "дома $size м, {$it['square']} м²$place: $rooms."
+                . (!empty($it['construction_period']) ? ' Срок строительства — ' . $it['construction_period'] . '.' : '');
+            break;
+        case 'blog_item':
+            $title = ($it['seo_title'] ?: $it['pagetitle']) . ' | Класс Хаус';
+            $itemDescription = seoExcerpt($it['description'] ?: $it['content']);
+            break;
+        case 'video_item':
+            $title = $it['title'] . ' — видео | Класс Хаус';
+            $itemDescription = seoExcerpt($it['description'] ?? '');
+            break;
+    }
+}
+
 // SEO для страниц-списков из коллекции pages_seo (route = $uri)
 $seo = null;
 // у главной route пустой — фильтр по пустой строке Directus отклоняет с ошибкой 400
@@ -180,7 +214,7 @@ if (!isset($slug) && $page !== '404' && $uri !== '') {
     ])[0] ?? null;
 }
 if (!empty($seo['seo_title'])) $title = $seo['seo_title'];
-$description = $seo['seo_description'] ?? '';
+$description = $seo['seo_description'] ?? $itemDescription;
 $ogImage = !empty($seo['seo_image']) ? getAssetUrl($seo['seo_image']) . '?width=1200&height=630&fit=cover' : '';
 $siteUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 $canonical = $siteUrl . '/' . $uri;
