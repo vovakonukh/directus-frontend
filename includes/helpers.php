@@ -39,3 +39,11 @@ function getShiftTelegramLink(string $fallback = 'https://t.me/alinaclasshouse')
     }
     return $links[$day] ?? $links[0] ?? $fallback;
 }
+
+// Аннуитетный платёж в месяц: annuityPayment(6400000, 6, 30) → 38371
+function annuityPayment(float $sum, float $ratePercent, int $years): int {
+    $i = $ratePercent / 1200;
+    $n = $years * 12;
+    if ($i == 0) return (int) round($sum / $n);
+    return (int) round($sum * $i / (1 - pow(1 + $i, -$n)));
+}

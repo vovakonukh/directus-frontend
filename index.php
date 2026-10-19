@@ -234,7 +234,9 @@ if (API_CACHE_TTL > 0 && http_response_code() === 200 && $page !== 'thank-you') 
 <?php if ($description): ?>
     <meta name="description" content="<?= htmlspecialchars($description) ?>">
 <?php endif; ?>
-<?php if (!empty($seo['seo_noindex'])): ?>
+<?php if (!empty($noindex)): ?>
+    <meta name="robots" content="noindex, nofollow">
+<?php elseif (!empty($seo['seo_noindex'])): ?>
     <meta name="robots" content="noindex, follow">
 <?php endif; ?>
     <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
