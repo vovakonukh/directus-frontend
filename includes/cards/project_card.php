@@ -1,4 +1,8 @@
-<div class="project_card">
+<div class="project_card"
+     data-floors="<?= $item['floors'] ?>"
+     data-area="<?= $item['square'] ?>"
+     data-bedrooms="<?= $item['bedrooms'] ?>"
+     data-bathrooms="<?= $item['wc'] ?>">
     <a href="/projects/<?= $item['slug'] ?>">
         <img src="<?= getAssetUrl($item['main_image']) ?>" />
     </a>
