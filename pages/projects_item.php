@@ -432,6 +432,14 @@ $ldProduct = [
         x-intersect:leave.margin.99999px.0px.-90px.0px="$dispatch('sticky-pane-released', false)"></div>
 </section>
 
+<!-- Ипотечный калькулятор: стоимость берётся из выбранной комплектации -->
+<section class="page__wrap">
+    <?php
+    $calc = ['price' => (int) $project['price_tk']];
+    include 'includes/mortgage_calc.php';
+    ?>
+</section>
+
 <!-- Дополнения -->
 <?php if (!empty($additions)): ?>
 <section class="page__wrap">
@@ -610,6 +618,7 @@ function complectationCalc() {
             let sum = 0;
             inputs.forEach(i => { if (i.checked) sum += Number(i.value); });
             this.total = sum;
+            this.$dispatch('project-total', sum); // ипотечный калькулятор подхватывает сумму
         }
     }
 }

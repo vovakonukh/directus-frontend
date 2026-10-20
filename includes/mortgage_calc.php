@@ -1,11 +1,12 @@
 <?php
 // Ипотечный калькулятор. Подключение:
-//   $calc = ['price' => 8000000, 'button_onclick' => "..."];  // все ключи необязательные
+//   $calc = ['price' => 8000000];  // все ключи необязательные
 //   include 'includes/mortgage_calc.php';
-// Кнопка CTA: либо button_onclick (открыть форму, уже выведенную на странице),
-// либо form_code — код click-формы Bitrix, выводится прямо перед кнопкой.
+// Стоимость можно менять событием: $dispatch('project-total', 5000000) —
+// так комплектация на странице проекта передаёт выбранную сумму.
+// Кнопка CTA открывает форму Bitrix из коллекции forms (form_id) —
+// код формы выводится прямо перед кнопкой, как на главной.
 $calc = array_merge([
-    'title' => 'Ипотечный калькулятор',
     'price' => 8000000,
     'pv_percent' => 20,
     'rate' => 6,
@@ -13,9 +14,14 @@ $calc = array_merge([
     'pv_buttons' => [20, 30, 40, 50],
     'years_buttons' => [15, 20, 30],
     'button_text' => 'Получить точный расчёт',
-    'button_onclick' => '',
-    'form_code' => '',
+    'form_id' => 4,
 ], $calc ?? []);
+
+$calcForm = fetchItems('forms', [
+    'filter[id][_eq]' => $calc['form_id'],
+    'fields' => 'bitrix_code'
+]);
+$calcFormCode = $calcForm[0]['bitrix_code'] ?? '';
 
 // Стартовый результат считает PHP — цифры видны до загрузки Alpine
 $calcPv = (int) round($calc['price'] * $calc['pv_percent'] / 100);
@@ -28,12 +34,8 @@ $calcFmt = fn($x) => number_format($x, 0, '', ' ');
     'pvPercent' => $calc['pv_percent'],
     'rate' => $calc['rate'],
     'years' => $calc['years'],
-]), ENT_QUOTES) ?>)">
+]), ENT_QUOTES) ?>)" @project-total.window="setPriceValue($event.detail)">
     <div class="mortgage_calc__fields">
-        <?php if (!empty($calc['title'])): ?>
-            <h3 class="mortgage_calc__title"><?= htmlspecialchars($calc['title']) ?></h3>
-        <?php endif; ?>
-
         <label class="mortgage_calc__field">
             <span class="mortgage_calc__label">Стоимость дома</span>
             <span class="mortgage_calc__input">
@@ -44,7 +46,7 @@ $calcFmt = fn($x) => number_format($x, 0, '', ' ');
 
         <div class="mortgage_calc__field">
             <label class="mortgage_calc__label" for="mortgage_calc_pv">
-                Первоначальный взнос <span class="mortgage_calc__hint" x-text="pvShare + '%'"><?= $calc['pv_percent'] ?>%</span>
+                <span>Первоначальный взнос — <span x-text="pvShare + '%'"><?= $calc['pv_percent'] ?>%</span></span>
             </label>
             <span class="mortgage_calc__input">
                 <input id="mortgage_calc_pv" type="text" inputmode="numeric" value="<?= $calcFmt($calcPv) ?>" :value="fmt(pv)" @input="setPv($event)">
@@ -83,11 +85,14 @@ $calcFmt = fn($x) => number_format($x, 0, '', ' ');
         <span class="mortgage_calc__result_label">Ежемесячный платёж</span>
         <span class="mortgage_calc__result_value" x-text="fmt(payment) + ' ₽/мес'"><?= $calcFmt($calcPayment) ?> ₽/мес</span>
         <div class="mortgage_calc__result_rows">
+            <div>Стоимость дома <span x-text="fmt(price) + ' ₽'"><?= $calcFmt($calc['price']) ?> ₽</span></div>
+            <div>Первоначальный взнос <span x-text="fmt(pv) + ' ₽ (' + pvShare + '%)'"><?= $calcFmt($calcPv) ?> ₽ (<?= $calc['pv_percent'] ?>%)</span></div>
             <div>Сумма кредита <span x-text="fmt(loan) + ' ₽'"><?= $calcFmt($calcLoan) ?> ₽</span></div>
-            <div>Переплата <span x-text="fmt(overpay) + ' ₽'"><?= $calcFmt(max(0, $calcPayment * $calc['years'] * 12 - $calcLoan)) ?> ₽</span></div>
+            <div>Срок кредита <span x-text="termYears + ' ' + yearsWord"><?= $calc['years'] ?> <?= pluralRu($calc['years'], ['год', 'года', 'лет']) ?></span></div>
+            <div>Ставка <span x-text="(rate || 0) + '%'"><?= $calc['rate'] ?>%</span></div>
         </div>
-        <?= $calc['form_code'] ?>
-        <button type="button" class="button mortgage_calc__button"<?= $calc['button_onclick'] ? ' onclick="' . htmlspecialchars($calc['button_onclick']) . '"' : '' ?>><?= htmlspecialchars($calc['button_text']) ?></button>
+        <?= $calcFormCode ?>
+        <button type="button" class="button mortgage_calc__button"><?= htmlspecialchars($calc['button_text']) ?></button>
         <p class="mortgage_calc__note">Расчёт предварительный. Точные условия зависят от банка и программы.</p>
     </div>
 </div>
@@ -110,6 +115,11 @@ function mortgageCalc(init) {
             if (this.pvPercent !== null) this.pv = Math.round(this.price * this.pvPercent / 100);
             e.target.value = this.fmt(this.price);
         },
+        // цена пришла снаружи (событие project-total)
+        setPriceValue(v) {
+            this.price = Math.round(Number(v)) || 0;
+            if (this.pvPercent !== null) this.pv = Math.round(this.price * this.pvPercent / 100);
+        },
         setPv(e) {
             this.pv = this.digits(e);
             this.pvPercent = null;
@@ -127,16 +137,22 @@ function mortgageCalc(init) {
             return Math.max(0, this.price - this.pv);
         },
         // та же формула, что annuityPayment() в includes/helpers.php
+        get termYears() {
+            return Math.min(Math.max(this.years || 0, 1), 30);
+        },
+        get yearsWord() {
+            const n = this.termYears % 100, n1 = n % 10;
+            if (n > 10 && n < 20) return 'лет';
+            if (n1 === 1) return 'год';
+            if (n1 > 1 && n1 < 5) return 'года';
+            return 'лет';
+        },
         get payment() {
-            const n = Math.min(Math.max(this.years || 0, 1), 30) * 12;
+            const n = this.termYears * 12;
             const i = (this.rate || 0) / 1200;
             if (!this.loan) return 0;
             if (i === 0) return Math.round(this.loan / n);
             return Math.round(this.loan * i / (1 - Math.pow(1 + i, -n)));
-        },
-        get overpay() {
-            const n = Math.min(Math.max(this.years || 0, 1), 30) * 12;
-            return Math.max(0, this.payment * n - this.loan);
         },
         fmt(x) {
             return Math.round(x).toLocaleString('ru-RU');

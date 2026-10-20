@@ -2,7 +2,7 @@
 // ===== Данные из Directus =====
 // Синглтон ipoteka
 $ipotekaData = fetchItems('ipoteka', [
-    'fields' => 'id,hero_header,hero_subtitle,hero_button_link,trust_items,matcap_first,matcap_second,example_price,docs_borrower,docs_land,cta_header,cta_text,cta_items,cta_form'
+    'fields' => 'id,hero_header,hero_subtitle,hero_button_link,hero_form.bitrix_code,trust_items,matcap_first,matcap_second,example_price,docs_borrower,docs_land,cta_header,cta_text,cta_items,cta_form'
 ]);
 $ipoteka = (is_array($ipotekaData) && isset($ipotekaData[0]) ? $ipotekaData[0] : $ipotekaData) ?: [];
 
@@ -108,21 +108,20 @@ $fmt = fn($x) => number_format($x, 0, '', ' ');
 $fmtRub = fn($x) => number_format($x, 2, ',', ' ');
 $fmtPercent = fn($x) => str_replace('.', ',', (string) (float) $x);
 
-// Расчёты примеров — из первой выделенной программы (льготная) и example_price
-$calc = null;
+// Пример расчёта ($example) — из первой выделенной программы (льготная) и example_price
+$example = null;
 foreach ($programs as $prog) {
     if (!empty($prog['is_highlighted'])) {
         if (!empty($prog['rate']) && !empty($prog['pv']) && !empty($prog['srok']) && !empty($ipoteka['example_price'])) {
             $price = (float) $ipoteka['example_price'];
             $pvPercent = (float) $prog['pv'];
             $downPayment = (int) round($price * $pvPercent / 100);
-            $calc = [
+            $example = [
                 'price' => $price,
                 'pv' => $pvPercent,
                 'rate' => (float) $prog['rate'],
                 'srok' => (int) $prog['srok'],
                 'down_payment' => $downPayment,
-                'payment' => annuityPayment($price - $downPayment, (float) $prog['rate'], (int) $prog['srok']),
             ];
         }
         break;
@@ -168,8 +167,14 @@ if (!empty($faqs)) {
             <?php endforeach; ?>
         </ul>
         <?php endif; ?>
-        <?php if (!empty($ipoteka['hero_button_link'])): ?>
-        <a href="<?= htmlspecialchars($ipoteka['hero_button_link']) ?>" class="button_image ipoteka__hero_button">
+        <?php
+        // Кнопка hero: форма важнее ссылки; если не заполнено ни то, ни другое — кнопки нет
+        $heroFormCode = $ipoteka['hero_form']['bitrix_code'] ?? '';
+        $heroLink = trim($ipoteka['hero_button_link'] ?? '');
+        ?>
+        <?php if ($heroFormCode || $heroLink): ?>
+        <?= $heroFormCode ?>
+        <a class="button_image ipoteka__hero_button"<?= $heroFormCode ? '' : ' href="' . htmlspecialchars($heroLink) . '"' ?>>
             <span>Рассчитать стоимость</span>
             <span>и получить консультацию</span>
             <img src="/assets/icons/calculator.webp" alt="">
@@ -270,8 +275,22 @@ if (!empty($faqs)) {
     </div>
 </section>
 
+<!-- 4.1. Ипотечный калькулятор: стартовые значения — из примера (льготная программа + example_price) -->
+<section>
+    <h2>Рассчитайте ежемесячный платёж</h2>
+    <?php
+    $calc = $example ? [
+        'price' => (int) $example['price'],
+        'pv_percent' => $example['pv'],
+        'rate' => $example['rate'],
+        'years' => $example['srok'],
+    ] : [];
+    include 'includes/mortgage_calc.php';
+    ?>
+</section>
+
 <!-- 5. Материнский капитал (пример выводится, если есть расчёт и хотя бы одна сумма маткапитала) -->
-<?php if ($calc && $matcaps): ?>
+<?php if ($example && $matcaps): ?>
 <section>
     <h2>Материнский капитал — в первоначальный взнос</h2>
     <div class="ipoteka__split">
@@ -284,8 +303,8 @@ if (!empty($faqs)) {
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
-            <div class="ipoteka__example_row">Дом <span><?= $fmt($calc['price']) ?> ₽</span></div>
-            <div class="ipoteka__example_row">Первоначальный взнос <?= $fmtPercent($calc['pv']) ?>% <span><?= $fmt($calc['down_payment']) ?> ₽</span></div>
+            <div class="ipoteka__example_row">Дом <span><?= $fmt($example['price']) ?> ₽</span></div>
+            <div class="ipoteka__example_row">Первоначальный взнос <?= $fmtPercent($example['pv']) ?>% <span><?= $fmt($example['down_payment']) ?> ₽</span></div>
             <div class="ipoteka__example_row">Маткапитал
                 <?php foreach ($matcaps as $i => $mc): ?>
                 <span x-show="kids === <?= $i ?>"<?= $i ? ' style="display: none"' : '' ?>>− <?= $fmtRub($mc['amount']) ?> ₽</span>
@@ -294,7 +313,7 @@ if (!empty($faqs)) {
             <div class="ipoteka__example_total">
                 Из своих средств
                 <?php foreach ($matcaps as $i => $mc): ?>
-                <span x-show="kids === <?= $i ?>"<?= $i ? ' style="display: none"' : '' ?>><?= $fmtRub(max(0, $calc['down_payment'] - $mc['amount'])) ?> ₽</span>
+                <span x-show="kids === <?= $i ?>"<?= $i ? ' style="display: none"' : '' ?>><?= $fmtRub(max(0, $example['down_payment'] - $mc['amount'])) ?> ₽</span>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -331,7 +350,7 @@ if (!empty($faqs)) {
     <?php endif; ?>
 </section>
 
-<!-- 7. Кому одобряют + пример платежа -->
+<!-- 7. Кому одобряют -->
 <section>
     <h2>Кому одобрят ипотеку</h2>
     <div class="ipoteka__tiles">
@@ -342,13 +361,6 @@ if (!empty($faqs)) {
         </div>
         <?php endforeach; ?>
     </div>
-    <?php if ($calc): ?>
-    <div class="ipoteka__payment">
-        <span class="ipoteka__payment_label">Ежемесячный платёж</span>
-        <span class="ipoteka__payment_value">от <?= $fmt($calc['payment']) ?> ₽/мес</span>
-        <span class="ipoteka__payment_caption">дом за <?= $fmtPercent(round($calc['price'] / 1000000, 1)) ?> млн ₽, взнос <?= $fmtPercent($calc['pv']) ?>%, ставка <?= $fmtPercent($calc['rate']) ?>%, срок <?= $calc['srok'] ?> лет</span>
-    </div>
-    <?php endif; ?>
 </section>
 
 <!-- 8. Требования к участку -->
