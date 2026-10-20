@@ -20,7 +20,6 @@ if ($uri === 'robots.txt') {
     echo "User-agent: *\n";
     echo "Disallow: /thank-you\n";
     echo "Disallow: /links\n";
-    echo "Disallow: /calc-test\n";
     echo "\n";
     echo "Sitemap: $siteUrl/sitemap.xml\n";
     exit;
@@ -131,10 +130,6 @@ switch (true) {
     case $uri === 'policy':
         $page = 'policy';
         $title = 'Политика обработки персональных данных';
-        break;
-    case $uri === 'calc-test':
-        $page = 'calc_test';
-        $title = 'Тест калькулятора';
         break;
     case $uri === 'thank-you':
         $page = 'thank-you';
@@ -332,9 +327,6 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
             break;
         case 'thank-you':
             include 'pages/thank-you.php';
-            break;
-        case 'calc_test':
-            include 'pages/calc_test.php';
             break;
         default:
             echo '<section class="page__wrap"><h1>404 — Страница не найдена</h1></section>';
