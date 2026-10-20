@@ -115,8 +115,9 @@ if (!empty($project['similar_projects'])) {
 $faq = fetchItems('faq', [
     'filter[status][_eq]' => 'published',
     'filter[show_on][_contains]' => 'project_item',
-    'fields' => '*'
-]);
+    'sort' => 'sort',
+    'fields' => 'question,answer'
+]) ?? [];
 
 // Хлебные крошки
 $breadcrumbs = [
@@ -549,6 +550,18 @@ $ldProduct = [
         <?php include 'includes/cards/faq_card.php'; ?>
     <?php endforeach; ?>
 </section>
+<?php
+$ldFaq = [
+    '@context' => 'https://schema.org',
+    '@type' => 'FAQPage',
+    'mainEntity' => array_map(fn($f) => [
+        '@type' => 'Question',
+        'name' => $f['question'],
+        'acceptedAnswer' => ['@type' => 'Answer', 'text' => trim(strip_tags($f['answer'] ?? ''))],
+    ], $faq),
+];
+?>
+<script type="application/ld+json"><?= json_encode($ldFaq, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
 <?php endif; ?>
 
 <script>

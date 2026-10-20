@@ -449,11 +449,8 @@ if (!empty($faqs)) {
 <?php if (!empty($faqs)): ?>
 <section>
     <h2>Частые вопросы по ипотеке</h2>
-    <?php foreach ($faqs as $faq): ?>
-    <details class="faq__card">
-        <summary class="faq__header"><?= htmlspecialchars($faq['question']) ?></summary>
-        <p><?= nl2br(htmlspecialchars($faq['answer'] ?? '')) ?></p>
-    </details>
+    <?php foreach ($faqs as $f): ?>
+        <?php include 'includes/cards/faq_card.php'; ?>
     <?php endforeach; ?>
 </section>
 <script type="application/ld+json"><?= json_encode($ldFaq, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
