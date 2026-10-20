@@ -46,7 +46,18 @@ $feedbacks = fetchItems('feedback', [
             <?php endforeach; ?>
         </div>
 
-        <div class="feedback_rating_sticky"></div>
+        <aside class="feedback__rating_card">
+            <p class="feedback__rating_value"><?= htmlspecialchars($contacts['yandex_rating'] ?? '') ?></p>
+            <div class="service__feedback_stars">
+                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
+                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
+                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
+                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
+                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
+            </div>
+            <span class="feedback__rating_caption">Наш рейтинг на Яндекс Картах</span>
+            <a class="feedback__rating_link" href="https://yandex.ru/maps/-/CXFt5QND" target="_blank" rel="noopener nofollow">Проверить</a>
+        </aside>
     </div>
     <?php include 'includes/seo_text.php'; ?>
 </section>

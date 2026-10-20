@@ -3487,6 +3487,75 @@
 		  margin-left: 5px;
 		}
 
+		/* Страница отзывов: лента + sticky-карточка рейтинга */
+		.feedback__page_inner {
+			display: flex;
+			flex-direction: row;
+			align-items: flex-start;
+			gap: 30px;
+			margin-bottom: 40px;
+
+			@media (max-width: 767px) {
+				flex-direction: column;
+				align-items: stretch;
+				gap: 20px;
+			}
+		}
+
+		.feedback__page_inner .feedback_gallery {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.feedback__rating_card {
+			position: sticky;
+			top: 30px;
+			width: 300px;
+			flex-shrink: 0;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+			padding: 30px 20px;
+			background-color: white;
+			border-radius: 20px;
+			border: 1px solid #f1f1f1;
+			box-shadow: var(--box-shadow-big);
+
+			@media (max-width: 767px) {
+				/* на мобильном карточка над лентой и не липнет */
+				position: static;
+				width: 100%;
+				order: -1;
+				padding: 20px;
+			}
+		}
+
+		.feedback__rating_value {
+			font-weight: 800;
+			font-size: 64px;
+			line-height: 1;
+			margin: 0 0 10px 0;
+			padding: 0;
+		}
+
+		.feedback__rating_caption {
+			font-weight: 300;
+			color: #aaa;
+			margin: 12px 0 6px 0;
+		}
+
+		.feedback__rating_link {
+			font-size: 14px;
+			color: #b0b0b0;
+			text-decoration: underline;
+		}
+
+		.feedback__rating_link:hover {
+			text-decoration: none;
+		}
+
 	/* ---------- Services ---------- */
 	
 	    .service_gallery {
