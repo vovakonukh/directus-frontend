@@ -1,5 +1,9 @@
-<div class="project_card finished">
-    <a href="/pages/finished_item.php?slug=<?= $item['slug'] ?>">
+<div class="project_card finished"
+     data-floors="<?= $item['floors'] ?>"
+     data-area="<?= $item['square'] ?>"
+     data-bedrooms="<?= $item['bedrooms'] ?>"
+     data-bathrooms="<?= $item['wc'] ?>">
+    <a href="/finished/<?= $item['slug'] ?>">
         <img src="<?= getAssetUrl($item['main_image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
     </a>
     <div class="project_card__description_wrap">
@@ -39,6 +43,6 @@
             <li>Дата сдачи: <?= htmlspecialchars($item['finish_date']) ?></li>
             <li>Срок строительства: <?= htmlspecialchars($item['construction_period']) ?></li>
         </ul>
-        <a href="/pages/finished_item.php?slug=<?= $item['slug'] ?>">Посмотреть дом</a>
+        <a href="/finished/<?= $item['slug'] ?>">Посмотреть дом</a>
     </div>
 </div>
