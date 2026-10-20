@@ -9,11 +9,15 @@ if (!empty($slides)):
 ?>
 <style>
 <?php foreach ($slides as $i => $slide): ?>
+<?php // мобильный фон необязателен — без него показываем десктопный ?>
+<?php $bgMobile = $slide['background_mobile'] ?: $slide['background_desktop']; ?>
 #jumbo_slide_<?= $i ?> {
     background: linear-gradient(rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>), rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>)), url(<?= getAssetUrl($slide['background_desktop']) ?>) center/cover no-repeat;
+    <?php if ($bgMobile !== $slide['background_desktop']): ?>
     @media (max-width: 767px) {
-        background: linear-gradient(rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>), rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>)), url(<?= getAssetUrl($slide['background_mobile']) ?>) center/cover no-repeat;
+        background: linear-gradient(rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>), rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>)), url(<?= getAssetUrl($bgMobile) ?>) center/cover no-repeat;
     }
+    <?php endif; ?>
 }
 <?php endforeach; ?>
 </style>
@@ -25,13 +29,27 @@ if (!empty($slides)):
                 <?php foreach ($slides as $i => $slide): ?>
                 <div class="f-carousel__slide jumbo_slide" id="jumbo_slide_<?= $i ?>">
                     <div class="jumbo_content_wrap">
-                        <p class="jumbo_header"><?= $slide['header'] ?></p>
+                        <?php // h1 на странице один — у первого слайда, у остальных такой же стиль на <p> ?>
+                        <?php $headerTag = $i === 0 ? 'h1' : 'p'; ?>
+                        <<?= $headerTag ?> class="jumbo_header"><?= $slide['header'] ?></<?= $headerTag ?>>
                         <p class="jumbo_description"><?= $slide['description'] ?></p>
+                        <?php if (!empty($slide['trust_items'])): ?>
+                        <ul class="ipoteka__trust">
+                            <?php foreach ($slide['trust_items'] as $trust): ?>
+                            <?php if (!empty($trust['text'])): ?>
+                            <li><?= htmlspecialchars($trust['text']) ?></li>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php endif; ?>
                         <?php if (!empty($slide['form'])): ?>
                             <?= $slide['form']['bitrix_code'] ?>
-                            <a class="jumbo_button"><?= $slide['button_text'] ?></a>
+                            <a class="button big"><?= $slide['button_text'] ?></a>
                         <?php else: ?>
-                            <a class="jumbo_button" href="<?= $slide['button_link'] ?>"><?= $slide['button_text'] ?></a>
+                            <a class="button big" href="<?= $slide['button_link'] ?>"><?= $slide['button_text'] ?></a>
+                        <?php endif; ?>
+                        <?php if (!empty($slide['note'])): ?>
+                        <p class="ipoteka__hero_note"><?= htmlspecialchars($slide['note']) ?></p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -47,7 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
     new Carousel(el, {
         infinite: true,
         Dots: false,
-        Autoplay: { timeout: 6000, pauseOnHover: true }
+        Autoplay: { timeout: 6000, pauseOnHover: true },
+        // на мобильном вместо стрелок — точки под слайдом
+        breakpoints: {
+            '(max-width: 767px)': { Dots: true, Navigation: false }
+        }
     });
 });
 </script>

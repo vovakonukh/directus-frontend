@@ -94,6 +94,12 @@ switch (true) {
             $title = 'Строительство домов | Строительная компания Класс Хаус';
             $bodyClass = 'page__stroitelstvo';
             break;
+    case $uri === 'services/stroitelstvo-test':
+        $page = 'services/stroitelstvo_test';
+        $title = 'Строительство каркасных домов под ключ | Класс Хаус';
+        $bodyClass = 'page__stroitelstvo_test';
+        $noindex = true; // тестовая версия, не индексируем
+        break;
     case $uri === 'services/inzhenerka':
         $page = 'services/inzhenerka';
         $title = 'Инженерные сети | Строительная компания Класс Хаус';
@@ -300,6 +306,9 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
             break;
         case 'services/stroitelstvo':
             include 'pages/services/stroitelstvo.php';
+            break;
+        case 'services/stroitelstvo_test':
+            include 'pages/services/stroitelstvo_test.php';
             break;
         case 'services/inzhenerka':
             include 'pages/services/inzhenerka.php';
