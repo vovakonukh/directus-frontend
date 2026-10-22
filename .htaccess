@@ -1,4 +1,8 @@
 RewriteEngine On
+
+# 301 редиректы
+RewriteRule ^finished/karkasnyy-dom-9h14-m/?$ /finished/elizavetinskoe [R=301,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^ index.php [L]

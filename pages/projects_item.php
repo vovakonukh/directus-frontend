@@ -473,8 +473,8 @@ $ldProduct = [
         <div class="tile_item">
             <img src="/assets/icons/warranty-contract.svg" />
             <div class="tile_item_text_wrap">
-                <span>Гарантия 5 лет</span>
-                <p>Мы даем пятилетнюю гарантию на свои дома. В случае проблем — приезжаем и переделываем за свой счет</p>
+                <span>Гарантия до 10 лет</span>
+                <p>Мы даем хорошую гарантию на свои дома. В случае проблем — приезжаем и переделываем за свой счет</p>
             </div>
         </div>
         <div class="tile_item">
@@ -504,7 +504,7 @@ $ldProduct = [
 <!-- Видео -->
 <?php if ($video): ?>
 <section id="video">
-    <h2>Видео-обзор</h2>
+    <h2>Видеообзор</h2>
     <div class="finished__video_wrap">
         <?= $video['video_code'] ?>
     </div>

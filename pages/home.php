@@ -180,7 +180,7 @@ if (!empty($projects)):
         <div class="tile_item">
             <img src="assets/icons/shield_warranty.svg" />
             <div class="tile_item_text_wrap">
-                <span>Гарантия 5 лет</span>
+                <span>Гарантия до 10 лет</span>
                 <p>Гарантия прописана в договоре и мы никогда не отказываем в гарантийных работах</p>
             </div>
         </div>
