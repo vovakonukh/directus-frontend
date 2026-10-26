@@ -423,39 +423,7 @@ if (!empty($faqs)) {
 </section>
 
 <!-- 11. Договор -->
-<section class="service__contract_section">
-    <div class="service__contract_inner">
-        <div class="service__contract_col_1">
-            <h2>Вы защищены по договору на 100%</h2>
-            <p class="service__description">
-                Перед началом работ мы заключаем договор, поэтому вы защищены законодательством РФ
-            </p>
-        </div>
-        <div class="service__contract_col_2">
-            <h3>В договоре зафиксированы:</h3>
-            <div class="service__contract_list">
-                <img src="/assets/icons/service__money.webp" alt="" loading="lazy" />
-                <p>Стоимость работ</p>
-            </div>
-            <div class="service__contract_list">
-                <img src="/assets/icons/service__payments.webp" alt="" loading="lazy" />
-                <p>Порядок оплаты</p>
-            </div>
-            <div class="service__contract_list">
-                <img src="/assets/icons/service__period.webp" alt="" loading="lazy" />
-                <p>Сроки работы</p>
-            </div>
-            <div class="service__contract_list">
-                <img src="/assets/icons/service__warranty.webp" alt="" loading="lazy" />
-                <p>Гарантия 5 лет</p>
-            </div>
-            <div class="service__contract_list">
-                <img src="/assets/icons/service__smeta.webp" alt="" loading="lazy" />
-                <p>Спецификация используемых материалов</p>
-            </div>
-        </div>
-    </div>
-</section>
+<?php include 'includes/blocks/contract.php'; ?>
 
 <!-- 12. FAQ -->
 <?php if (!empty($faqs)): ?>

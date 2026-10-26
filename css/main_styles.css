@@ -6706,7 +6706,7 @@
 		color: #06435b99;
 	}
 
-/* ===== Строительство v2 (pages/services/stroitelstvo_test.php) ===== */
+/* ===== Строительство v2 (pages/services/stroitelstvo.php) ===== */
 /* остальное переиспользует классы ipoteka__* */
 	.stroy__hero {
 		background-image: linear-gradient(90deg, #06435be6 0%, #06435bb3 60%, #06435b66 100%), var(--hero-image, none);
@@ -6807,29 +6807,604 @@
 	.stroy__draw_results img {
 		aspect-ratio: 1;
 	}
-	.stroy__tour {
+	.stroy__group_title {
+		margin: 30px 0 8px 0;
+		font-size: 18px;
+	}
+	.stroy__card_title + .stroy__group_title {
+		margin-top: 16px;
+	}
+	.stroy__tile_icon {
+		display: block;
+		width: 48px;
+		height: 48px;
+		margin-bottom: 14px;
+		object-fit: contain;
+	}
+	/* индивидуальный проект: иконка слева от текста */
+	.stroy__tile_row {
+		display: flex;
 		align-items: center;
+		gap: 16px;
+	}
+	.stroy__tile_row .stroy__tile_icon {
+		flex-shrink: 0;
+		margin-bottom: 0;
+	}
+	.stroy__tile_row h3 {
+		margin-bottom: 6px;
+	}
+	/* поэтапная оплата: сегменты-кнопки, ширина = процент (flex-grow) */
+	.stroy__pay {
+		padding: 20px;
+		border-radius: 20px;
+		background-color: white;
+		border: 1px solid #00000015;
+		@media (min-width: 768px) {
+			padding: 30px;
+		}
+	}
+	.stroy__pay_track {
+		display: flex;
+		gap: 4px;
+		@media (min-width: 768px) {
+			gap: 6px;
+		}
+	}
+	.stroy__pay_seg {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		flex-basis: 0;
+		min-width: 0;
+		padding: 0;
+		border: none;
+		background: none;
+		color: var(--text-color);
+		font-family: inherit;
+		text-align: left;
+		cursor: pointer;
+	}
+	.stroy__pay_seg_step {
+		display: none;
+		font-size: 14px;
+		font-weight: 300;
+		color: #06435bb3;
+		white-space: nowrap;
+		@media (min-width: 768px) {
+			display: block;
+		}
+	}
+	.stroy__pay_seg_bar {
+		display: block;
+		height: 14px;
+		border-radius: 14px;
+		background-color: #02c39a40;
+		transition: background-color 0.2s ease-out;
+		@media (min-width: 768px) {
+			height: 18px;
+		}
+	}
+	.stroy__pay_seg:hover .stroy__pay_seg_bar {
+		background-color: #02c39a80;
+	}
+	.stroy__pay_seg.active .stroy__pay_seg_bar {
+		background-color: var(--accent-color);
+	}
+	.stroy__pay_seg_percent {
+		font-size: 14px;
+		font-weight: 700;
+		white-space: nowrap;
+		transition: color 0.2s ease-out;
+		@media (min-width: 768px) {
+			font-size: 24px;
+			font-weight: 800;
+		}
+	}
+	.stroy__pay_seg.active .stroy__pay_seg_percent,
+	.stroy__pay_seg.active .stroy__pay_seg_step {
+		color: var(--accent-color);
+	}
+	.stroy__pay_detail {
+		margin-top: 20px;
+		padding: 20px;
+		border-radius: 16px;
+		background-color: #13e0b521;
+		@media (min-width: 768px) {
+			margin-top: 24px;
+			padding: 24px 30px;
+		}
+	}
+	.stroy__pay_detail_head {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 5px 20px;
+		margin-bottom: 10px;
+	}
+	.stroy__pay_detail_head span {
+		font-size: 15px;
+		font-weight: 300;
+		color: #06435bb3;
+	}
+	.stroy__pay_detail_head b {
+		font-size: 28px;
+		font-weight: 800;
+		color: var(--accent-color);
+	}
+	.stroy__pay_detail_head small {
+		font-size: 15px;
+		font-weight: 300;
+		color: var(--text-color);
+	}
+	.stroy__pay_detail p {
+		padding: 0;
+		font-size: 17px;
+		font-weight: 300;
+		line-height: 1.45;
+		@media (min-width: 768px) {
+			font-size: 19px;
+		}
+	}
+	/* способы оплаты: ипотека / свои средства */
+	.stroy__pay_options {
+		display: grid;
+		gap: 10px;
+		@media (min-width: 768px) {
+			grid-template-columns: 1fr 1fr;
+			gap: 20px;
+		}
+	}
+	.stroy__pay_option {
+		display: flex;
+		flex-direction: column;
+		padding: 24px 20px;
+		border-radius: 20px;
+		background-color: white;
+		border: 1px solid #00000015;
+		@media (min-width: 768px) {
+			padding: 30px;
+		}
+	}
+	.stroy__pay_option--mortgage {
+		background-image: linear-gradient(135deg, #02c39a 0%, #029f7e 100%);
+		border-color: transparent;
+		color: white;
+	}
+	.stroy__pay_option_label {
+		align-self: flex-start;
+		padding: 4px 12px 2px 12px;
+		border-radius: 50px;
+		background-color: #06435b10;
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.stroy__pay_option--mortgage .stroy__pay_option_label {
+		background-color: #ffffff33;
+	}
+	.stroy__pay_option h3 {
+		margin: 14px 0 18px 0;
+		font-size: 24px;
+		@media (min-width: 768px) {
+			font-size: 28px;
+		}
+	}
+	.stroy__pay_option_figures {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px 30px;
+		margin-bottom: 20px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid #06435b15;
+		font-size: 14px;
+		font-weight: 300;
+	}
+	.stroy__pay_option--mortgage .stroy__pay_option_figures {
+		border-color: #ffffff40;
+	}
+	.stroy__pay_option_figures b {
+		display: block;
+		font-size: 28px;
+		font-weight: 800;
+		color: var(--accent-color);
+	}
+	.stroy__pay_option--mortgage .stroy__pay_option_figures b {
+		color: white;
+	}
+	.stroy__pay_option .ipoteka__final_cta_list {
+		margin: 0 0 24px 0;
+		font-weight: 300;
+		line-height: 1.4;
+	}
+	.stroy__pay_option--mortgage .ipoteka__final_cta_list li::before {
+		color: white;
+	}
+	.stroy__pay_option_button {
+		margin-top: auto;
+		font-family: inherit;
+	}
+	.stroy__pay_option--mortgage .stroy__pay_option_button {
+		background-color: white;
+		color: var(--text-color);
+		box-shadow: none;
+		font-weight: 700;
+	}
+	/* проверка участка: плитки с номером, акцентная полоса слева */
+	.stroy__land_tiles .ipoteka__tile {
+		border-left: 4px solid var(--accent-color);
+	}
+	.stroy__land_tiles h3 {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.stroy__land_num {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		background-color: #13e0b521;
+		color: var(--accent-color);
+		font-size: 16px;
+		font-weight: 800;
+	}
+	/* экскурсия */
+	.stroy__tour_list {
+		margin: 0 0 30px 0;
+		font-weight: 300;
+		line-height: 1.4;
 	}
 	.stroy__tour .button {
 		font-family: inherit;
 	}
-	.stroy__tiles--2 {
+	/* фото: первое крупное сверху, остальные в ряд под ним */
+	.stroy__tour_photos {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+	}
+	.stroy__tour_photos a:first-child {
+		grid-column: 1 / -1;
+	}
+	.stroy__tour_photos--2 a:last-child {
+		grid-column: 1 / -1;
+	}
+	.stroy__tour_photos img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 3 / 2;
+		object-fit: cover;
+		border-radius: 16px;
+	}
+	.stroy__tour_photos a:first-child img {
+		aspect-ratio: 16 / 9;
+	}
+
+/* ===== Строительство v2: оформление страницы (обёртка .stroy) ===== */
+/* полосы: серая (фон сайта) / белая / тёмная; соседние полосы одного цвета не удваивают отступ */
+	.stroy__band {
+		padding-top: 56px;
+		padding-bottom: 56px;
+		@media (min-width: 992px) {
+			padding-top: 96px;
+			padding-bottom: 96px;
+		}
+	}
+	.stroy__band--white {
+		background-color: white;
+	}
+	.stroy__band--dark {
+		background-color: var(--text-color);
+		color: white;
+	}
+	.stroy__band:not(.stroy__band--white, .stroy__band--dark) + .stroy__band:not(.stroy__band--white, .stroy__band--dark, .stroy__band--tight),
+	.stroy__band--white + .stroy__band--white {
+		padding-top: 0;
+	}
+	/* секция заканчивается кнопкой — снизу отступ меньше, иначе с отступом следующей полосы получается дыра */
+	.stroy__band:has(> .stroy__more:last-child),
+	.stroy__band--tight {
+		padding-bottom: 40px;
+		@media (min-width: 992px) {
+			padding-bottom: 64px;
+		}
+	}
+	/* --tight продолжает предыдущую секцию (сравнение расчёта, SEO-текст) */
+	.stroy__band:has(+ .stroy__band--tight) {
+		padding-bottom: 0;
+	}
+	.stroy__band--tight {
+		padding-top: 36px;
+		@media (min-width: 992px) {
+			padding-top: 48px;
+		}
+	}
+	.stroy__band--tight > .ipoteka__inline_cta {
+		margin-top: 0;
+	}
+
+/* h1: обычный регистр, крупнее и плотнее */
+	.stroy h1 {
+		text-transform: none;
+		font-size: 34px;
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		max-width: 16em;
 		@media (min-width: 768px) {
+			font-size: 48px;
+		}
+		@media (min-width: 1280px) {
+			font-size: 60px;
+		}
+	}
+	/* отступ сверху задаёт полоса, у заголовков секций его убираем (заголовки карточек не трогаем) */
+	.stroy__band > h2,
+	.stroy__tour h2 {
+		margin-top: 0;
+	}
+	.stroy .ipoteka__lead {
+		max-width: 44em;
+		padding-bottom: 32px;
+		color: #06435bcc;
+		@media (min-width: 768px) {
+			padding-bottom: 44px;
+		}
+	}
+	.stroy .stroy__more {
+		margin-top: 40px;
+	}
+	.stroy :is(a, button, summary):focus-visible {
+		outline: 3px solid var(--accent-color);
+		outline-offset: 3px;
+	}
+
+/* hero */
+	.stroy .ipoteka__hero_subtitle {
+		max-width: 36em;
+	}
+	.stroy .ipoteka__trust {
+		@media (min-width: 768px) {
+			gap: 0;
+		}
+	}
+	.stroy .ipoteka__trust li {
+		@media (min-width: 768px) {
+			padding-right: 24px;
+			margin-right: 24px;
+			border-right: 1px solid #ffffff40;
+		}
+	}
+	.stroy .ipoteka__trust li:last-child {
+		border-right: none;
+	}
+	.stroy .stroy__hero_price {
+		display: inline-flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 4px 12px;
+		margin-bottom: 28px;
+	}
+
+/* комплектация: вкладки и спецификация с выносками */
+	.stroy .stroy__tabs button.active {
+		background-color: var(--text-color);
+		color: white;
+		box-shadow: none;
+	}
+	.stroy .stroy__tabs {
+		margin-bottom: 16px;
+	}
+	.stroy__band--white .ipoteka__example_card {
+		background-color: #f7f7f7;
+		border-color: transparent;
+		box-shadow: none;
+		@media (min-width: 992px) {
+			padding: 40px 48px;
+		}
+	}
+	.stroy .ipoteka__example_row {
+		align-items: baseline;
+		gap: 10px;
+		border-bottom: none;
+		padding: 9px 0;
+	}
+	.stroy .stroy__row_leader {
+		flex: 1 1 24px;
+		min-width: 24px;
+		border-bottom: 2px dotted #06435b40;
+	}
+	.stroy .stroy__row_label {
+		font-weight: 300;
+		white-space: normal;
+		flex-shrink: 1;
+	}
+	.stroy .stroy__group_title {
+		margin-top: 32px;
+		color: var(--accent-color);
+	}
+
+/* этапы */
+	.stroy .ipoteka__steps {
+		margin-bottom: 0;
+	}
+
+/* оплата: тёмная полоса, крупные проценты */
+	.stroy__band--dark h2 {
+		color: white;
+	}
+	.stroy__band--dark .ipoteka__lead {
+		color: #ffffffcc;
+	}
+	.stroy__band--dark .stroy__pay {
+		padding: 0;
+		border: none;
+		background: none;
+	}
+	.stroy__band--dark .stroy__pay_seg {
+		color: white;
+	}
+	.stroy__band--dark .stroy__pay_seg_step {
+		color: #ffffff99;
+	}
+	.stroy__band--dark .stroy__pay_seg_bar {
+		background-color: #ffffff26;
+		@media (min-width: 768px) {
+			height: 24px;
+		}
+	}
+	.stroy__band--dark .stroy__pay_seg:hover .stroy__pay_seg_bar {
+		background-color: #ffffff4d;
+	}
+	.stroy__band--dark .stroy__pay_seg.active .stroy__pay_seg_bar {
+		background-color: var(--accent-color);
+	}
+	.stroy__band--dark .stroy__pay_seg_percent {
+		@media (min-width: 768px) {
+			font-size: 32px;
+		}
+		@media (min-width: 1280px) {
+			font-size: 44px;
+			letter-spacing: -0.02em;
+		}
+	}
+	.stroy__band--dark .stroy__pay_detail {
+		margin-top: 28px;
+		background-color: #ffffff12;
+		border: 1px solid #ffffff1f;
+		@media (min-width: 768px) {
+			margin-top: 36px;
+			padding: 32px 40px;
+		}
+	}
+	.stroy__band--dark .stroy__pay_detail_head span,
+	.stroy__band--dark .stroy__pay_detail_head small {
+		color: #ffffffb3;
+	}
+	.stroy__band--dark .stroy__pay_detail p {
+		max-width: 44em;
+	}
+
+/* плитки на белой полосе — серые, без рамки */
+	.stroy__band--white .ipoteka__tile {
+		background-color: #f7f7f7;
+		border-color: transparent;
+	}
+
+/* финальный CTA */
+	.stroy .ipoteka__final_cta {
+		margin-top: 0;
+	}
+
+/* ===== КОМПОНЕНТ: Блок договора (includes/blocks/contract.php) ===== */
+/* текст слева, справа «лист договора» поверх второго листа */
+	/* фото договора на всю ширину, снизу растворяется в белом — переход в следующую белую полосу без шва */
+	.contract_block {
+		padding-top: 56px;
+		padding-bottom: 56px;
+		background-color: white;
+		background-image: linear-gradient(to bottom, #ffffff00 60%, white), url(/assets/images/backgrounds/service__contract.webp);
+		background-size: cover;
+		background-position: left center;
+		@media (min-width: 992px) {
+			padding-top: 96px;
+			padding-bottom: 96px;
+		}
+	}
+	.contract_block h2 {
+		margin-top: 0;
+	}
+	.contract_block__inner {
+		/* свой контекст наложения, чтобы второй лист (z-index: -1) не ушёл под фон */
+		isolation: isolate;
+		display: grid;
+		gap: 30px;
+		@media (min-width: 992px) {
 			grid-template-columns: 1fr 1fr;
+			align-items: center;
+			gap: 80px;
 		}
 	}
-	.stroy__tiles--2 .ipoteka__tile {
-		display: flex;
-		flex-direction: column;
-		gap: 15px;
-	}
-	.stroy__tiles--2 .button {
-		margin-top: auto;
-		font-family: inherit;
-	}
-	.stroy__final {
-		margin-bottom: 60px;
+	.contract_block__lead {
+		max-width: 44em;
+		padding-bottom: 30px;
+		font-size: 18px;
+		font-weight: 300;
+		line-height: 1.45;
+		color: #06435bcc;
 		@media (min-width: 768px) {
-			margin-bottom: 80px;
+			font-size: 20px;
 		}
+	}
+	.contract_block__text .button {
+		font-family: inherit;
+		@media (max-width: 477px) {
+			width: 100%;
+			text-align: center;
+		}
+	}
+	.contract_block__doc {
+		position: relative;
+		padding: 28px 24px;
+		border-radius: 6px;
+		border-top: 6px solid var(--accent-color);
+		background-color: white;
+		box-shadow: 0 1px 2px #06435b14, 0 16px 40px #06435b1f;
+		@media (min-width: 768px) {
+			padding: 36px 44px;
+		}
+	}
+	/* второй лист под первым */
+	.contract_block__doc::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: 6px;
+		background-color: white;
+		box-shadow: 0 8px 24px #06435b14;
+		transform: rotate(3deg) translate(10px, 6px);
+		@media (max-width: 767px) {
+			display: none;
+		}
+	}
+	.contract_block__doc h3 {
+		margin: 0 0 10px 0;
+		font-size: 22px;
+	}
+	.contract_block__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	.contract_block__list li {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 14px 0;
+		border-bottom: 1px solid #06435b14;
+		font-size: 18px;
+		line-height: 1.3;
+	}
+	.contract_block__list img {
+		display: block;
+		flex-shrink: 0;
+		width: 32px;
+	}
+	/* строки подписей — как в конце настоящего договора */
+	.contract_block__sign {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 30px;
+		margin-top: 40px;
+	}
+	.contract_block__sign span {
+		padding-top: 8px;
+		border-top: 1px solid var(--text-color);
+		font-size: 13px;
+		font-weight: 300;
+		color: #06435bb3;
 	}
