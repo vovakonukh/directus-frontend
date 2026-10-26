@@ -12,7 +12,7 @@ $landChecks = [
 <section class="<?= $blockClass ?? '' ?>">
     <h2>Проверим ваш участок перед строительством</h2>
     <div class="ipoteka__land">
-        <img class="ipoteka__land_image" src="/assets/images/uchastok.webp" alt="Участок под строительство каркасного дома" loading="lazy">
+        <img class="ipoteka__land_image" src="<?= asset('/assets/images/uchastok.webp') ?>" alt="Участок под строительство каркасного дома" loading="lazy">
         <div class="ipoteka__tiles stroy__land_tiles">
             <?php foreach ($landChecks as $i => $tile): ?>
             <div class="ipoteka__tile">

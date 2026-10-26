@@ -73,9 +73,9 @@ $tiles = [
         ['header' => 'Общается с банком сам', 'text' => 'Отвечает на все вопросы банка — вам не нужно разбираться в требованиях.'],
     ],
     'bank' => [
-        ['icon' => '/assets/icons/banks/sber_logo.svg', 'header' => 'Сбербанк'],
-        ['icon' => '/assets/icons/banks/vtb_logo.svg', 'header' => 'ВТБ'],
-        ['icon' => '/assets/icons/banks/domrf_logo.svg', 'header' => 'Банк ДОМ.РФ'],
+        ['icon' => asset('/assets/icons/banks/sber_logo.svg'), 'header' => 'Сбербанк'],
+        ['icon' => asset('/assets/icons/banks/vtb_logo.svg'), 'header' => 'ВТБ'],
+        ['icon' => asset('/assets/icons/banks/domrf_logo.svg'), 'header' => 'Банк ДОМ.РФ'],
     ],
     'land_rule' => [
         ['header' => 'Без зарегистрированных жилых строений', 'text' => 'Если на участке стоит дом или баня с назначением «жилое», банк откажет. Такое строение придётся снять с учёта до сделки.'],
@@ -177,7 +177,7 @@ if (!empty($faqs)) {
         <a class="button_image ipoteka__hero_button"<?= $heroFormCode ? '' : ' href="' . htmlspecialchars($heroLink) . '"' ?>>
             <span>Рассчитать стоимость</span>
             <span>и получить консультацию</span>
-            <img src="/assets/icons/calculator.webp" alt="">
+            <img src="<?= asset('/assets/icons/calculator.webp') ?>" alt="">
         </a>
         <?php endif; ?>
         <p class="ipoteka__hero_note"><?= htmlspecialchars($heroNote) ?></p>
@@ -367,7 +367,7 @@ if (!empty($faqs)) {
 <section>
     <h2>Участок должен быть готов к ипотеке</h2>
     <div class="ipoteka__land">
-        <img class="ipoteka__land_image" src="/assets/images/uchastok.webp" alt="Участок под строительство дома в ипотеку" loading="lazy">
+        <img class="ipoteka__land_image" src="<?= asset('/assets/images/uchastok.webp') ?>" alt="Участок под строительство дома в ипотеку" loading="lazy">
         <div class="ipoteka__tiles ipoteka__tiles--land">
             <?php foreach ($tiles['land_rule'] as $tile): ?>
             <div class="ipoteka__tile">

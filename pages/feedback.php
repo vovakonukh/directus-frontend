@@ -14,11 +14,11 @@ $feedbacks = fetchItems('feedback', [
                 <div class="feedback__card">
                     <span><?= htmlspecialchars($item['client_name']) ?></span>
                     <div class="feedback__stars_wrap">
-                        <img src="/assets/icons/rating-star-full-yellow.svg" />
-                        <img src="/assets/icons/rating-star-full-yellow.svg" />
-                        <img src="/assets/icons/rating-star-full-yellow.svg" />
-                        <img src="/assets/icons/rating-star-full-yellow.svg" />
-                        <img src="/assets/icons/rating-star-full-yellow.svg" />
+                        <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                        <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                        <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                        <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                        <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
                         <?php if (!empty($item['date'])): ?>
                             <span><?= date('d.m.Y', strtotime($item['date'])) ?></span>
                         <?php endif; ?>
@@ -39,7 +39,7 @@ $feedbacks = fetchItems('feedback', [
                     <?php if (!empty($item['link'])): ?>
                         <a class="feedback__source" href="<?= htmlspecialchars($item['link']) ?>" target="_blank" rel="noopener">
                             <span>Отзыв оставлен на Яндекс Картах</span>
-                            <img src="/assets/icons/external_link.svg" />
+                            <img src="<?= asset('/assets/icons/external_link.svg') ?>" />
                         </a>
                     <?php endif; ?>
                 </div>
@@ -49,11 +49,11 @@ $feedbacks = fetchItems('feedback', [
         <aside class="feedback__rating_card">
             <p class="feedback__rating_value"><?= htmlspecialchars($contacts['yandex_rating'] ?? '') ?></p>
             <div class="service__feedback_stars">
-                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
-                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
-                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
-                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
-                <img src="/assets/icons/rating-star-full-yellow.svg" alt="" />
+                <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" alt="" />
+                <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" alt="" />
+                <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" alt="" />
+                <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" alt="" />
+                <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" alt="" />
             </div>
             <span class="feedback__rating_caption">Наш рейтинг на Яндекс Картах</span>
             <a class="feedback__rating_link" href="https://yandex.ru/maps/-/CXFt5QND" target="_blank" rel="noopener nofollow">Проверить</a>

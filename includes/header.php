@@ -82,7 +82,7 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
     <div class="header_info">
 
         <div class="header_info__logo_wrap">
-            <a href="/"><img src="/assets/logo/logo-colored.svg" /></a>
+            <a href="/"><img src="<?= asset('/assets/logo/logo-colored.svg') ?>" /></a>
             <!--<span>
                 Санкт-Петербург <br />
                 Москва
@@ -101,11 +101,11 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
             <span class="header_info__rating_number"><?= $contacts['yandex_rating'] ?? '' ?></span>
             <div class="column">
                 <div class="header_info__rating_stars_wrap">
-                    <img src="/assets/icons/rating-star-full-yellow.svg" />
-                    <img src="/assets/icons/rating-star-full-yellow.svg" />
-                    <img src="/assets/icons/rating-star-full-yellow.svg" />
-                    <img src="/assets/icons/rating-star-full-yellow.svg" />
-                    <img src="/assets/icons/rating-star-full-yellow.svg" />
+                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
                 </div>
                 <span class="header_info__rating_label_bold">Рейтинг Яндекс</span>
                 <span class="header_info__rating_label_light">на основании <?= $contacts['yandex_feedback_amount'] ?? '' ?> отзывов</span>
@@ -118,9 +118,9 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
                 <span class="header_info__online_label">Пишите, мы онлайн</span>
             </div>
             <div class="header_info__messengers">
-                <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="/assets/icons/vk-colored-bg.webp" /></a>
-                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="/assets/icons/telegram-colored-bg.svg" /></a>
-                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="/assets/icons/max.svg" /></a>
+                <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="<?= asset('/assets/icons/vk-colored-bg.webp') ?>" /></a>
+                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" /></a>
+                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" /></a>
             </div>
         </div>
 

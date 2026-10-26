@@ -25,7 +25,7 @@ $contractItems = [
             <ul class="contract_block__list">
                 <?php foreach ($contractItems as $c): ?>
                 <li>
-                    <img src="/assets/icons/<?= $c['icon'] ?>" alt="" loading="lazy">
+                    <img src="<?= asset('/assets/icons/' . $c['icon']) ?>" alt="" loading="lazy">
                     <span><?= htmlspecialchars($c['text']) ?></span>
                 </li>
                 <?php endforeach; ?>

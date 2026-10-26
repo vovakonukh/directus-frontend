@@ -2,7 +2,7 @@
     <span><?= htmlspecialchars($item['client_name']) ?></span>
     <div class="feedback__stars_wrap">
         <?php for ($i = 0; $i < 5; $i++): ?>
-            <img src="/assets/icons/rating-star-full-yellow.svg" />
+            <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
         <?php endfor; ?>
         <span><?= date('d.m.Y', strtotime($item['date'])) ?></span>
     </div>
@@ -18,6 +18,6 @@
     <?php endif; ?>
     <a class="feedback__source" href="<?= htmlspecialchars($item['link']) ?>" target="_blank">
         <span>Отзыв оставлен на Яндекс Картах</span>
-        <img src="/assets/icons/external_link.svg" />
+        <img src="<?= asset('/assets/icons/external_link.svg') ?>" />
     </a>
 </div>

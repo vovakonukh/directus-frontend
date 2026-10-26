@@ -32,8 +32,8 @@ $tourItems = [
         <?php if ($tourPhotos): ?>
         <div class="stroy__tour_photos stroy__tour_photos--<?= count($tourPhotos) ?>">
             <?php foreach ($tourPhotos as $src): ?>
-            <a href="<?= $src ?>" data-fancybox="stroy-tour">
-                <img src="<?= $src ?>" alt="Каркасный дом на экскурсии" loading="lazy">
+            <a href="<?= asset($src) ?>" data-fancybox="stroy-tour">
+                <img src="<?= asset($src) ?>" alt="Каркасный дом на экскурсии" loading="lazy">
             </a>
             <?php endforeach; ?>
         </div>

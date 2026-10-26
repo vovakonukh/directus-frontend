@@ -15,7 +15,7 @@ $whyFrame = [
     <div class="ipoteka__tiles">
         <?php foreach ($whyFrame as $tile): ?>
         <div class="ipoteka__tile">
-            <img class="stroy__tile_icon" src="/assets/icons/<?= $tile['icon'] ?>" alt="" loading="lazy">
+            <img class="stroy__tile_icon" src="<?= asset('/assets/icons/' . $tile['icon']) ?>" alt="" loading="lazy">
             <h3><?= htmlspecialchars($tile['header']) ?></h3>
             <p><?= htmlspecialchars($tile['text']) ?></p>
         </div>

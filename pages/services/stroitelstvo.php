@@ -325,19 +325,19 @@ $ldFaq = [
         <div>
             <p class="ipoteka__lead">Возьмите готовый проект из каталога или сделаем свой. Меняем размеры дома, окна, террасу, добавляем комнаты. Есть только эскиз от руки — сделаем по нему объёмную модель до начала строительства.</p>
             <div class="ipoteka__tiles ipoteka__tiles--stack">
-                <div class="ipoteka__tile stroy__tile_row"><img class="stroy__tile_icon" src="/assets/icons/house.webp" alt="" loading="lazy"><div><h3>Создадим дом с нуля</h3><p>По вашим требованиям и сценарию жизни.</p></div></div>
-                <div class="ipoteka__tile stroy__tile_row"><img class="stroy__tile_icon" src="/assets/icons/pen.webp" alt="" loading="lazy"><div><h3>Доработаем планировку</h3><p>Возьмём проект из каталога и адаптируем.</p></div></div>
-                <div class="ipoteka__tile stroy__tile_row"><img class="stroy__tile_icon" src="/assets/icons/tree.webp" alt="" loading="lazy"><div><h3>Впишем дом в участок</h3><p>С учётом солнца, сторон света и соседей.</p></div></div>
+                <div class="ipoteka__tile stroy__tile_row"><img class="stroy__tile_icon" src="<?= asset('/assets/icons/house.webp') ?>" alt="" loading="lazy"><div><h3>Создадим дом с нуля</h3><p>По вашим требованиям и сценарию жизни.</p></div></div>
+                <div class="ipoteka__tile stroy__tile_row"><img class="stroy__tile_icon" src="<?= asset('/assets/icons/pen.webp') ?>" alt="" loading="lazy"><div><h3>Доработаем планировку</h3><p>Возьмём проект из каталога и адаптируем.</p></div></div>
+                <div class="ipoteka__tile stroy__tile_row"><img class="stroy__tile_icon" src="<?= asset('/assets/icons/tree.webp') ?>" alt="" loading="lazy"><div><h3>Впишем дом в участок</h3><p>С учётом солнца, сторон света и соседей.</p></div></div>
             </div>
         </div>
         <div class="stroy__draw">
-            <a href="/assets/images/build__draw_first.webp" data-fancybox="stroy-draw">
-                <img src="/assets/images/build__draw_first.webp" alt="Эскиз планировки от руки" loading="lazy">
+            <a href="<?= asset('/assets/images/build__draw_first.webp') ?>" data-fancybox="stroy-draw">
+                <img src="<?= asset('/assets/images/build__draw_first.webp') ?>" alt="Эскиз планировки от руки" loading="lazy">
             </a>
             <div class="stroy__draw_results">
                 <?php for ($i = 1; $i <= 4; $i++): ?>
-                <a href="/assets/images/build__draw_result_<?= $i ?>.webp" data-fancybox="stroy-draw">
-                    <img src="/assets/images/build__draw_result_<?= $i ?>.webp" alt="3D-модель дома по эскизу" loading="lazy">
+                <a href="<?= asset("/assets/images/build__draw_result_$i.webp") ?>" data-fancybox="stroy-draw">
+                    <img src="<?= asset("/assets/images/build__draw_result_$i.webp") ?>" alt="3D-модель дома по эскизу" loading="lazy">
                 </a>
                 <?php endfor; ?>
             </div>

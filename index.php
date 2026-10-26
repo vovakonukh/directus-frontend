@@ -249,7 +249,7 @@ if (API_CACHE_TTL > 0 && http_response_code() === 200 && $page !== 'thank-you') 
 <?php if ($ogImage): ?>
     <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>">
 <?php endif; ?>
-    <link rel="icon" href="/assets/icons/favicon.ico">
+    <link rel="icon" href="<?= asset('/assets/icons/favicon.ico') ?>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/carousel/carousel.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.css">
     <link rel="stylesheet" href="/css/main_styles.css?v=<?= filemtime(__DIR__ . '/css/main_styles.css') ?>">

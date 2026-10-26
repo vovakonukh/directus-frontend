@@ -125,14 +125,14 @@ if (!empty($fundament['hero_form'])) {
             КП Березовка, Ленинградская обл.
             <div>
                 <div class="fund__case_param_item">
-                    <img src="/assets/icons/service_budget.svg" alt="">
+                    <img src="<?= asset('/assets/icons/service_budget.svg') ?>" alt="">
                     <div>
                         <span>Бюджет</span>
                         1 100 000 ₽
                     </div>
                 </div>
                 <div class="fund__case_param_item">
-                    <img src="/assets/icons/service_srok.svg" alt="">
+                    <img src="<?= asset('/assets/icons/service_srok.svg') ?>" alt="">
                     <div>
                         <span>Сроки</span>
                         13 дней
@@ -146,14 +146,14 @@ if (!empty($fundament['hero_form'])) {
             п.Черничное, Ленинградская обл.
             <div>
                 <div class="fund__case_param_item">
-                    <img src="/assets/icons/service_budget.svg" alt="">
+                    <img src="<?= asset('/assets/icons/service_budget.svg') ?>" alt="">
                     <div>
                         <span>Бюджет</span>
                         1 300 000 ₽
                     </div>
                 </div>
                 <div class="fund__case_param_item">
-                    <img src="/assets/icons/service_srok.svg" alt="">
+                    <img src="<?= asset('/assets/icons/service_srok.svg') ?>" alt="">
                     <div>
                         <span>Сроки</span>
                         17 дней
@@ -168,13 +168,13 @@ if (!empty($fundament['hero_form'])) {
     <h2>Комплектация "Все включено"</h2>
     <p>Специально для вас мы сделали процесс возведения фундамента максимально простым и понятным. Все сложности мы берем на себя, вам остается только наблюдать</p>
     <div class="fund__allinclusive">
-        <div><img src="/assets/icons/fund_research.svg" alt="">Геологическое исследование</div>
-        <div><img src="/assets/icons/fund_project.svg" alt="">Проектирование фундамента</div>
-        <div><img src="/assets/icons/fund_kotlovan.svg" alt="">Рытье котлована</div>
-        <div><img src="/assets/icons/fund_sand.svg" alt="">Отсыпка</div>
-        <div><img src="/assets/icons/fund_opalubka.svg" alt="">Возведение опалубки</div>
-        <div><img src="/assets/icons/fund_armirovanie.svg" alt="">Армирование</div>
-        <div><img src="/assets/icons/fund_beton.svg" alt="">Залитие бетона</div>
+        <div><img src="<?= asset('/assets/icons/fund_research.svg') ?>" alt="">Геологическое исследование</div>
+        <div><img src="<?= asset('/assets/icons/fund_project.svg') ?>" alt="">Проектирование фундамента</div>
+        <div><img src="<?= asset('/assets/icons/fund_kotlovan.svg') ?>" alt="">Рытье котлована</div>
+        <div><img src="<?= asset('/assets/icons/fund_sand.svg') ?>" alt="">Отсыпка</div>
+        <div><img src="<?= asset('/assets/icons/fund_opalubka.svg') ?>" alt="">Возведение опалубки</div>
+        <div><img src="<?= asset('/assets/icons/fund_armirovanie.svg') ?>" alt="">Армирование</div>
+        <div><img src="<?= asset('/assets/icons/fund_beton.svg') ?>" alt="">Залитие бетона</div>
     </div>
 </section>
 

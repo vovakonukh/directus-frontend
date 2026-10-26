@@ -65,7 +65,7 @@ if (!empty($ipoteka['hero_form'])) {
             <a href="<?= htmlspecialchars($ipoteka['hero_button_link']) ?>" class="button_image">
                 <span>Рассчитать стоимость</span>
                 <span>и получить консультацию</span>
-                <img src="/assets/icons/calculator.webp">
+                <img src="<?= asset('/assets/icons/calculator.webp') ?>">
             </a>
         <?php endif; ?>
     </div>
@@ -138,7 +138,7 @@ if (!empty($ipoteka['hero_form'])) {
     </div>
     <div class="ipoteka__programs_other">
         <div>
-            <img src="/assets/icons/info_green.svg">
+            <img src="<?= asset('/assets/icons/info_green.svg') ?>">
             Также работаем с другими вариантами ипотечных программ
         </div>
     </div>
@@ -169,7 +169,7 @@ if (!empty($ipoteka['hero_form'])) {
             <div>
                 <?php foreach ($ipoteka['cta_items'] ?? [] as $ctaItem): ?>
                 <div class="ipoteka__cta_list_item">
-                    <img src="/assets/icons/logo_classhouse.webp" alt="">
+                    <img src="<?= asset('/assets/icons/logo_classhouse.webp') ?>" alt="">
                     <p><?= htmlspecialchars($ctaItem['text']) ?></p>
                 </div>
                 <?php endforeach; ?>
@@ -193,23 +193,23 @@ if (!empty($ipoteka['hero_form'])) {
         <div class="service__contract_col_2">
             <h3>В договоре зафиксированы:</h3>
             <div class="service__contract_list">
-                <img src="/assets/icons/service__money.webp" />
+                <img src="<?= asset('/assets/icons/service__money.webp') ?>" />
                 <p>Стоимость работ</p>
             </div>
             <div class="service__contract_list">
-                <img src="/assets/icons/service__payments.webp" />
+                <img src="<?= asset('/assets/icons/service__payments.webp') ?>" />
                 <p>Порядок оплаты</p>
             </div>
             <div class="service__contract_list">
-                <img src="/assets/icons/service__period.webp" />
+                <img src="<?= asset('/assets/icons/service__period.webp') ?>" />
                 <p>Сроки работы</p>
             </div>
             <div class="service__contract_list">
-                <img src="/assets/icons/service__warranty.webp" />
+                <img src="<?= asset('/assets/icons/service__warranty.webp') ?>" />
                 <p>Гарантия 5 лет</p>
             </div>
             <div class="service__contract_list">
-                <img src="/assets/icons/service__smeta.webp" />
+                <img src="<?= asset('/assets/icons/service__smeta.webp') ?>" />
                 <p>Спецификация используемых материалов</p>
             </div>
         </div>

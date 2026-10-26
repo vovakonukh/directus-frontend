@@ -50,13 +50,13 @@ include 'includes/breadcrumbs.php';
                     <?php if (empty($link['url'])) continue; ?>
                     <a class="links__card" href="<?= htmlspecialchars($link['url']) ?>"<?php if (!empty($link['goal'])): ?> onclick="ym(62605987, 'reachGoal', '<?= $link['goal'] ?>'); return true;"<?php endif; ?>>
                         <div class="links__card_icon <?= $link['type'] ?>">
-                            <img src="/assets/icons/<?= $link['icon'] ?>" alt="" />
+                            <img src="<?= asset('/assets/icons/' . $link['icon']) ?>" alt="" />
                         </div>
                         <div class="links__card_text">
                             <span><?= htmlspecialchars($link['title']) ?></span>
                             <span><?= htmlspecialchars($link['text']) ?></span>
                         </div>
-                        <img class="links__card_arrow" src="/assets/icons/arrow-green-right.svg" alt="" />
+                        <img class="links__card_arrow" src="<?= asset('/assets/icons/arrow-green-right.svg') ?>" alt="" />
                     </a>
                 <?php endforeach; ?>
             </div>

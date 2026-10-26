@@ -5773,12 +5773,27 @@
 			}
 		}
 
+		/* h1: обычный регистр, крупнее и плотнее */
 		.ipoteka__hero h1 {
+			max-width: 16em;
 			margin-top: 0;
 			color: white;
+			text-transform: none;
+			font-size: 34px;
+			line-height: 1.05;
+			letter-spacing: -0.02em;
+
+			@media (min-width: 768px) {
+				font-size: 48px;
+			}
+
+			@media (min-width: 1280px) {
+				font-size: 60px;
+			}
 		}
 
 		.ipoteka__hero_subtitle {
+			max-width: 36em;
 			font-size: 18px;
 			font-weight: 300;
 			line-height: 1.4;
@@ -5799,14 +5814,25 @@
 
 			@media (min-width: 768px) {
 				flex-direction: row;
-				gap: 30px;
+				gap: 0;
 				font-size: 18px;
 			}
 		}
 
+		/* на десктопе пункты разделены тонкими линиями */
 		.ipoteka__trust li {
 			position: relative;
 			padding-left: 26px;
+
+			@media (min-width: 768px) {
+				padding-right: 24px;
+				margin-right: 24px;
+				border-right: 1px solid #ffffff40;
+			}
+		}
+
+		.ipoteka__trust li:last-child {
+			border-right: none;
 		}
 
 		.ipoteka__trust li::before {
@@ -7127,20 +7153,6 @@
 		margin-top: 0;
 	}
 
-/* h1: обычный регистр, крупнее и плотнее */
-	.stroy h1 {
-		text-transform: none;
-		font-size: 34px;
-		line-height: 1.05;
-		letter-spacing: -0.02em;
-		max-width: 16em;
-		@media (min-width: 768px) {
-			font-size: 48px;
-		}
-		@media (min-width: 1280px) {
-			font-size: 60px;
-		}
-	}
 	/* отступ сверху задаёт полоса, у заголовков секций его убираем (заголовки карточек не трогаем) */
 	.stroy__band > h2,
 	.stroy__tour h2 {
@@ -7162,25 +7174,7 @@
 		outline-offset: 3px;
 	}
 
-/* hero */
-	.stroy .ipoteka__hero_subtitle {
-		max-width: 36em;
-	}
-	.stroy .ipoteka__trust {
-		@media (min-width: 768px) {
-			gap: 0;
-		}
-	}
-	.stroy .ipoteka__trust li {
-		@media (min-width: 768px) {
-			padding-right: 24px;
-			margin-right: 24px;
-			border-right: 1px solid #ffffff40;
-		}
-	}
-	.stroy .ipoteka__trust li:last-child {
-		border-right: none;
-	}
+/* hero (общие стили — в .ipoteka__hero) */
 	.stroy .stroy__hero_price {
 		display: inline-flex;
 		flex-wrap: wrap;

@@ -186,7 +186,7 @@ $ldProduct = [
                 ];
                 foreach ($params as $p): ?>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/<?= $p['icon'] ?>" />
+                    <img src="<?= asset('/assets/icons/project_icons/' . $p['icon']) ?>" />
                     <div class="project__info_params_item_text">
                         <span><?= $p['label'] ?></span>
                         <span><?= $p['value'] ?></span>
@@ -471,28 +471,28 @@ $ldProduct = [
     <h2>С нами надежно</h2>
     <div class="tile_wrap">
         <div class="tile_item">
-            <img src="/assets/icons/warranty-contract.svg" />
+            <img src="<?= asset('/assets/icons/warranty-contract.svg') ?>" />
             <div class="tile_item_text_wrap">
                 <span>Гарантия до 10 лет</span>
                 <p>Мы даем хорошую гарантию на свои дома. В случае проблем — приезжаем и переделываем за свой счет</p>
             </div>
         </div>
         <div class="tile_item">
-            <img src="/assets/icons/project.svg" />
+            <img src="<?= asset('/assets/icons/project.svg') ?>" />
             <div class="tile_item_text_wrap">
                 <span>Строим по проекту</span>
                 <p>Для всех домов мы обязательно делаем проект с расчетом нагрузок и подробной инструкцией по сборке</p>
             </div>
         </div>
         <div class="tile_item">
-            <img src="/assets/icons/house-wooden.webp" />
+            <img src="<?= asset('/assets/icons/house-wooden.webp') ?>" />
             <div class="tile_item_text_wrap">
                 <span>Экскурсия на строящийся дом</span>
                 <p>Запишитесь на экскурсию на строящийся дом — своими глазами посмотрите на качество материала и работ</p>
             </div>
         </div>
         <div class="tile_item">
-            <img src="/assets/icons/communication.webp" />
+            <img src="<?= asset('/assets/icons/communication.webp') ?>" />
             <div class="tile_item_text_wrap">
                 <span>Фотоотчеты со стройки</span>
                 <p>Вам не нужно приезжать на стройку — фотографии со стройки вы получаете регулярно в удобном для вас мессенджере</p>

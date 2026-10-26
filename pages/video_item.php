@@ -42,7 +42,7 @@ include __DIR__ . '/../includes/breadcrumbs.php';
 
                 <div class="video__channel_wrap">
                     <a href="<?= htmlspecialchars($contacts['vk_group'] ?? '#') ?>" class="video__author">
-                        <img src="/assets/images/logo/logo_squre_colored.svg" alt="">
+                        <img src="<?= asset('/assets/images/logo/logo_squre_colored.svg') ?>" alt="">
                         <div>
                             <strong>Каркасные дома Класс Хаус</strong>
                             <p><?= htmlspecialchars($contacts['subscribers_amount'] ?? '') ?> подписчиков</p>

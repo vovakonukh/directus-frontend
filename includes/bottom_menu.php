@@ -24,7 +24,7 @@ $bottomMenuSection = explode('/', $uri)[0];
                         <div class="bottom_menu__dropdown">
                             <a href="<?= trim($item['url']) ?>"><?= $item['label'] ?></a>
                             <span class="bottom_menu__dropdown_icon" :class="{ 'active': dropdownOpen }" @click="dropdownOpen = !dropdownOpen">
-                                <img src="/assets/icons/dropdown_arrow.svg" alt="" />
+                                <img src="<?= asset('/assets/icons/dropdown_arrow.svg') ?>" alt="" />
                             </span>
                         </div>
                         <div class="bottom_menu__dropdown_list" x-show="dropdownOpen" style="display:none">
@@ -45,9 +45,9 @@ $bottomMenuSection = explode('/', $uri)[0];
                 <a href="mailto:<?= $contacts['email'] ?? '' ?>"><?= $contacts['email'] ?? '' ?></a>
             </div>
             <div class="bottom_menu__messengers">
-                <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="/assets/icons/vk-colored-bg.webp" alt="VK" /></a>
-                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="/assets/icons/telegram-colored-bg.svg" alt="Telegram" /></a>
-                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="/assets/icons/max.svg" alt="MAX" /></a>
+                <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="<?= asset('/assets/icons/vk-colored-bg.webp') ?>" alt="VK" /></a>
+                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="Telegram" /></a>
+                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" alt="MAX" /></a>
             </div>
         </div>
 

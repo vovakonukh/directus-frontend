@@ -11,28 +11,28 @@
             <div>
                 <span class="contacts__subheader">Офис в Санкт-Петербурге</span>
                 <div class="contacts__element">
-                    <img src="/assets/icons/geo-green.svg" />
+                    <img src="<?= asset('/assets/icons/geo-green.svg') ?>" />
                     <span><?= htmlspecialchars($contacts['address_spb']) ?></span>
                 </div>
                 <div class="contacts__element margin-bottom-40">
-                    <img src="/assets/icons/phone-green.svg" />
+                    <img src="<?= asset('/assets/icons/phone-green.svg') ?>" />
                     <span><?= htmlspecialchars($contacts['phone']) ?></span>
                 </div>
                 <span class="contacts__subheader">Переговорная в Москве</span>
                 <div class="contacts__disclaimer">Встреча возможна только по предварительному согласованию</div>
                 <div class="contacts__element">
-                    <img src="/assets/icons/geo-green.svg" />
+                    <img src="<?= asset('/assets/icons/geo-green.svg') ?>" />
                     <span><?= htmlspecialchars($contacts['address_msk']) ?></span>
                 </div>
             </div>
             <div>
                 <div class="row contacts__messenger_buttons margin-bottom-30">
                     <a class="contacts__messenger_button telegram" href="<?= htmlspecialchars($shiftTelegram) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;">
-                        <img src="/assets/icons/telegram-white.svg" />
+                        <img src="<?= asset('/assets/icons/telegram-white.svg') ?>" />
                         <span>Написать в Телеграм</span>
                     </a>
                     <a class="contacts__messenger_button whatsapp" href="<?= htmlspecialchars($contacts['whatsapp']) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-whatsapp'); return true;">
-                        <img src="/assets/icons/whatsapp-white.svg" />
+                        <img src="<?= asset('/assets/icons/whatsapp-white.svg') ?>" />
                         <span>Написать в WhatsApp</span>
                     </a>
                 </div>
@@ -40,21 +40,21 @@
                 <div class="row contacts__socials">
                     <div class="column">
                         <a class="contacts__element" href="<?= htmlspecialchars($contacts['vk_group']) ?>">
-                            <img src="/assets/icons/vk-colored.svg" />
+                            <img src="<?= asset('/assets/icons/vk-colored.svg') ?>" />
                             <span>Вконтакте</span>
                         </a>
                         <a class="contacts__element" href="https://ok.ru/group/63361648361523">
-                            <img src="/assets/icons/ok-colored.svg" />
+                            <img src="<?= asset('/assets/icons/ok-colored.svg') ?>" />
                             <span>Одноклассники</span>
                         </a>
                     </div>
                     <div class="column">
                         <a class="contacts__element" href="<?= htmlspecialchars($contacts['youtube']) ?>">
-                            <img src="/assets/icons/youtube-colored.svg" />
+                            <img src="<?= asset('/assets/icons/youtube-colored.svg') ?>" />
                             <span>Youtube</span>
                         </a>
                         <a class="contacts__element" href="<?= htmlspecialchars($contacts['telegram_channel']) ?>">
-                            <img src="/assets/icons/telegram-colored.svg" />
+                            <img src="<?= asset('/assets/icons/telegram-colored.svg') ?>" />
                             <span>Телеграм</span>
                         </a>
                     </div>

@@ -47,3 +47,10 @@ function annuityPayment(float $sum, float $ratePercent, int $years): int {
     if ($i == 0) return (int) round($sum / $n);
     return (int) round($sum * $i / (1 - pow(1 + $i, -$n)));
 }
+
+// Адрес локального файла из /assets с версией (?v=время изменения файла).
+// Заменили картинку — меняется адрес, и браузер сразу грузит новую вместо копии из кэша.
+function asset(string $path): string {
+    $file = __DIR__ . '/../' . ltrim($path, '/');
+    return is_file($file) ? $path . '?v=' . filemtime($file) : $path;
+}

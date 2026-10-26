@@ -14,19 +14,19 @@
             <h2><?= $item['floors'] == 1 ? 'Одноэтажный дом' : 'Двухэтажный дом' ?> <?= $item['length'] ?> на <?= $item['width'] ?> м</h2>
             <div class="project_card__info_box_wrap">
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/square.svg" />
+                    <img src="<?= asset('/assets/icons/square.svg') ?>" />
                     <?= $item['square'] ?> м²
                 </div>
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/dimensions.svg" />
+                    <img src="<?= asset('/assets/icons/dimensions.svg') ?>" />
                     <?= $item['length'] ?>⨉<?= $item['width'] ?>
                 </div>
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/bedrooms.svg" />
+                    <img src="<?= asset('/assets/icons/bedrooms.svg') ?>" />
                     <?= $item['bedrooms'] ?> спальни
                 </div>
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/wc.svg" />
+                    <img src="<?= asset('/assets/icons/wc.svg') ?>" />
                     <?= $item['wc'] ?> санузел
                 </div>
             </div>

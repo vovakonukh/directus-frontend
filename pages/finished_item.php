@@ -164,49 +164,49 @@ include 'includes/breadcrumbs.php';
 
             <div class="project__info_params_wrap">
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/square_icon.png" />
+                    <img src="<?= asset('/assets/icons/project_icons/square_icon.png') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Площадь</span>
                         <span><?= $item['square'] ?> м²</span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/size_icon.png" />
+                    <img src="<?= asset('/assets/icons/project_icons/size_icon.png') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Габариты</span>
                         <span><?= formatDimension($item['length']) ?>⨉<?= formatDimension($item['width']) ?> м</span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/bedrooms_icon.png" />
+                    <img src="<?= asset('/assets/icons/project_icons/bedrooms_icon.png') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Спален</span>
                         <span><?= $item['bedrooms'] ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/wc_icon.png" />
+                    <img src="<?= asset('/assets/icons/project_icons/wc_icon.png') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Санузлов</span>
                         <span><?= $item['wc'] ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/second_light.svg" />
+                    <img src="<?= asset('/assets/icons/project_icons/second_light.svg') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Второй свет</span>
                         <span><?= $item['second_light'] ? 'Есть' : 'Нет' ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/clock.svg" />
+                    <img src="<?= asset('/assets/icons/project_icons/clock.svg') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Срок строительства</span>
                         <span><?= htmlspecialchars($item['construction_period']) ?></span>
                     </div>
                 </div>
                 <div class="project__info_params_item">
-                    <img src="/assets/icons/project_icons/geo.svg" />
+                    <img src="<?= asset('/assets/icons/project_icons/geo.svg') ?>" />
                     <div class="project__info_params_item_text">
                         <span>Местоположение</span>
                         <span><?= htmlspecialchars($item['location']) ?></span>

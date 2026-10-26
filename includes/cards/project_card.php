@@ -15,21 +15,21 @@
             <span class="project_card__price">от <?= number_format($item['price_tk'], 0, '', ' ') ?> ₽</span>
             <div class="project_card__info_box_wrap">
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/square.svg" />
+                    <img src="<?= asset('/assets/icons/square.svg') ?>" />
                     <?= $item['square'] ?> м²
                 </div>
                 <?php if ($item['length'] && $item['width']): ?>
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/dimensions.svg" />
+                    <img src="<?= asset('/assets/icons/dimensions.svg') ?>" />
                     <?= formatDimension($item['length']) ?>⨉<?= formatDimension($item['width']) ?>
                 </div>
                 <?php endif; ?>
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/bedrooms.svg" />
+                    <img src="<?= asset('/assets/icons/bedrooms.svg') ?>" />
                     <?= $item['bedrooms'] ?> спальни
                 </div>
                 <div class="project_card__info_box">
-                    <img src="/assets/icons/wc.svg" />
+                    <img src="<?= asset('/assets/icons/wc.svg') ?>" />
                     <?= $item['wc'] ?> санузел
                 </div>
             </div>
