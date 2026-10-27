@@ -510,6 +510,11 @@
         background: linear-gradient(rgba(247, 247, 247, 0), #f7f7f7);
     }
 
+    /* на белой полосе затухание текста — в белый, а не в серый фон сайта */
+    .stroy__band--white .seo_text--collapsed::after {
+        background: linear-gradient(#ffffff00, white);
+    }
+
     .seo_text__toggle {
         margin-top: 10px;
         padding: 0;
@@ -7401,4 +7406,234 @@
 		font-size: 13px;
 		font-weight: 300;
 		color: #06435bb3;
+	}
+
+/* ===== Главная (/): обёртка .stroy.home2, остальные блоки — из «Строительства» ===== */
+/* hero: фото реального дома на всю ширину, текст слева на градиенте, переходящем в фото */
+	.home2__hero {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding: 0;
+		background-color: var(--text-color);
+		color: white;
+		overflow: hidden;
+		@media (min-width: 992px) {
+			min-height: 640px;
+			justify-content: center;
+		}
+	}
+	.home2__hero_text {
+		position: relative;
+		z-index: 2;
+		padding: 0 20px 50px;
+		@media (min-width: 768px) {
+			padding: 0 40px 60px;
+		}
+		@media (min-width: 992px) {
+			width: min(540px, 48%);
+			padding: 60px 0 80px 60px;
+		}
+	}
+	.home2__hero h1 {
+		margin: 0 0 20px;
+		text-transform: none;
+		font-size: 32px;
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		@media (min-width: 768px) {
+			font-size: 46px;
+		}
+		@media (min-width: 1280px) {
+			font-size: 54px;
+		}
+	}
+	.home2__hero_subtitle {
+		max-width: 30em;
+		font-size: 18px;
+		font-weight: 300;
+		line-height: 1.4;
+		@media (min-width: 768px) {
+			font-size: 21px;
+		}
+	}
+	/* пункты доверия в колонку: строкой они растягиваются на фото */
+	.home2__hero .ipoteka__trust {
+		flex-direction: column;
+		gap: 8px;
+	}
+	.home2__hero .ipoteka__trust li {
+		border: none;
+		margin: 0;
+		padding-right: 0;
+	}
+	/* телефон: фото сверху с чёткой границей, текст под ним;
+	   десктоп: фото на весь блок, слева затемнение под текст */
+	.home2__hero_photo {
+		position: relative;
+		order: -1;
+		margin: 0 0 30px;
+		@media (min-width: 992px) {
+			position: absolute;
+			inset: 0;
+			margin: 0;
+		}
+	}
+	.home2__hero_photo::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		@media (min-width: 992px) {
+			background: linear-gradient(90deg, #06435b 0%, #06435bf2 30%, #06435bb3 46%, #06435b00 72%);
+		}
+	}
+	.home2__hero_photo img {
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		object-fit: cover;
+		@media (min-width: 992px) {
+			height: 100%;
+			aspect-ratio: auto;
+			object-position: 70% center;
+		}
+	}
+	/* подпись к фото: мелко в углу, читается, только если присмотреться */
+	.home2__plate {
+		position: absolute;
+		z-index: 1;
+		top: 16px;
+		right: 20px;
+		max-width: 260px;
+		text-align: right;
+		@media (min-width: 992px) {
+			top: auto;
+			bottom: 28px;
+			right: 40px;
+		}
+	}
+	/* полупрозрачная подложка: на снегу и светлом небе белый текст без неё не читается */
+	.home2__plate a {
+		display: block;
+		padding: 8px 12px;
+		border-radius: 8px;
+		background-color: #06435b8c;
+		-webkit-backdrop-filter: blur(6px);
+		backdrop-filter: blur(6px);
+		font-size: 14px;
+		font-weight: 300;
+		line-height: 1.35;
+		color: #ffffffd9;
+	}
+	.home2__plate b {
+		display: block;
+		font-weight: 700;
+		color: white;
+	}
+	.home2__plate a:hover b,
+	.home2__plate a:focus-visible b {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+/* направления: полоса ссылок на услуги сразу под hero, на сером фоне сайта (следующая полоса белая) */
+	.home2__directions {
+		display: grid;
+		@media (min-width: 768px) {
+			grid-template-columns: 1fr 1fr;
+		}
+		@media (min-width: 1280px) {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+	.home2__direction {
+		display: flex;
+		align-items: flex-start;
+		gap: 16px;
+		padding: 22px 20px;
+		border-bottom: 1px solid #06435b14;
+		font-size: 16px;
+		font-weight: 300;
+		line-height: 1.3;
+		transition: background-color 0.2s;
+		@media (min-width: 1280px) {
+			padding: 30px 30px 30px 60px;
+			border-bottom: none;
+		}
+	}
+	.home2__direction + .home2__direction {
+		@media (min-width: 1280px) {
+			padding-left: 30px;
+			border-left: 1px solid #06435b14;
+		}
+	}
+	.home2__direction:hover,
+	.home2__direction:focus-visible {
+		background-color: #02c39a12;
+	}
+	.home2__direction img {
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		object-fit: contain;
+	}
+	.home2__direction b {
+		display: block;
+		margin-bottom: 4px;
+		font-size: 20px;
+	}
+
+/* «Почему строят с нами»: 6 причин сеткой, по 3 в ряд на десктопе */
+	.home2__why_list {
+		display: grid;
+		gap: 0 40px;
+		list-style: none;
+		padding: 0;
+		@media (min-width: 768px) {
+			grid-template-columns: 1fr 1fr;
+		}
+		@media (min-width: 1280px) {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+	.home2__why_list li {
+		padding: 28px 0;
+		border-top: 1px solid #06435b1f;
+	}
+	.home2__why_list img {
+		display: block;
+		width: 64px;
+		height: 64px;
+		object-fit: contain;
+		margin-bottom: 16px;
+	}
+	.home2__why_list h3 {
+		margin: 0 0 10px;
+		font-size: 22px;
+		line-height: 1.15;
+		@media (min-width: 992px) {
+			font-size: 24px;
+		}
+	}
+	.home2__why_list p {
+		padding: 0;
+		font-size: 17px;
+		font-weight: 300;
+		line-height: 1.45;
+	}
+	.home2__why_list a {
+		color: #029b7a;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.home2__map iframe {
+		display: block;
+		width: 100%;
+		border: 0;
+		border-radius: 16px;
+	}
+	/* отступ SEO-текста остаётся внутри белой полосы, иначе между полосами виден серый просвет */
+	.home2 .stroy__band--tight {
+		display: flow-root;
 	}

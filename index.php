@@ -204,10 +204,10 @@ if (isset($itemCollections[$page]) && !empty($exists)) {
 
 // SEO для страниц-списков из коллекции pages_seo (route = $uri)
 $seo = null;
-// у главной route пустой — фильтр по пустой строке Directus отклоняет с ошибкой 400
-if (!isset($slug) && $page !== '404' && $uri !== '') {
+// у главной в pages_seo route = «/» (фильтр по пустой строке Directus отклоняет с ошибкой 400)
+if (!isset($slug) && $page !== '404') {
     $seo = fetchItems('pages_seo', [
-        'filter[route][_eq]' => $uri,
+        'filter[route][_eq]' => $uri === '' ? '/' : $uri,
         'fields' => 'h1,seo_title,seo_description,seo_image,seo_noindex,seo_text',
         'limit' => 1
     ])[0] ?? null;

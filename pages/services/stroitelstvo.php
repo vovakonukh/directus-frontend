@@ -109,17 +109,6 @@ $heroTitle = trim($seo['h1'] ?? '') ?: 'Строительство каркас�
 
 $heroSubtitle = trim($stroitelstvo['hero_description'] ?? '');
 
-// Этапы «Как мы строим» — статичные, живут только на этой странице
-$steps = [
-    ['header' => 'Консультация', 'text' => 'Обсуждаем задачу, бюджет и участок, подбираем проект.'],
-    ['header' => 'Расчёт сметы', 'text' => 'Считаем стоимость по выбранной комплектации, без «от».'],
-    ['header' => 'Участок', 'text' => 'Пробное бурение и геодезия, подбираем фундамент.'],
-    ['header' => 'Договор', 'text' => 'Фиксируем цену, сроки, материалы и график оплаты.'],
-    ['header' => 'Фундамент', 'text' => 'Сваи или плита — по результатам бурения.'],
-    ['header' => 'Коробка и инженерка', 'text' => 'Каркас, кровля, окна, фасад, коммуникации.'],
-    ['header' => 'Сдача дома', 'text' => 'Подписываем акт, начинает действовать гарантия.'],
-];
-
 // Этапы оплаты — repeater `payments` в синглтоне stroitelstvo (percent, description), порядок — как в админке.
 // Номер этапа — по порядку (1, 2, 3…), ширина сегмента полосы = percent.
 $payments = array_values(array_filter($stroitelstvo['payments'] ?? [], fn($p) => (float) ($p['percent'] ?? 0) > 0));
@@ -395,21 +384,8 @@ $ldFaq = [
 <!-- 14. Почему каркасный дом (статичный блок) -->
 <?php $blockClass = 'stroy__band'; include 'includes/blocks/why_frame.php'; ?>
 
-<!-- 15. Этапы -->
-<section class="stroy__band stroy__band--white">
-    <h2>Как мы строим</h2>
-    <ol class="ipoteka__steps">
-        <?php foreach ($steps as $i => $step): ?>
-        <li class="ipoteka__step">
-            <span class="ipoteka__step_num"><?= $i + 1 ?></span>
-            <div>
-                <h3><?= htmlspecialchars($step['header']) ?></h3>
-                <p><?= htmlspecialchars($step['text']) ?></p>
-            </div>
-        </li>
-        <?php endforeach; ?>
-    </ol>
-</section>
+<!-- 15. Этапы (статичный блок) -->
+<?php $blockClass = 'stroy__band stroy__band--white'; include 'includes/blocks/steps.php'; ?>
 
 <!-- 16. FAQ -->
 <?php if (!empty($faqs)): ?>

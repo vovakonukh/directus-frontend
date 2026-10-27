@@ -1,243 +1,276 @@
 <?php
-$slides = fetchItems('homepage_slides', [
+// Главная (/). Собрана из блоков других страниц + hero с фото построенного дома.
+// Прошлая версия (слайдер homepage_slides) — pages/home_old.php, в роутинге не подключена.
+
+// Синглтон homepage: hero, дом для фото в hero, карта. SEO-текст и запасной H1 — из pages_seo (route «/»), $seo задаёт index.php
+$homepage = fetchItems('homepage', ['fields' => 'hero_title,hero_subtitle,hero_trust,hero_house.slug,hero_house.main_image,hero_house.square,hero_house.location,hero_house.construction_period,map_code']);
+if (is_array($homepage) && isset($homepage[0])) $homepage = $homepage[0];
+$heroTitle = trim($homepage['hero_title'] ?? '') ?: trim($seo['h1'] ?? '') ?: 'Каркасные дома в Ленинградской и Московской области';
+$heroSubtitle = trim($homepage['hero_subtitle'] ?? '');
+$trust = array_filter(array_map(fn($t) => trim($t['text'] ?? ''), $homepage['hero_trust'] ?? []));
+$mapCode = $homepage['map_code'] ?? '';
+
+// Минимальная цена тёплого контура — для «от ... ₽» в hero
+$cheapest = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
-    'sort' => 'sort',
-    'fields' => '*,form.bitrix_code'
+    'filter[price_tk][_nnull]' => 'true',
+    'fields' => 'price_tk',
+    'sort' => 'price_tk',
+    'limit' => 1
 ]);
+$minPrice = (int) ($cheapest[0]['price_tk'] ?? 0);
 
-if (!empty($slides)):
-?>
-<style>
-<?php foreach ($slides as $i => $slide): ?>
-<?php // мобильный фон необязателен — без него показываем десктопный ?>
-<?php $bgMobile = $slide['background_mobile'] ?: $slide['background_desktop']; ?>
-#jumbo_slide_<?= $i ?> {
-    background: linear-gradient(rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>), rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>)), url(<?= getAssetUrl($slide['background_desktop']) ?>) center/cover no-repeat;
-    <?php if ($bgMobile !== $slide['background_desktop']): ?>
-    @media (max-width: 767px) {
-        background: linear-gradient(rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>), rgba(0,0,0,<?= $slide['slide_opacity'] ?? 0.5 ?>)), url(<?= getAssetUrl($bgMobile) ?>) center/cover no-repeat;
-    }
-    <?php endif; ?>
-}
-<?php endforeach; ?>
-</style>
-
-<section class="jumbo_section">
-    <div class="f-carousel" id="jumbo_slider">
-        <div class="f-carousel__viewport">
-            <div class="f-carousel__track">
-                <?php foreach ($slides as $i => $slide): ?>
-                <div class="f-carousel__slide jumbo_slide" id="jumbo_slide_<?= $i ?>">
-                    <div class="jumbo_content_wrap">
-                        <?php // h1 на странице один — у первого слайда, у остальных такой же стиль на <p> ?>
-                        <?php $headerTag = $i === 0 ? 'h1' : 'p'; ?>
-                        <<?= $headerTag ?> class="jumbo_header"><?= $slide['header'] ?></<?= $headerTag ?>>
-                        <p class="jumbo_description"><?= $slide['description'] ?></p>
-                        <?php if (!empty($slide['trust_items'])): ?>
-                        <ul class="ipoteka__trust">
-                            <?php foreach ($slide['trust_items'] as $trust): ?>
-                            <?php if (!empty($trust['text'])): ?>
-                            <li><?= htmlspecialchars($trust['text']) ?></li>
-                            <?php endif; ?>
-                            <?php endforeach; ?>
-                        </ul>
-                        <?php endif; ?>
-                        <?php if (!empty($slide['form'])): ?>
-                            <?= $slide['form']['bitrix_code'] ?>
-                            <a class="button big"><?= $slide['button_text'] ?></a>
-                        <?php else: ?>
-                            <a class="button big" href="<?= $slide['button_link'] ?>"><?= $slide['button_text'] ?></a>
-                        <?php endif; ?>
-                        <?php if (!empty($slide['note'])): ?>
-                        <p class="ipoteka__hero_note"><?= htmlspecialchars($slide['note']) ?></p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
-</section>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const el = document.getElementById('jumbo_slider');
-    if (!el) return;
-    new Carousel(el, {
-        infinite: true,
-        Dots: false,
-        Autoplay: { timeout: 6000, pauseOnHover: true },
-        // на мобильном вместо стрелок — точки под слайдом
-        breakpoints: {
-            '(max-width: 767px)': { Dots: true, Navigation: false }
-        }
-    });
-});
-</script>
-<?php endif; ?>
-
-
-<?php
+// Популярные проекты
 $projects = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
     'filter[show_on_main][_eq]' => true,
-    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk'
-]);
+    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk',
+    'limit' => 6
+]) ?? [];
 
-if (!empty($projects)):
+// Построенные дома
+$finished = fetchItems('finished', [
+    'fields' => 'id,name,slug,main_image,plan_1,floors,square,length,width,bedrooms,wc,finish_date,location,construction_period',
+    'filter[show_on_main][_eq]' => 'true',
+    'sort' => 'sort',
+    'limit' => 3
+]) ?? [];
+
+// Дом для фото в hero (с табличкой «где и за сколько построили»): выбран в homepage.hero_house, иначе первый построенный
+$heroHouse = is_array($homepage['hero_house'] ?? null) ? $homepage['hero_house'] : ($finished[0] ?? null);
+
+// Ипотека: выделенная (льготная) программа, иначе первая
+$mortgagePrograms = fetchItems('ipoteka_programs', [
+    'filter[status][_eq]' => 'published',
+    'sort' => 'sort',
+    'fields' => 'name,rate,pv,is_highlighted',
+]) ?? [];
+$mainProgram = array_values(array_filter($mortgagePrograms, fn($p) => !empty($p['is_highlighted'])))[0] ?? ($mortgagePrograms[0] ?? null);
+$fmtPercent = fn($x) => str_replace('.', ',', (string) (float) $x);
+
+// Отзывы
+$feedback = fetchItems('feedback', [
+    'fields' => 'id,client_name,date,content,link,images.directus_files_id',
+    'filter[show_on_main][_eq]' => 'true',
+    'sort' => '-date',
+    'limit' => 2
+]) ?? [];
+
+// FAQ главной: в коллекции faq show_on должен содержать home
+$faqs = fetchItems('faq', [
+    'filter[status][_eq]' => 'published',
+    'filter[show_on][_contains]' => 'home',
+    'sort' => 'sort',
+    'fields' => 'question,answer'
+]) ?? [];
+
+// Форма 3 — получить расчёт. Выводится один раз со скрытой кнопкой, видимые кнопки кликают по ней
+$calcForm = fetchItems('forms', ['filter[id][_eq]' => 3, 'fields' => 'bitrix_code'])[0]['bitrix_code'] ?? '';
+$openCalc = "document.getElementById('home_form_3_trigger').click()";
+
+// Направления — ссылки на разделы услуг
+$directions = [
+    ['href' => '/services/stroitelstvo', 'icon' => '/assets/icons/house.webp', 'title' => 'Дома под ключ', 'text' => 'Каркасные дома по типовым и индивидуальным проектам'],
+    ['href' => '/services/fundament', 'icon' => '/assets/icons/fund_beton.svg', 'title' => 'Фундаменты', 'text' => 'Сваи и монолитная плита после пробного бурения'],
+    ['href' => '/services/inzhenerka', 'icon' => '/assets/icons/light.webp', 'title' => 'Инженерные сети', 'text' => 'Электрика, водоснабжение, отопление, канализация'],
+    ['href' => '/ipoteka', 'icon' => '/assets/icons/for_mortgage.webp', 'title' => 'Ипотека', 'text' => 'Строим с эскроу-счётом, поможем с одобрением'],
+];
+
 ?>
-<section>
+
+<div class="stroy home2">
+
+<!-- 1. Hero: фото реального построенного дома (на десктопе — на весь блок, слева оффер на градиенте) -->
+<section class="home2__hero">
+    <div class="home2__hero_text">
+        <h1><?= htmlspecialchars($heroTitle) ?></h1>
+        <?php if ($heroSubtitle): ?>
+        <p class="home2__hero_subtitle"><?= htmlspecialchars($heroSubtitle) ?></p>
+        <?php endif; ?>
+        <?php if ($trust): ?>
+        <ul class="ipoteka__trust">
+            <?php foreach ($trust as $t): ?>
+            <li><?= htmlspecialchars($t) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+        <?php if ($minPrice): ?>
+        <p class="stroy__hero_price">Тёплый контур — от <b><?= number_format($minPrice, 0, '', ' ') ?> ₽</b></p>
+        <?php endif; ?>
+        <div class="stroy__hero_buttons">
+            <button type="button" class="button big" onclick="<?= $openCalc ?>">Рассчитать стоимость</button>
+            <a class="button big stroy__button_ghost" href="/projects">Выбрать проект</a>
+        </div>
+    </div>
+    <?php if ($heroHouse): ?>
+    <figure class="home2__hero_photo">
+        <img src="<?= getAssetUrl($heroHouse['main_image']) ?>?width=1400&format=webp" alt="Построенный каркасный дом, <?= htmlspecialchars($heroHouse['location']) ?>" fetchpriority="high">
+        <figcaption class="home2__plate">
+            <a href="/finished/<?= $heroHouse['slug'] ?>">
+                <?php if (!empty($heroHouse['construction_period'])): ?>
+                <b>Этот дом мы построили за <?= htmlspecialchars($heroHouse['construction_period']) ?></b>
+                <?php else: ?>
+                <b>Этот дом построили мы</b>
+                <?php endif; ?>
+                <?= htmlspecialchars($heroHouse['location']) ?>, <?= $heroHouse['square'] ?> м²
+            </a>
+        </figcaption>
+    </figure>
+    <?php endif; ?>
+</section>
+
+<!-- 2. Направления -->
+<nav class="home2__directions" aria-label="Услуги">
+    <?php foreach ($directions as $d): ?>
+    <a class="home2__direction" href="<?= $d['href'] ?>">
+        <img src="<?= asset($d['icon']) ?>" alt="" loading="lazy">
+        <span>
+            <b><?= $d['title'] ?></b>
+            <?= $d['text'] ?>
+        </span>
+    </a>
+    <?php endforeach; ?>
+</nav>
+
+<!-- 3. Популярные проекты -->
+<?php if (!empty($projects)): ?>
+<section class="stroy__band stroy__band--white">
     <h2>Популярные проекты</h2>
     <div class="projects__collection">
         <?php foreach ($projects as $item): ?>
             <?php include 'includes/cards/project_card.php'; ?>
         <?php endforeach; ?>
     </div>
+    <div class="stroy__more">
+        <a class="button" href="/projects">Смотреть весь каталог</a>
+    </div>
 </section>
 <?php endif; ?>
 
+<!-- 4. Этапы (статичный блок) -->
+<?php $blockClass = 'stroy__band'; include 'includes/blocks/steps.php'; ?>
 
-<section>
-    <h2>С нами вы можете использовать льготную ипотеку</h2>
+<!-- 5. Экскурсия (статичный блок) -->
+<?php $blockClass = 'stroy__band stroy__band--white'; include 'includes/blocks/tour.php'; ?>
 
-	<div class="ipoteka_section">
-		<div class="ipoteka_descr_wrap">
-			<div class="ipoteka_descr_list">
-				<li>работаем по эскроу счету</li>
-				<li>консультируем по сбору документов</li>
-				<li>помогаем правильно оформить заявку</li>
-				<li>подберем условия под вашу ситуацию</li>
-				<li>подадим заявку в несколько банков</li>
-				<li>одобрение за 24 часа без визита банк</li>
-			</div>
-			<?php
-                $ipoteka_form = fetchItems('forms', [
-                    'fields' => 'bitrix_code',
-                    'filter[id][_eq]' => 4
-                ]);
-                $ipoteka_form_code = $ipoteka_form[0]['bitrix_code'] ?? '';
-                ?>
-
-                <?= $ipoteka_form_code ?>
-                <a class="button">Одобрить ипотеку</a>
-		</div>
-	
-		<div class="ipoteka_banks_wrap">
-			<div class="ipoteka_banks_logo_wrap">
-				<img src="assets/icons/banks/sber_logo.svg" />
-				<img src="assets/icons/banks/rshb_logo.svg" />
-				<img src="assets/icons/banks/domrf_logo.svg" />
-				<img src="assets/icons/banks/vtb_logo.svg" />
-				<img src="assets/icons/banks/alfabank_logo.webp" />
-			</div>
-			<h3 class="ipoteka_banks_header">Пример условий по ипотеке на строительство дома</h3>
-			<div class="ipoteka_conditions_wrap">
-				<div class="ipoteka_conditions_item">
-					<span>Ставка</span>
-					<span>от 6%</span>
-				</div>
-
-				<div class="ipoteka_conditions_item">
-					<span>Сумма</span>
-					<span>до 12 млн</span>
-				</div>
-
-				<div class="ipoteka_conditions_item">
-					<span>Срок</span>
-					<span>до 360 мес</span>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<section>
-    <h1>СТРОИТЕЛЬНАЯ КОМПАНИЯ «КЛАСС ХАУС»</h1>
-    <div class="tile_wrap">
-        <div class="tile_item">
-            <img src="assets/icons/camera.svg" />
-            <div class="tile_item_text_wrap">
-                <span>Следите онлайн за ходом строительства</span>
-                <p>Каждые 2-3 дня руководитель проекта присылает фотографии со строительной площадки</p>
-            </div>
-        </div>
-
-        <div class="tile_item">
-            <img src="assets/icons/contract.svg" />
-            <div class="tile_item_text_wrap">
-                <span>Прозрачная смета и договор</span>
-                <p>Проходим по каждому пункту договора при заключении. Никаких подводных камней.</p>
-            </div>
-        </div>
-
-        <div class="tile_item">
-            <img src="assets/icons/house_project.svg" />
-            <div class="tile_item_text_wrap">
-                <span>Бесплатный индивидуальный проект</span>
-                <p>Воплотите свои идеи в жизнь вместе с нашим архитектором. Выражайте свою индивидуальность</p>
-            </div>
-        </div>
-
-        <div class="tile_item">
-            <img src="assets/icons/shield_warranty.svg" />
-            <div class="tile_item_text_wrap">
-                <span>Гарантия до 10 лет</span>
-                <p>Гарантия прописана в договоре и мы никогда не отказываем в гарантийных работах</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<?php
-$finished = fetchItems('finished', [
-    'fields' => 'id,name,slug,main_image,plan_1,floors,square,length,width,bedrooms,wc,finish_date,location,construction_period',
-    'filter[show_on_main][_eq]' => 'true',
-    'sort' => 'sort'
-]);
-?>
-
-<section>
+<!-- 6. Построенные дома -->
+<?php if (!empty($finished)): ?>
+<section class="stroy__band">
     <h2>Мы построили</h2>
     <div class="projects__collection">
         <?php foreach ($finished as $item): ?>
             <?php include 'includes/cards/finished_card.php'; ?>
         <?php endforeach; ?>
     </div>
+    <div class="stroy__more">
+        <a class="button" href="/finished">Все построенные дома</a>
+    </div>
 </section>
+<?php endif; ?>
 
-<?php
-$feedback = fetchItems('feedback', [
-    'fields' => 'id,client_name,date,content,link,show_on_main,images.directus_files_id',
-    'filter[show_on_main][_eq]' => 'true',
-    'sort' => '-date',
-    'limit' => 2
-]);
-?>
+<!-- 7. Почему строят с нами (статичный блок) -->
+<?php $blockClass = 'stroy__band stroy__band--white'; include 'includes/blocks/why_us.php'; ?>
 
-<section>
+<!-- 8. Отзывы -->
+<?php if (!empty($feedback)): ?>
+<section class="stroy__band">
     <h2>Отзывы</h2>
     <div class="feedback_gallery">
         <?php foreach ($feedback as $item): ?>
             <?php include 'includes/cards/feedback_card.php'; ?>
         <?php endforeach; ?>
     </div>
-</section>
-
-<?php
-$homepage = fetchItems('homepage', [
-    'fields' => 'map_code, seo_text'
-]);
-// singleton возвращает массив с одним элементом или объект — проверь что приходит
-$map_code = is_array($homepage) && isset($homepage[0]) ? $homepage[0]['map_code'] : $homepage['map_code'] ?? '';
-$seo_text = is_array($homepage) && isset($homepage[0]) ? $homepage[0]['seo_text'] : $homepage['seo_text'] ?? '';
-?>
-
-<section>
-    <h2>География построенных домов</h2>
-    <?= $map_code ?>
-</section>
-
-<section>
-    <div class="mainpage__content_inner">
-        <?= $seo_text ?>
+    <div class="stroy__more">
+        <a class="button" href="/feedback">Все отзывы</a>
     </div>
 </section>
+<?php endif; ?>
+
+<!-- 9. Способы оплаты -->
+<section class="stroy__band stroy__band--white">
+    <h2>Строим в ипотеку или на свои средства</h2>
+    <p class="ipoteka__lead">Дом и гарантия одинаковые, отличается только порядок расчётов.</p>
+    <div class="stroy__pay_options">
+        <div class="stroy__pay_option stroy__pay_option--mortgage">
+            <span class="stroy__pay_option_label">В ипотеку</span>
+            <h3>Ипотека с эскроу-счётом</h3>
+            <?php if ($mainProgram && (!empty($mainProgram['rate']) || !empty($mainProgram['pv']))): ?>
+            <div class="stroy__pay_option_figures">
+                <?php if (!empty($mainProgram['rate'])): ?>
+                <div><b><?= $fmtPercent($mainProgram['rate']) ?>%</b><?= htmlspecialchars(mb_strtolower(trim($mainProgram['name']))) ?></div>
+                <?php endif; ?>
+                <?php if (!empty($mainProgram['pv'])): ?>
+                <div><b>от <?= $fmtPercent($mainProgram['pv']) ?>%</b>первый взнос</div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+            <ul class="ipoteka__final_cta_list">
+                <li>Деньги хранятся на эскроу-счёте и переходят к нам только после сдачи дома</li>
+                <li>Ипотечный брокер в команде поможет получить одобрение</li>
+                <li>Материнский капитал — в первоначальный взнос</li>
+            </ul>
+            <a class="button stroy__pay_option_button" href="/ipoteka">Условия ипотеки</a>
+        </div>
+        <div class="stroy__pay_option">
+            <span class="stroy__pay_option_label">Свои средства</span>
+            <h3>Поэтапная оплата по договору</h3>
+            <div class="stroy__pay_option_figures">
+                <div><b>Лучшая цена</b>без расходов на банковское сопровождение</div>
+            </div>
+            <ul class="ipoteka__final_cta_list">
+                <li>Платите по этапам — по факту выполненных работ</li>
+                <li>Основная часть — когда материалы уже на вашем участке</li>
+                <li>Быстрый старт: не нужно ждать одобрения банка</li>
+            </ul>
+            <a class="button stroy__pay_option_button" href="/services/stroitelstvo#payments">Как устроена оплата</a>
+        </div>
+    </div>
+</section>
+
+<!-- 10. География -->
+<?php if ($mapCode): ?>
+<section class="stroy__band">
+    <h2>География построенных домов</h2>
+    <div class="home2__map"><?= $mapCode ?></div>
+</section>
+<?php endif; ?>
+
+<!-- 11. FAQ (появится, когда у вопросов в faq будет show_on = home) -->
+<?php if (!empty($faqs)): ?>
+<section class="stroy__band stroy__band--white">
+    <h2>Частые вопросы</h2>
+    <?php foreach ($faqs as $f): ?>
+        <?php include 'includes/cards/faq_card.php'; ?>
+    <?php endforeach; ?>
+</section>
+<?php endif; ?>
+
+<!-- 12. Финальный CTA -->
+<section class="stroy__band stroy__band--white stroy__final">
+    <div class="ipoteka__final_cta"<?php if ($heroHouse): ?> style="--cta-image: url('<?= getAssetUrl($heroHouse['main_image']) ?>?width=1600&format=webp')"<?php endif; ?>>
+        <div class="ipoteka__final_cta_content">
+            <h2>Рассчитаем стоимость вашего дома</h2>
+            <p>Оставьте заявку — специалист свяжется с вами, пришлёт подробную комплектацию и ответит на вопросы.</p>
+            <ul class="ipoteka__final_cta_list">
+                <li>Расчёт без «от» — по вашему проекту</li>
+                <li>Подбор фундамента под участок</li>
+                <li>Расчёт ипотечного платежа</li>
+            </ul>
+        </div>
+        <div class="ipoteka__final_cta_action">
+            <button type="button" class="button big" onclick="<?= $openCalc ?>">Получить расчёт</button>
+        </div>
+    </div>
+</section>
+
+<!-- 13. SEO-текст из pages_seo, сворачивается -->
+<?php if (!empty($seo['seo_text'])): ?>
+<section class="stroy__band stroy__band--white stroy__band--tight">
+    <?php include 'includes/seo_text.php'; ?>
+</section>
+<?php endif; ?>
+
+<?= $calcForm ?>
+<button type="button" id="home_form_3_trigger" hidden></button>
+
+</div>
