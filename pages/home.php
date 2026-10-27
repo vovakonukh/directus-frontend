@@ -70,10 +70,10 @@ $openCalc = "document.getElementById('home_form_3_trigger').click()";
 
 // Направления — ссылки на разделы услуг
 $directions = [
-    ['href' => '/services/stroitelstvo', 'icon' => '/assets/icons/house.webp', 'title' => 'Дома под ключ', 'text' => 'Каркасные дома по типовым и индивидуальным проектам'],
-    ['href' => '/services/fundament', 'icon' => '/assets/icons/fund_beton.svg', 'title' => 'Фундаменты', 'text' => 'Сваи и монолитная плита после пробного бурения'],
-    ['href' => '/services/inzhenerka', 'icon' => '/assets/icons/light.webp', 'title' => 'Инженерные сети', 'text' => 'Электрика, водоснабжение, отопление, канализация'],
-    ['href' => '/ipoteka', 'icon' => '/assets/icons/for_mortgage.webp', 'title' => 'Ипотека', 'text' => 'Строим с эскроу-счётом, поможем с одобрением'],
+    ['href' => '/services/stroitelstvo', 'icon' => '/assets/icons/home__services_1.webp', 'title' => 'Дома под ключ', 'text' => 'Каркасные дома по типовым и индивидуальным проектам'],
+    ['href' => '/services/fundament', 'icon' => '/assets/icons/home__services_2.webp', 'title' => 'Фундаменты', 'text' => 'Сваи и монолитная плита после пробного бурения'],
+    ['href' => '/services/inzhenerka', 'icon' => '/assets/icons/home__services_3.webp', 'title' => 'Инженерные сети', 'text' => 'Электрика, водоснабжение, отопление, канализация'],
+    ['href' => '/ipoteka', 'icon' => '/assets/icons/home__services_4.webp', 'title' => 'Ипотека', 'text' => 'Строим с эскроу-счётом, поможем с одобрением'],
 ];
 
 ?>
