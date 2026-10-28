@@ -4,7 +4,7 @@
 
 // Синглтон страницы: hero-картинка и плитки преимуществ
 $stroitelstvo = fetchItems('stroitelstvo', [
-    'fields' => 'hero_image,hero_description,hero_form.bitrix_code,hero_link,trust,payments,tiles.tiles_id.icon,tiles.tiles_id.header,tiles.tiles_id.text,tiles.tiles_id.sort',
+    'fields' => 'hero_image,hero_header_msk,hero_description,hero_form.bitrix_code,hero_link,trust,payments,tiles.tiles_id.icon,tiles.tiles_id.header,tiles.tiles_id.text,tiles.tiles_id.sort',
     'deep[tiles][_sort]' => 'tiles_id.sort'
 ]);
 if (is_array($stroitelstvo) && isset($stroitelstvo[0])) $stroitelstvo = $stroitelstvo[0];
@@ -106,6 +106,8 @@ $openLand = "document.getElementById('stroy_form_1_trigger').click()";
 
 // H1 и SEO-текст — из pages_seo ($seo задаётся в index.php)
 $heroTitle = trim($seo['h1'] ?? '') ?: 'Строительство каркасных домов под ключ в СПб и Ленобласти';
+// /services/stroitelstvo-msk: заголовок для Москвы из синглтона
+if (!empty($isMsk) && trim($stroitelstvo['hero_header_msk'] ?? '') !== '') $heroTitle = trim($stroitelstvo['hero_header_msk']);
 
 $heroSubtitle = trim($stroitelstvo['hero_description'] ?? '');
 

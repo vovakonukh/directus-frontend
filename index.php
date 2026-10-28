@@ -93,6 +93,12 @@ switch (true) {
         $page = 'services/stroitelstvo';
         $title = 'Строительство каркасных домов под ключ | Класс Хаус';
         break;
+    case $uri === 'services/stroitelstvo-msk':
+        // тот же шаблон, что /services/stroitelstvo, меняется только H1
+        $page = 'services/stroitelstvo';
+        $isMsk = true;
+        $title = 'Строительство каркасных домов под ключ в Москве | Класс Хаус';
+        break;
     case $uri === 'services/inzhenerka':
         $page = 'services/inzhenerka';
         $title = 'Инженерные сети | Строительная компания Класс Хаус';
