@@ -2188,6 +2188,7 @@
 			}
 			#project_thumbs {
 				--f-carousel-spacing: 10px;
+				width: 100%;
 			}
 
 			#project_thumbs .f-carousel__slide {
@@ -2200,8 +2201,12 @@
 			}
 
 			#project_thumbs img {
+				display: block;
+				width: 100%;
+				height: auto;
 				border-radius: 10px;
 				aspect-ratio: 3 / 2;
+				object-fit: cover;
 			}
 
 			#project_thumbs .f-carousel__slide.is-nav-selected {
