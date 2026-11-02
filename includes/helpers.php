@@ -54,3 +54,16 @@ function asset(string $path): string {
     $file = __DIR__ . '/../' . ltrim($path, '/');
     return is_file($file) ? $path . '?v=' . filemtime($file) : $path;
 }
+
+// Дата сдачи из текста в число ГГГГММ для сортировки: «май 2023 года» → 202305, «2021» → 202100, без года → 0.
+// Временно: finish_date в Directus — строка. Когда поле станет датой, функция не нужна.
+function finishDateSortKey(string $text): int {
+    $months = ['янв' => 1, 'фев' => 2, 'мар' => 3, 'апр' => 4, 'мая' => 5, 'май' => 5, 'июн' => 6,
+               'июл' => 7, 'авг' => 8, 'сен' => 9, 'окт' => 10, 'ноя' => 11, 'дек' => 12];
+    if (!preg_match('/\d{4}/', $text, $y)) return 0;
+    $text = mb_strtolower($text);
+    foreach ($months as $prefix => $m) {
+        if (mb_strpos($text, $prefix) !== false) return $y[0] * 100 + $m;
+    }
+    return $y[0] * 100;
+}
