@@ -347,5 +347,6 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/fancybox/fancybox.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.36/dist/carousel/carousel.umd.js"></script>
     <script>Fancybox.bind('[data-fancybox]');</script>
+    <script src="<?= asset('/js/page_time.js') ?>"></script>
 </body>
 </html>
