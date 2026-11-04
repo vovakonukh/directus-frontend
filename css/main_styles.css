@@ -476,7 +476,6 @@
 	/* ---------- SEO text (текст из Directus под листингами) ---------- */
 
     .seo_text_wrap {
-        max-width: 820px;
         margin: 70px 0 40px 0;
 
         @media (max-width: 767px) {
@@ -491,6 +490,11 @@
         @media (max-width: 767px) {
             font-size: 17px;
         }
+    }
+
+    /* узкая колонка для удобства чтения; таблицы — исключение, им нужна вся ширина */
+    .seo_text > :not(table) {
+        max-width: 820px;
     }
 
     /* свернутое состояние: текст остается в DOM, обрезается только визуально */
@@ -586,6 +590,18 @@
         width: 100%;
         border-collapse: collapse;
         margin: 0 0 20px 0;
+
+        /* на узких экранах столбцы не влезают — таблица прокручивается по горизонтали */
+        @media (max-width: 991px) {
+            display: block;
+            overflow-x: auto;
+        }
+    }
+
+    .seo_text caption {
+        margin-bottom: 10px;
+        font-weight: 700;
+        text-align: left;
     }
 
     .seo_text th,
@@ -597,6 +613,11 @@
 
         @media (max-width: 767px) {
             padding: 8px 10px;
+        }
+
+        /* таблица прокручивается, поэтому числа и короткие подписи не переносим */
+        @media (max-width: 991px) {
+            white-space: nowrap;
         }
     }
 
@@ -621,6 +642,22 @@
         height: auto;
         border-radius: 20px;
         margin: 24px 0;
+    }
+
+    /* картинка с подписью: <figure><img><figcaption> (TinyMCE в Directus с image_caption) */
+    .seo_text figure {
+        margin: 24px 0;
+    }
+
+    .seo_text figure img {
+        margin: 0;
+    }
+
+    .seo_text figcaption {
+        margin-top: 10px;
+        font-size: 15px;
+        line-height: 1.4;
+        color: #06435bb3;
     }
 
 	/* ---------- Header ---------- */
