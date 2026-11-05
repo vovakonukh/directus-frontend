@@ -138,7 +138,8 @@ function renderBlocks(?string $html): string {
             foreach ([2, 3, 4, 5] as $g) if (isset($p[$g]) && $p[$g] !== '') { $v = trim($p[$g]); break; }
             $params[$p[1]] = $v ?? true;
         }
-        $limit = max(1, min(12, (int) ($params['limit'] ?? 4)));
+        // проекты и дома выводятся по 3 в ряд — по умолчанию один полный ряд
+        $limit = max(1, min(12, (int) ($params['limit'] ?? (in_array($m[1], ['projects', 'finished']) ? 3 : 4))));
         $slugs = isset($params['slugs']) ? array_filter(array_map('trim', explode(',', $params['slugs']))) : [];
 
         // записи в порядке, в котором slug перечислены в шорткоде

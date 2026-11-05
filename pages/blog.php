@@ -12,15 +12,7 @@ $posts = fetchItems('blog', [
 
     <div class="blog_index__collection">
         <?php foreach ($posts as $post): ?>
-            <a class="blog_index__card" href="/blog/<?= htmlspecialchars($post['slug']) ?>">
-                <?php if (!empty($post['blog_image'])): ?>
-                    <img src="<?= getAssetUrl($post['blog_image']) ?>" alt="<?= htmlspecialchars($post['pagetitle']) ?>" />
-                <?php endif; ?>
-                <span class="blog_index__card_header"><?= htmlspecialchars($post['pagetitle']) ?></span>
-                <?php if (!empty($post['description'])): ?>
-                    <span class="blog_index__card_descr"><?= htmlspecialchars($post['description']) ?></span>
-                <?php endif; ?>
-            </a>
+            <?php include 'includes/cards/blog_card.php'; ?>
         <?php endforeach; ?>
     </div>
 </section>

@@ -1,4 +1,4 @@
-<div class="article_block">
+<div class="article_block article_block--wide">
     <div class="projects__collection">
         <?php foreach ($items as $item): ?>
             <?php include __DIR__ . '/../cards/project_card.php'; ?>

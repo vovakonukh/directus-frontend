@@ -1,6 +1,6 @@
 <?php
 $items = fetchItems('blog', [
-    'fields' => 'id,slug,pagetitle,content,blog_image,date,seo_title,description',
+    'fields' => 'id,slug,pagetitle,content,blog_image,date,seo_title,description,faq_blog',
     'filter[slug][_eq]' => $slug,
     'filter[status][_eq]' => 'published',
     'limit' => 1,
@@ -58,13 +58,19 @@ function buildContentsAndAnchors($html) {
 
 $processed = buildContentsAndAnchors(renderVars($post['content']));
 
-// Другие статьи
+// FAQ статьи (repeater faq_blog): шорткоды {{...}} подставляются и в вопросы, и в ответы
+$faq = array_values(array_filter(array_map(fn($f) => [
+    'question' => renderVars($f['question'] ?? ''),
+    'answer'   => renderVars($f['answer'] ?? ''),
+], $post['faq_blog'] ?? []), fn($f) => trim($f['question']) !== '' && trim($f['answer']) !== ''));
+
+// Смотрите также: 3 последние статьи, кроме текущей
 $others = fetchItems('blog', [
-    'fields' => 'slug,pagetitle,blog_image',
+    'fields' => 'slug,pagetitle,description,blog_image',
     'filter[status][_eq]' => 'published',
     'filter[id][_neq]' => $post['id'],
     'sort' => '-date',
-    'limit' => 6,
+    'limit' => 3,
 ]);
 ?>
 
@@ -73,19 +79,37 @@ $others = fetchItems('blog', [
         <h1><?= htmlspecialchars($post['pagetitle']) ?></h1>
         <?= $processed['contents'] ?>
         <?= renderBlocks($processed['content']) /* блоки после оглавления: заголовки карточек в него не попадают */ ?>
+
+        <?php if (!empty($faq)): ?>
+            <h2>Часто задаваемые вопросы</h2>
+            <?php foreach ($faq as $f): ?>
+                <?php include 'includes/cards/faq_card.php'; ?>
+            <?php endforeach; ?>
+            <?php
+            $ldFaq = [
+                '@context' => 'https://schema.org',
+                '@type' => 'FAQPage',
+                'mainEntity' => array_map(fn($f) => [
+                    '@type' => 'Question',
+                    'name' => $f['question'],
+                    'acceptedAnswer' => ['@type' => 'Answer', 'text' => trim(strip_tags($f['answer']))],
+                ], $faq),
+            ];
+            ?>
+            <script type="application/ld+json"><?= json_encode($ldFaq, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
+        <?php endif; ?>
     </div>
 
     <?php if (!empty($others)): ?>
-        <div class="blog__other_box">
-            <span>Смотрите также:</span>
-            <?php foreach ($others as $o): ?>
-                <a href="/blog/<?= htmlspecialchars($o['slug']) ?>" class="blog__other_item">
-                    <?php if (!empty($o['blog_image'])): ?>
-                        <img src="<?= getAssetUrl($o['blog_image']) ?>" alt="<?= htmlspecialchars($o['pagetitle']) ?>" />
-                    <?php endif; ?>
-                    <?= htmlspecialchars($o['pagetitle']) ?>
-                </a>
-            <?php endforeach; ?>
+        <div class="blog__others">
+            <h2>Смотрите также</h2>
+            <div class="blog_index__collection">
+                <?php $article = $post; ?>
+                <?php foreach ($others as $post): ?>
+                    <?php include 'includes/cards/blog_card.php'; ?>
+                <?php endforeach; ?>
+                <?php $post = $article; ?>
+            </div>
         </div>
     <?php endif; ?>
 </section>
