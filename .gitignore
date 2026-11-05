@@ -4,3 +4,4 @@ CLAUDE.md
 .claude/
 cache/
 includes/cache_key.php
+_archive/

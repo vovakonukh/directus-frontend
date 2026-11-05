@@ -314,134 +314,28 @@ $ldProduct = [
 
 </div></section>
 
-<!-- Комплектация -->
-<section id="complectation" x-data="complectationCalc()">
-    <h2>Комплектация</h2>
-
-    <!-- Сваи -->
-    <div class="project__complectation_card">
-        <div>
-            <input type="checkbox" id="fund_svai" :value="<?= $priceSvai ?>" @change="recalc($el)">
-            <label for="fund_svai">Фундамент: ЖБ сваи <span><?= number_format($priceSvai, 0, '', ' ') ?> ₽</span></label>
-            <span class="project__complectation_fund_disclaimer">Окончательно определиться с типом фундамента можно только после пробного бурения и анализа вашего участка</span>
-        </div>
-        <div class="project__complectation_card_items">
-            <?php foreach ($complectation as $item): ?>
-                <?php if ($item['stage'] === 'svai'): ?>
-                <div class="project__complectation_card_item">
-                    <span><?= htmlspecialchars($item['label']) ?></span>
-                    <span><?= htmlspecialchars($item['value']) ?></span>
-                </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- Плита -->
-    <div class="project__complectation_card">
-        <div>
-            <input type="checkbox" id="fund_plita" :value="<?= $pricePlita ?>" @change="recalc($el)">
-            <label for="fund_plita">Фундамент: ЖБ плита <span><?= number_format($pricePlita, 0, '', ' ') ?> ₽</span></label>
-            <span class="project__complectation_fund_disclaimer">Окончательно определиться с типом фундамента можно только после пробного бурения и анализа вашего участка</span>
-        </div>
-        <div class="project__complectation_card_items">
-            <?php foreach ($complectation as $item): ?>
-                <?php if ($item['stage'] === 'plita'): ?>
-                <div class="project__complectation_card_item">
-                    <span><?= htmlspecialchars($item['label']) ?></span>
-                    <span><?= htmlspecialchars($item['value']) ?></span>
-                </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- Теплый контур -->
-    <div class="project__complectation_card">
-        <div>
-            <input type="checkbox" id="teplyi_kontur" checked :value="<?= $project['price_tk'] ?>" @change="recalc($el)">
-            <label for="teplyi_kontur">Теплый контур <span><?= number_format($project['price_tk'], 0, '', ' ') ?> ₽</span></label>
-        </div>
-        <div class="project__complectation_card_items">
-            <?php foreach ($complectation as $item): ?>
-                <?php if ($item['stage'] === 'tk'): ?>
-                <div class="project__complectation_card_item">
-                    <span><?= htmlspecialchars($item['label']) ?></span>
-                    <span><?= htmlspecialchars($item['value']) ?></span>
-                </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- Инженерные сети -->
-    <div class="project__complectation_card">
-        <div>
-            <input type="checkbox" id="inzhenerka" :value="<?= $priceInzhenerka ?>" @change="recalc($el)">
-            <label for="inzhenerka">Инженерные сети от <span><?= number_format($priceInzhenerka, 0, '', ' ') ?> ₽</span></label>
-        </div>
-        <div class="project__complectation_card_items">
-            <?php foreach ($complectation as $item): ?>
-                <?php if ($item['stage'] === 'inzhenerka'): ?>
-                <div class="project__complectation_card_item">
-                    <span><?= htmlspecialchars($item['label']) ?></span>
-                    <span><?= htmlspecialchars($item['value']) ?></span>
-                </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- Отделка -->
-    <div class="project__complectation_card">
-        <div>
-            <input type="checkbox" id="otdelka" :value="<?= $project['price_otdelka'] ?>" @change="recalc($el)">
-            <label for="otdelka">Отделка от <span><?= number_format($project['price_otdelka'], 0, '', ' ') ?> ₽</span></label>
-        </div>
-        <div class="project__complectation_card_items">
-            <?php foreach ($complectation as $item): ?>
-                <?php if ($item['stage'] === 'otdelka'): ?>
-                <div class="project__complectation_card_item">
-                    <span><?= htmlspecialchars($item['label']) ?></span>
-                    <span><?= htmlspecialchars($item['value']) ?></span>
-                </div>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </div>
-    </div>
-
-    <!-- Плавающая панель с ценой -->
-    <div class="project__pane"
-        :style="total > 0 ? 'display:flex' : 'display:none'"
-        x-intersect:enter="$dispatch('sticky-pane-visible', true)"
-        x-intersect:leave="$dispatch('sticky-pane-visible', false)">
-        <div>
-            <div class="project__pane_price_wrap">
-                Общая стоимость: <span x-text="totalFormatted"></span> ₽
-            </div>
-            <div class="project__pane_ipoteka_wrap">Стоимость в ипотеку уточняйте у менеджера</div>
-        </div>
-        <?= $formCode ?>
-        <div class="button big">Оставить заявку</div>
-    </div>
-
-    <!-- Метка на «родном» месте панели: когда она поднялась на 90px над низом экрана,
-         панель уже отлипла — нижнее мобильное меню возвращается -->
-    <div class="project__pane_sentinel"
-        x-intersect:enter.margin.99999px.0px.-90px.0px="$dispatch('sticky-pane-released', true)"
-        x-intersect:leave.margin.99999px.0px.-90px.0px="$dispatch('sticky-pane-released', false)"></div>
-</section>
+<?php include __DIR__ . '/../includes/complectation.php'; // старый вариант: _archive/complectation/ ?>
 
 <!-- Дополнения -->
 <?php if (!empty($additions)): ?>
-<section class="page__wrap">
-    <h2>Возможные дополнения</h2>
-    <?php foreach ($additions as $item): ?>
-    <div class="project__extra_service_item">
-        <span><?= htmlspecialchars($item['label']) ?></span>
-        <span><?= htmlspecialchars($item['price']) ?></span>
+<section class="page__wrap extras">
+    <div class="extras__head">
+        <h2>Возможные дополнения</h2>
+        <p>Комплектацию можно изменить под ваши задачи — точную стоимость рассчитает менеджер</p>
     </div>
-    <?php endforeach; ?>
+    <ul class="extras__grid">
+        <?php foreach ($additions as $item):
+            // цена со знаком минус («-40 000 ₽») — это удешевление, выделяем зелёным
+            $extraPrice = trim($item['price'] ?? '');
+            $isMinus = (bool) preg_match('/^[-−–]/u', $extraPrice);
+            if ($isMinus) $extraPrice = preg_replace('/^[-−–]\s*/u', '−', $extraPrice);
+        ?>
+        <li class="extras__item">
+            <span class="extras__name"><?= htmlspecialchars($item['label']) ?></span>
+            <span class="extras__price<?= $isMinus ? ' is-minus' : '' ?>"><?= htmlspecialchars($extraPrice) ?></span>
+        </li>
+        <?php endforeach; ?>
+    </ul>
 </section>
 <?php endif; ?>
 
@@ -598,20 +492,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
-
-function complectationCalc() {
-    return {
-        total: <?= $project['price_tk'] ?>,
-        get totalFormatted() {
-            return new Intl.NumberFormat('ru-RU').format(this.total);
-        },
-        recalc(el) {
-            const inputs = document.querySelectorAll('#complectation input[type=checkbox]');
-            let sum = 0;
-            inputs.forEach(i => { if (i.checked) sum += Number(i.value); });
-            this.total = sum;
-            this.$dispatch('project-total', sum); // ипотечный калькулятор подхватывает сумму
-        }
-    }
-}
 </script>

@@ -1,6 +1,6 @@
 <?php
 // Главная (/). Собрана из блоков других страниц + hero с фото построенного дома.
-// Прошлая версия (слайдер homepage_slides) — pages/home_old.php, в роутинге не подключена.
+// Прошлая версия (слайдер homepage_slides) — _archive/pages/home_old.php (локально, вне git).
 
 // Синглтон homepage: hero, дом для фото в hero, карта. SEO-текст и запасной H1 — из pages_seo (route «/»), $seo задаёт index.php
 $homepage = fetchItems('homepage', ['fields' => 'hero_title,hero_subtitle,hero_trust,hero_house.slug,hero_house.main_image,hero_house.square,hero_house.location,hero_house.construction_period,map_code']);
