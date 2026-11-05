@@ -56,7 +56,7 @@ function buildContentsAndAnchors($html) {
     return ['contents' => $contents, 'content' => str_replace($from, $to, $html)];
 }
 
-$processed = buildContentsAndAnchors($post['content']);
+$processed = buildContentsAndAnchors(renderVars($post['content']));
 
 // Другие статьи
 $others = fetchItems('blog', [
@@ -72,7 +72,7 @@ $others = fetchItems('blog', [
     <div class="blog__content">
         <h1><?= htmlspecialchars($post['pagetitle']) ?></h1>
         <?= $processed['contents'] ?>
-        <?= $processed['content'] ?>
+        <?= renderBlocks($processed['content']) /* блоки после оглавления: заголовки карточек в него не попадают */ ?>
     </div>
 
     <?php if (!empty($others)): ?>

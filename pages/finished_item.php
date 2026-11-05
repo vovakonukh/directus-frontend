@@ -15,8 +15,7 @@ if (empty($finished)) {
 $item = $finished[0];
 
 // Формируем заголовок
-$floorText = $item['floors'] == 1 ? 'Одноэтажный дом' : 'Двухэтажный дом';
-$pageTitle = $floorText . ' ' . $item['length'] . ' на ' . $item['width'] . ' м';
+$pageTitle = finishedTitle($item);
 
 // Хлебные крошки
 $breadcrumbs = [

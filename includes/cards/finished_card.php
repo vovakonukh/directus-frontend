@@ -4,7 +4,7 @@
      data-bedrooms="<?= $item['bedrooms'] ?>"
      data-bathrooms="<?= $item['wc'] ?>">
     <a href="/finished/<?= $item['slug'] ?>">
-        <img src="<?= getAssetUrl($item['main_image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>">
+        <img src="<?= getAssetUrl($item['main_image']) ?>" alt="<?= htmlspecialchars(finishedTitle($item)) ?>">
     </a>
     <div class="project_card__description_wrap">
         <div class="project_card_description">

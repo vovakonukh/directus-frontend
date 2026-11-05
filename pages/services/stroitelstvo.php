@@ -123,8 +123,8 @@ $ldFaq = [
     '@type' => 'FAQPage',
     'mainEntity' => array_map(fn($faq) => [
         '@type' => 'Question',
-        'name' => $faq['question'],
-        'acceptedAnswer' => ['@type' => 'Answer', 'text' => trim(strip_tags($faq['answer'] ?? ''))],
+        'name' => renderVars($faq['question']),
+        'acceptedAnswer' => ['@type' => 'Answer', 'text' => trim(strip_tags(renderVars($faq['answer'] ?? '')))],
     ], $faqs),
 ];
 ?>

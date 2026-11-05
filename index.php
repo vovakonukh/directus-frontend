@@ -199,7 +199,7 @@ if (isset($itemCollections[$page]) && !empty($exists)) {
             break;
         case 'blog_item':
             $title = ($it['seo_title'] ?: $it['pagetitle']) . ' | Класс Хаус';
-            $itemDescription = seoExcerpt($it['description'] ?: $it['content']);
+            $itemDescription = seoExcerpt(renderVars($it['description'] ?: $it['content']));
             break;
         case 'video_item':
             $title = $it['title'] . ' — видео | Класс Хаус';
