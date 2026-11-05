@@ -70,9 +70,6 @@ $footer_socials = array_filter([
                 <?php if (!empty($contacts['address_spb'])): ?>
                     <span class="footer__office"><?= htmlspecialchars($contacts['address_spb']) ?></span>
                 <?php endif; ?>
-                <?php if (!empty($contacts['address_msk'])): ?>
-                    <span class="footer__office"><?= htmlspecialchars($contacts['address_msk']) ?></span>
-                <?php endif; ?>
             </address>
             <?= $footer_form_code ?>
             <div class="button footer__button" data-b24-form="click/6/t86koa">Заказать звонок</div>
