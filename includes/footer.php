@@ -4,58 +4,89 @@ $footer_form = fetchItems('forms', [
     'filter[id][_eq]' => 1
 ]);
 $footer_form_code = $footer_form[0]['bitrix_code'] ?? '';
+
+// Соцсети: пустые ссылки из Directus не выводим
+$footer_socials = array_filter([
+    ['url' => $contacts['max_channel'] ?? '',      'icon' => 'max-white.svg',      'name' => 'Канал Класс Хаус в MAX'],
+    ['url' => $contacts['telegram_channel'] ?? '', 'icon' => 'telegram-white.svg', 'name' => 'Telegram-канал Класс Хаус'],
+    ['url' => $contacts['vk_group'] ?? '',         'icon' => 'vk-white.svg',       'name' => 'Группа Класс Хаус ВКонтакте'],
+    ['url' => $contacts['youtube'] ?? '',          'icon' => 'youtube-white.svg',  'name' => 'YouTube-канал Класс Хаус'],
+    ['url' => 'https://ok.ru/group/63361648361523', 'icon' => 'ok-white.svg',      'name' => 'Класс Хаус в Одноклассниках'],
+], fn($s) => !empty($s['url']));
 ?>
 
-<footer>
-    <div class="footer__column opacity-60">
-        <img class="footer__logo" src="<?= asset('/assets/icons/logo-white.svg') ?>" />
-        <div class="row margin-bottom-10">
-            <img class="footer__contacts_icon" src="<?= asset('/assets/icons/phone-white.svg') ?>" />
-            <a class="footer__contacts_text" href="tel:<?= $contacts['phone'] ?>">
-                <?= $contacts['phone'] ?>
+<footer class="footer">
+    <div class="footer__inner">
+
+        <div class="footer__brand">
+            <a href="/" aria-label="Класс Хаус — на главную">
+                <img class="footer__logo" src="<?= asset('/assets/icons/logo-white.svg') ?>" alt="Класс Хаус" width="150" height="40" />
             </a>
+            <p class="footer__about">
+                Строим каркасные дома под ключ в Санкт-Петербурге, Ленинградской и Московской области.
+                Фиксированная смета, договор и гарантия.
+            </p>
+            <div class="footer__socials">
+                <?php foreach ($footer_socials as $s): ?>
+                    <a class="footer__social" href="<?= htmlspecialchars($s['url']) ?>" target="_blank" rel="noopener" aria-label="<?= $s['name'] ?>" title="<?= $s['name'] ?>">
+                        <img src="<?= asset('/assets/icons/' . $s['icon']) ?>" alt="" width="20" height="20" />
+                    </a>
+                <?php endforeach; ?>
+            </div>
         </div>
-        <div class="row margin-bottom-20">
-            <img class="footer__contacts_icon" src="<?= asset('/assets/icons/email-white.svg') ?>" />
-            <a class="footer__contacts_text" href="mailto:<?= $contacts['email'] ?>">
-                <?= $contacts['email'] ?>
-            </a>
+
+        <nav class="footer__col" aria-label="Каталог">
+            <p class="footer__title">Каталог</p>
+            <ul class="footer__list">
+                <li><a class="footer__link" href="/projects">Проекты каркасных домов</a></li>
+                <li><a class="footer__link" href="/finished">Построенные дома</a></li>
+                <li><a class="footer__link" href="/feedback">Отзывы клиентов</a></li>
+                <li><a class="footer__link" href="/video">Видео с объектов</a></li>
+                <li><a class="footer__link" href="/blog">Блог о строительстве</a></li>
+            </ul>
+        </nav>
+
+        <nav class="footer__col" aria-label="Услуги">
+            <p class="footer__title">Услуги</p>
+            <ul class="footer__list">
+                <li><a class="footer__link" href="/services/stroitelstvo">Строительство домов под ключ</a></li>
+                <li><a class="footer__link" href="/services/fundament">Фундаменты</a></li>
+                <li><a class="footer__link" href="/services/inzhenerka">Инженерные системы</a></li>
+                <li><a class="footer__link" href="/ipoteka">Дом в ипотеку</a></li>
+            </ul>
+        </nav>
+
+        <div class="footer__col footer__contacts">
+            <p class="footer__title">Контакты</p>
+            <address class="footer__address">
+                <a class="footer__contact" href="tel:<?= htmlspecialchars($contacts['phone'] ?? '') ?>">
+                    <img src="<?= asset('/assets/icons/phone-white.svg') ?>" alt="" width="18" height="18" />
+                    <?= htmlspecialchars($contacts['phone'] ?? '') ?>
+                </a>
+                <a class="footer__contact" href="mailto:<?= htmlspecialchars($contacts['email'] ?? '') ?>">
+                    <img src="<?= asset('/assets/icons/email-white.svg') ?>" alt="" width="18" height="18" />
+                    <?= htmlspecialchars($contacts['email'] ?? '') ?>
+                </a>
+                <?php if (!empty($contacts['address_spb'])): ?>
+                    <span class="footer__office"><?= htmlspecialchars($contacts['address_spb']) ?></span>
+                <?php endif; ?>
+                <?php if (!empty($contacts['address_msk'])): ?>
+                    <span class="footer__office"><?= htmlspecialchars($contacts['address_msk']) ?></span>
+                <?php endif; ?>
+            </address>
+            <?= $footer_form_code ?>
+            <div class="button footer__button" data-b24-form="click/6/t86koa">Заказать звонок</div>
         </div>
-        <div class="row margin-bottom-30">
-            <a href="<?= $contacts['instagram'] ?>"><img class="footer__socials_icon" src="<?= asset('/assets/icons/insta-white.svg') ?>" /></a>
-            <a href="<?= $contacts['telegram_channel'] ?>"><img class="footer__socials_icon" src="<?= asset('/assets/icons/telegram-white.svg') ?>" /></a>
-            <a href="<?= $contacts['vk_group'] ?>"><img class="footer__socials_icon" src="<?= asset('/assets/icons/vk-white.svg') ?>" /></a>
-            <a href="<?= $contacts['youtube'] ?>"><img class="footer__socials_icon" src="<?= asset('/assets/icons/youtube-white.svg') ?>" /></a>
-            <a href="https://ok.ru/group/63361648361523"><img class="footer__socials_icon" src="<?= asset('/assets/icons/ok-white.svg') ?>" /></a>
-        </div>
-        <span class="footer__llc_text">
-            ООО "СККХ"<br />
-            ИНН: 7840095917<br />
-            ОГРН: 1217800062754<br />
-            <br />
-            Информация на сайте не является публичной офертой
+
+    </div>
+
+    <div class="footer__bottom">
+        <span>© <?= date('Y') ?> Класс Хаус · ООО «СККХ» · ИНН 7840095917 · ОГРН 1217800062754</span>
+        <span>Информация на сайте не является публичной офертой</span>
+        <span class="footer__bottom_links">
+            <a href="/contacts">Контакты</a>
+            <a href="/postavshhikam">Поставщикам</a>
+            <a href="/policy">Политика конфиденциальности</a>
         </span>
-    </div>
-    <div class="footer__column">
-        <a class="footer__link" href="/projects">Каталог проектов</a>
-        <a class="footer__link" href="/finished">Построенные дома</a>
-        <a class="footer__link" href="/video">Видео</a>
-        <a class="footer__link" href="/ipoteka">Строительство в ипотеку</a>
-        <span class="footer__header">Услуги</span>
-        <!--<a class="footer__link" href="#">Проектирование</a>-->
-        <a class="footer__link" href="/services/fundament">Фундаменты</a>
-        <a class="footer__link" href="/services/stroitelstvo">Строительство</a>
-        <a class="footer__link" href="/services/inzhenerka">Инженерные системы</a>
-        <!--<a class="footer__link" href="#">Вентиляция</a>-->
-    </div>
-    <div class="footer__column">
-        <?= $footer_form_code ?>
-        <div class="button footer__button" data-b24-form="click/6/t86koa">Заказать звонок</div>
-        <span class="footer__header">Разное</span>
-        <!--<a class="footer__link" href="#">Работа у нас</a>-->
-        <a class="footer__link" href="/postavshhikam">Поставщикам</a>
-        <a class="footer__link" href="/policy">Конфиденциальность</a>
-        <a class="footer__link" href="/blog">Блог</a>
-        <a class="footer__link" href="/contacts">Контакты</a>
     </div>
 </footer>
