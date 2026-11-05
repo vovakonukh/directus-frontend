@@ -79,58 +79,66 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
 
 
 <section class="header">
-    <div class="header_info">
+    <div class="hdr">
 
-        <div class="header_info__logo_wrap">
-            <a href="/"><img src="<?= asset('/assets/logo/logo-colored.svg') ?>" /></a>
-            <!--<span>
-                Санкт-Петербург <br />
-                Москва
-            </span>-->
-            <div class="header_info__domrf">
-                <div><span><?= $header['domrf_deals'] ?? '' ?></span></div>
-                <div>
-                    сделок по эскроу<br>
-                    на строим.дом.рф
+        <!-- Логотип -->
+        <a class="hdr__logo" href="/" aria-label="Класс Хаус — на главную">
+            <img src="<?= asset('/assets/logo/logo-colored.svg') ?>" alt="Класс Хаус" />
+        </a>
+
+        <!-- Доверие: эскроу + рейтинг (средний приоритет, прячется на узких экранах) -->
+        <div class="hdr__trust">
+            <?php if (!empty($header['domrf_deals'])): ?>
+                <div class="hdr__badge">
+                    <span class="hdr__badge_num"><?= $header['domrf_deals'] ?></span>
+                    <span class="hdr__badge_text">сделок по эскроу<br>на строим.дом.рф</span>
                 </div>
-                
-            </div>
-        </div>
-
-        <div class="header_info__rating_wrap">
-            <span class="header_info__rating_number"><?= $contacts['yandex_rating'] ?? '' ?></span>
-            <div class="column">
-                <div class="header_info__rating_stars_wrap">
-                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
-                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
-                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
-                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
-                    <img src="<?= asset('/assets/icons/rating-star-full-yellow.svg') ?>" />
+            <?php endif; ?>
+            <?php if (!empty($contacts['yandex_rating'])): ?>
+                <div class="hdr__badge">
+                    <span class="hdr__badge_num"><?= $contacts['yandex_rating'] ?></span>
+                    <span class="hdr__badge_text">
+                        <span class="hdr__stars" aria-label="5 звёзд">★★★★★</span>
+                        Яндекс · <?= $contacts['yandex_feedback_amount'] ?? '' ?> отзывов
+                    </span>
                 </div>
-                <span class="header_info__rating_label_bold">Рейтинг Яндекс</span>
-                <span class="header_info__rating_label_light">на основании <?= $contacts['yandex_feedback_amount'] ?? '' ?> отзывов</span>
+            <?php endif; ?>
+        </div>
+
+        <!-- Мессенджеры -->
+        <div class="hdr__messengers">
+            <?php
+            // Рабочее время по Москве из Directus (header.start_work / finish_work, формат "09:00:00").
+            // PHP задаёт начальное состояние (без мигания), Alpine пересчитывает в браузере — на случай кэша страницы.
+            $toMin = fn($t, $def) => preg_match('/^(\d{1,2}):(\d{2})/', $t ?? '', $m) ? $m[1] * 60 + $m[2] : $def;
+            $workStart = $toMin($header['start_work'] ?? null, 9 * 60);
+            $workEnd   = $toMin($header['finish_work'] ?? null, 21 * 60);
+            $mskNow    = new DateTime('now', new DateTimeZone('Europe/Moscow'));
+            $nowMin    = $mskNow->format('G') * 60 + (int) $mskNow->format('i');
+            $isNight   = $nowMin < $workStart || $nowMin >= $workEnd;
+            ?>
+            <span class="hdr__online<?= $isNight ? ' is-night' : '' ?>"
+                  x-data="{ night: <?= $isNight ? 'true' : 'false' ?> }"
+                  x-init="const [h, m] = new Intl.DateTimeFormat('ru-RU', { hour: 'numeric', minute: 'numeric', hourCycle: 'h23', timeZone: 'Europe/Moscow' }).format(new Date()).split(':').map(Number); const now = h * 60 + m; night = now < <?= $workStart ?> || now >= <?= $workEnd ?>"
+                  :class="{ 'is-night': night }">
+                <i></i><span x-text="night ? 'Пишите, ответим утром' : 'Пишите, мы онлайн'"><?= $isNight ? 'Пишите, ответим утром' : 'Пишите, мы онлайн' ?></span>
+            </span>
+            <div class="hdr__icons">
+                <a href="<?= $contacts['vk_message'] ?? '' ?>" aria-label="Написать во ВКонтакте" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="<?= asset('/assets/icons/vk-colored-bg.webp') ?>" alt="" /></a>
+                <a href="<?= $shiftTelegram ?>" aria-label="Написать в Telegram" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="" /></a>
+                <a href="<?= $contacts['max'] ?? '' ?>" aria-label="Написать в MAX" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" alt="" /></a>
             </div>
         </div>
 
-        <div class="header_info__socials_wrap">
-            <div class="header_info__online_wrap">
-                <div class="header_info__online_circle"></div>
-                <span class="header_info__online_label">Пишите, мы онлайн</span>
-            </div>
-            <div class="header_info__messengers">
-                <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="<?= asset('/assets/icons/vk-colored-bg.webp') ?>" /></a>
-                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" /></a>
-                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" /></a>
-            </div>
+        <!-- Телефон и почта -->
+        <div class="hdr__contacts">
+            <a class="hdr__phone" href="tel:<?= $contacts['phone'] ?? '' ?>"><?= $contacts['phone'] ?? '' ?></a>
+            <a class="hdr__email" href="mailto:<?= $contacts['email'] ?? '' ?>"><?= $contacts['email'] ?? '' ?></a>
         </div>
 
-        <div class="header_info__contacts_wrap">
-            <a class="header_info_phone" href="tel:<?= $contacts['phone'] ?? '' ?>"><?= $contacts['phone'] ?? '' ?></a>
-            <a class="header_info_email" href="mailto:<?= $contacts['email'] ?? '' ?>"><?= $contacts['email'] ?? '' ?></a>
-        </div>
-
+        <!-- Кнопка расчёта (низкий приоритет). Скрипт Bitrix должен стоять прямо перед кнопкой -->
         <?= $header['form']['bitrix_code'] ?? '' ?>
-        <div class="button header_info__button"><?= $header['button_text'] ?? '' ?></div>
+        <div class="button hdr__button"><?= $header['button_text'] ?? '' ?></div>
     </div>
 
     <!-- Десктопное меню -->
