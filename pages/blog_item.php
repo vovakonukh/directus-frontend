@@ -1,6 +1,7 @@
 <?php
 $items = fetchItems('blog', [
-    'fields' => 'id,slug,pagetitle,content,blog_image,date,seo_title,description,faq_blog',
+    'fields' => 'id,slug,pagetitle,content,blog_image,date,seo_title,description,faq_blog,topic,'
+        . 'similar_articles.related_blog_id.slug,similar_articles.related_blog_id.pagetitle,similar_articles.related_blog_id.blog_image,similar_articles.related_blog_id.status',
     'filter[slug][_eq]' => $slug,
     'filter[status][_eq]' => 'published',
     'limit' => 1,
@@ -64,20 +65,47 @@ $faq = array_values(array_filter(array_map(fn($f) => [
     'answer'   => renderVars($f['answer'] ?? ''),
 ], $post['faq_blog'] ?? []), fn($f) => trim($f['question']) !== '' && trim($f['answer']) !== ''));
 
-// Смотрите также: 3 последние статьи, кроме текущей
-$others = fetchItems('blog', [
-    'fields' => 'slug,pagetitle,description,blog_image',
-    'filter[status][_eq]' => 'published',
-    'filter[id][_neq]' => $post['id'],
-    'sort' => '-date',
-    'limit' => 3,
-]);
+// Смотрите также:
+// 1) статьи из поля similar_articles (только опубликованные);
+// 2) иначе 3 последние статьи той же темы (topic), недостающие добираются последними из всех;
+// 3) если тема не указана — 3 последние статьи
+$others = array_values(array_filter(
+    array_column($post['similar_articles'] ?? [], 'related_blog_id'),
+    fn($o) => is_array($o) && ($o['status'] ?? '') === 'published'
+));
+if (!$others) {
+    $othersQuery = [
+        'fields' => 'id,slug,pagetitle,blog_image',
+        'filter[status][_eq]' => 'published',
+        'filter[id][_neq]' => $post['id'],
+        'sort' => '-date',
+        'limit' => 3,
+    ];
+    if (!empty($post['topic'])) {
+        $others = fetchItems('blog', $othersQuery + ['filter[topic][_eq]' => $post['topic']]) ?: [];
+    }
+    if (count($others) < 3) {
+        $exclude = implode(',', array_merge([$post['id']], array_column($others, 'id')));
+        $others = array_merge($others, fetchItems('blog', [
+            'filter[id][_nin]' => $exclude,
+            'limit' => 3 - count($others),
+        ] + $othersQuery) ?: []);
+    }
+}
 ?>
 
 <section class="page__wrap">
     <div class="blog__content">
         <h1><?= htmlspecialchars($post['pagetitle']) ?></h1>
-        <?= $processed['contents'] ?>
+        <?php if ($processed['contents']): ?>
+            <?php /* на мобильных подразделы (h3) свёрнуты; в HTML они есть всегда — для поисковиков */ ?>
+            <div class="page_toc" x-data="{ open: false }" :class="{ 'page_toc--open': open }">
+                <?= $processed['contents'] ?>
+                <?php if (strpos($processed['contents'], '<ul>') !== false): ?>
+                    <button type="button" class="page_toc__toggle" @click="open = !open" x-text="open ? 'Скрыть подразделы' : 'Показать подразделы'">Показать подразделы</button>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
         <?= renderBlocks($processed['content']) /* блоки после оглавления: заголовки карточек в него не попадают */ ?>
 
         <?php if (!empty($faq)): ?>
