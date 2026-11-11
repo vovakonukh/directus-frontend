@@ -81,9 +81,9 @@ function shortcodeValues(): array {
     // те же параметры, что на главной и в шапке — берутся из того же кэша
     $cheapest = fetchItems('projects', [
         'filter[status][_eq]' => 'published',
-        'filter[price_tk][_nnull]' => 'true',
-        'fields' => 'price_tk',
-        'sort' => 'price_tk',
+        'filter[price_tk_auto][_nnull]' => 'true',
+        'fields' => 'price_tk_auto',
+        'sort' => 'price_tk_auto',
         'limit' => 1,
     ]);
     $header = fetchItems('header', ['fields' => '*,form.bitrix_code']);
@@ -92,7 +92,7 @@ function shortcodeValues(): array {
     return $values = [
         'projects_count'  => $count('projects'),
         'finished_count'  => $count('finished'),
-        'price_from'      => (int) ($cheapest[0]['price_tk'] ?? 0),
+        'price_from'      => (int) ($cheapest[0]['price_tk_auto'] ?? 0),
         'yandex_reviews'  => (int) ($contacts['yandex_feedback_amount'] ?? 0),
         'stroimdom_deals' => (int) ($header['domrf_deals'] ?? 0),
     ];
@@ -155,7 +155,7 @@ function renderBlocks(?string $html): string {
             case 'projects':
                 $q = [
                     'filter[status][_eq]' => 'published',
-                    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk',
+                    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk_auto',
                 ];
                 $q += $slugs ? ['filter[slug][_in]' => implode(',', $slugs)] : ['sort' => '-popular,square', 'limit' => $limit];
                 $items = fetchItems('projects', $q) ?: [];

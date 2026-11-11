@@ -3,7 +3,7 @@
 // Использует из pages/projects_item.php: $project, $complectation, $priceSvai, $pricePlita, $priceInzhenerka, $formCode
 
 $kPrices = [
-    'tk'    => (int) ($project['price_tk'] ?? 0),
+    'tk'    => (int) ($project['price_tk_auto'] ?? 0),
     'svai'  => (int) $priceSvai,
     'plita' => (int) $pricePlita,
     'inzh'  => (int) $priceInzhenerka,

@@ -8,7 +8,9 @@
                 <?= $item['floors'] == 1 ? 'Одноэтажный' : 'Двухэтажный' ?>
             </span>
             <h2><?= $item['name'] ?></h2>
-            <span class="project_card__price">от <?= number_format($item['price_tk'], 0, '', ' ') ?> ₽</span>
+            <?php if (!empty($item['price_tk_auto'])): ?>
+            <span class="project_card__price">от <?= number_format($item['price_tk_auto'], 0, '', ' ') ?> ₽</span>
+            <?php endif; ?>
             <div class="project_card__info_box_wrap">
                 <div class="project_card__info_box">
                     <img src="<?= asset('/assets/icons/square.svg') ?>" />

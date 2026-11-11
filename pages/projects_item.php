@@ -104,7 +104,7 @@ if (!empty($finishedHouses)) {
 $similarProjects = [];
 if (!empty($project['similar_projects'])) {
     $projectFull = fetchItems('projects/' . $project['id'], [
-        'fields' => 'similar_projects.related_projects_id.id,similar_projects.related_projects_id.name,similar_projects.related_projects_id.slug,similar_projects.related_projects_id.main_image,similar_projects.related_projects_id.main_plan,similar_projects.related_projects_id.floors,similar_projects.related_projects_id.square,similar_projects.related_projects_id.length,similar_projects.related_projects_id.width,similar_projects.related_projects_id.bedrooms,similar_projects.related_projects_id.wc,similar_projects.related_projects_id.price_tk'
+        'fields' => 'similar_projects.related_projects_id.id,similar_projects.related_projects_id.name,similar_projects.related_projects_id.slug,similar_projects.related_projects_id.main_image,similar_projects.related_projects_id.main_plan,similar_projects.related_projects_id.floors,similar_projects.related_projects_id.square,similar_projects.related_projects_id.length,similar_projects.related_projects_id.width,similar_projects.related_projects_id.bedrooms,similar_projects.related_projects_id.wc,similar_projects.related_projects_id.price_tk_auto'
     ]);
     foreach ($projectFull['similar_projects'] ?? [] as $sp) {
         $similarProjects[] = $sp['related_projects_id'];
@@ -141,12 +141,15 @@ $ldProduct = [
     'offers' => [
         '@type' => 'Offer',
         'url' => $canonical,
-        'price' => (int) $project['price_tk'],
+        'price' => (int) $project['price_tk_auto'],
         'priceCurrency' => 'RUB',
         'availability' => 'https://schema.org/InStock',
         'seller' => ['@type' => 'Organization', '@id' => $siteUrl . '/#organization', 'name' => 'Класс Хаус'],
     ],
 ];
+if (empty($project['price_tk_auto'])) {
+    unset($ldProduct['offers']); // Offer без цены поисковики считают ошибкой
+}
 ?>
 <script type="application/ld+json"><?= json_encode($ldProduct, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
 
@@ -206,10 +209,12 @@ $ldProduct = [
                 <?php endif; ?>
             </div>
 
+            <?php if (!empty($project['price_tk_auto'])): ?>
             <div class="column">
                 <span class="project__info_box_price_label">Цена:</span>
-                <span class="project__info_box_price">от <?= number_format($project['price_tk'], 0, '', ' ') ?> ₽</span>
+                <span class="project__info_box_price">от <?= number_format($project['price_tk_auto'], 0, '', ' ') ?> ₽</span>
             </div>
+            <?php endif; ?>
 
             <?= $formCode ?>
             <div class="project__info_box_button">Оставить заявку</div>

@@ -13,18 +13,18 @@ $mapCode = $homepage['map_code'] ?? '';
 // Минимальная цена тёплого контура — для «от ... ₽» в hero
 $cheapest = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
-    'filter[price_tk][_nnull]' => 'true',
-    'fields' => 'price_tk',
-    'sort' => 'price_tk',
+    'filter[price_tk_auto][_nnull]' => 'true',
+    'fields' => 'price_tk_auto',
+    'sort' => 'price_tk_auto',
     'limit' => 1
 ]);
-$minPrice = (int) ($cheapest[0]['price_tk'] ?? 0);
+$minPrice = (int) ($cheapest[0]['price_tk_auto'] ?? 0);
 
 // Популярные проекты
 $projects = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
     'filter[show_on_main][_eq]' => true,
-    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk',
+    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk_auto',
     'limit' => 6
 ]) ?? [];
 

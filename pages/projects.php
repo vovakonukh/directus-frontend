@@ -2,7 +2,7 @@
 $projects = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
     'sort' => '-popular,square',
-    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk'
+    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk_auto'
 ]);
 
 // Подборки из project_landings — пока скрыты. Чтобы включить: раскомментировать блок,
@@ -60,7 +60,7 @@ include 'includes/breadcrumbs.php';
                  data-area="<?= $item['square'] ?>"
                  data-bedrooms="<?= $item['bedrooms'] ?>"
                  data-wc="<?= $item['wc'] ?>"
-                 data-price="<?= $item['price_tk'] ?>">
+                 data-price="<?= $item['price_tk_auto'] ?>">
                 <?php include 'includes/cards/project_card.php'; ?>
             </div>
         <?php endforeach; ?>

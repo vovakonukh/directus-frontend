@@ -75,7 +75,7 @@ include 'includes/breadcrumbs.php';
             <?php if (!empty($item['original_project'])):
                 $project = fetchItems('projects', [
                     'filter[id][_eq]' => $item['original_project'],
-                    'fields' => 'id,name,slug,main_plan,price_tk,price_inzhenerka,price_otdelka',
+                    'fields' => 'id,name,slug,main_plan,price_tk_auto,price_inzhenerka,price_otdelka',
                     'limit' => 1
                 ]);
                 if (!empty($project)):
@@ -91,8 +91,8 @@ include 'includes/breadcrumbs.php';
                 <div class="finished__original_project_card">
                     <div class="finished__original_project_info_wrap">
                         <div class="finished__original_project_prices">
-                            <?php if (!empty($project['price_tk'])): ?>
-                            <div class="finished__original_project_price"><span>Теплый контур:</span> от <?= number_format($project['price_tk'], 0, '', ' ') ?> ₽</div>
+                            <?php if (!empty($project['price_tk_auto'])): ?>
+                            <div class="finished__original_project_price"><span>Теплый контур:</span> от <?= number_format($project['price_tk_auto'], 0, '', ' ') ?> ₽</div>
                             <?php endif; ?>
                             <?php if (!empty($project['price_inzhenerka'])): ?>
                             <div class="finished__original_project_price"><span>Инженерные сети:</span> от <?= number_format($project['price_inzhenerka'], 0, '', ' ') ?> ₽</div>

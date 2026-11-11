@@ -150,7 +150,7 @@ switch (true) {
 // иначе код ответа 404 уже не отправить
 // Заодно запрашиваем поля, из которых ниже собираются title и description.
 $itemCollections = [
-    'projects_item' => ['projects', 'id,name,length,width,square,floors,bedrooms,wc,price_tk'],
+    'projects_item' => ['projects', 'id,name,length,width,square,floors,bedrooms,wc,price_tk_auto'],
     'finished_item' => ['finished', 'id,length,width,square,floors,bedrooms,wc,location,construction_period'],
     'blog_item'     => ['blog', 'id,pagetitle,seo_title,description,content'],
     'video_item'    => ['video', 'id,title,description'],
@@ -187,7 +187,7 @@ if (isset($itemCollections[$page]) && !empty($exists)) {
             $size = formatDimension($it['length']) . '×' . formatDimension($it['width']);
             $title = "Каркасный дом $size «{$it['name']}», {$it['square']} м² — проект и цена | Класс Хаус";
             $itemDescription = 'Проект ' . ($floorsAdj ? $floorsAdj . 'ого ' : '') . "каркасного дома «{$it['name']}» {$it['square']} м²: $rooms."
-                . ' Цена от ' . number_format($it['price_tk'], 0, '', ' ') . ' ₽. Планировка, комплектация, расчёт стоимости.';
+                . (!empty($it['price_tk_auto']) ? ' Цена от ' . number_format($it['price_tk_auto'], 0, '', ' ') . ' ₽.' : '') . ' Планировка, комплектация, расчёт стоимости.';
             break;
         case 'finished_item':
             $size = formatDimension($it['length']) . '×' . formatDimension($it['width']);

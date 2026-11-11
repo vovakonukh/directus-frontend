@@ -17,19 +17,19 @@ $trust = array_filter(array_map(fn($t) => trim($t['text'] ?? ''), $stroitelstvo[
 $projects = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
     'filter[show_on_main][_eq]' => true,
-    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk',
+    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk_auto',
     'limit' => 6
 ]) ?? [];
 
 // Минимальная цена теплого контура по каталогу — для «от ... ₽» в hero
 $cheapest = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
-    'filter[price_tk][_nnull]' => 'true', // строкой: http_build_query превращает true в 1, а Directus ждёт boolean
-    'fields' => 'price_tk',
-    'sort' => 'price_tk',
+    'filter[price_tk_auto][_nnull]' => 'true', // строкой: http_build_query превращает true в 1, а Directus ждёт boolean
+    'fields' => 'price_tk_auto',
+    'sort' => 'price_tk_auto',
     'limit' => 1
 ]);
-$minPrice = (int) ($cheapest[0]['price_tk'] ?? 0);
+$minPrice = (int) ($cheapest[0]['price_tk_auto'] ?? 0);
 
 // Ипотечные программы — та же коллекция, что на /ipoteka
 $mortgagePrograms = fetchItems('ipoteka_programs', [
