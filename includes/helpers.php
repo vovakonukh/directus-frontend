@@ -119,7 +119,7 @@ function renderVars(?string $text): string {
 }
 
 // Блоки в статьях: [[projects popular limit=4]], [[projects slugs=a,b]], [[finished limit=4]],
-// [[finished slugs=a,b]], [[feedback limit=3]], [[gallery finished=slug]].
+// [[finished slugs=a,b]], [[feedback limit=3]], [[gallery finished=slug]], [[images]]…[[/images]] (сетка картинок).
 // Обёртку <p>, которую добавляет редактор Directus, убираем: блок внутри <p> — невалидная вёрстка.
 function renderBlocks(?string $html): string {
     $html = (string) $html;
@@ -128,6 +128,10 @@ function renderBlocks(?string $html): string {
     // вокруг шорткода в редакторе бывает выделение (<strong>, <em>, <span>) — убираем и его, иначе оно ломает вёрстку блока
     $inlineOpen = '(?:<(?:strong|b|em|i|u|span)[^>]*>\s*)*';
     $inlineClose = '(?:\s*</(?:strong|b|em|i|u|span)>)*';
+
+    // парный шорткод [[images]] ... [[/images]] обрабатываем первым, иначе [[images]] попадёт в обычные блоки
+    $tag = fn($name) => '(?:<p[^>]*>\s*)?' . $inlineOpen . '\[\[\s*' . $name . '\s*\]\]' . $inlineClose . '(?:\s*(?:&nbsp;|<br\s*/?>)?\s*</p>)?';
+    $html = preg_replace_callback('#' . $tag('images') . '(.*?)' . $tag('/images') . '#su', fn($m) => renderImageGrid($m[1]), $html);
     return preg_replace_callback('#(?:<p[^>]*>\s*)?' . $inlineOpen . '\[\[\s*(\w+)([^\]]*)\]\]' . $inlineClose . '(?:\s*(?:&nbsp;|<br\s*/?>)?\s*</p>)?#u', function ($m) {
         // параметры: key=value, key="текст с пробелами" (кавычки "", “”, «») или просто флаг (popular)
         $params = [];
@@ -214,6 +218,48 @@ function renderBlocks(?string $html): string {
         include __DIR__ . '/blocks/' . $file;
         return ob_get_clean();
     }, $html);
+}
+
+// Сетка картинок в статье: [[images]] <figure>…</figure> или <img> … [[/images]].
+// 2 или 4 картинки — по 2 в ряд, остальное — по 3. Подписи (figcaption) сохраняются,
+// по клику картинки открываются в Fancybox одной галереей.
+function renderImageGrid(string $inner): string {
+    static $gridNum = 0;
+
+    // figure целиком или отдельный <img> (img внутри figure забирает первая альтернатива)
+    preg_match_all('#<figure\b.*?</figure>|<img\b[^>]*>#su', $inner, $found);
+    $items = [];
+    foreach ($found[0] as $chunk) {
+        if (!preg_match('#<img\b[^>]*>#u', $chunk, $img)) continue;
+        $attr = fn($name) => preg_match('#\s' . $name . '="([^"]*)"#u', $img[0], $a) ? $a[1] : '';
+        $caption = preg_match('#<figcaption[^>]*>(.*?)</figcaption>#su', $chunk, $c) ? trim($c[1]) : '';
+        $items[] = ['src' => $attr('src'), 'alt' => $attr('alt'), 'caption' => $caption];
+    }
+    $items = array_filter($items, fn($i) => $i['src'] !== '');
+
+    // в сетке картинка маленькая: файл из Directus без параметров берём уменьшенным, в Fancybox — оригинал
+    foreach ($items as &$i) {
+        $i['thumb'] = strpos($i['src'], API_URL . '/assets/') === 0 && strpos($i['src'], '?') === false ? $i['src'] . '?width=800' : $i['src'];
+    }
+    unset($i);
+
+    // одна картинка или ни одной — сетка не нужна, выводим как есть
+    if (count($items) < 2) return $inner;
+
+    $gridNum++;
+    $cols = in_array(count($items), [2, 4]) ? 2 : 3;
+    $out = '<div class="article_block article_images article_images--cols-' . $cols . '">';
+    foreach ($items as $i) {
+        // src и alt уже экранированы редактором — вставляем как есть
+        $out .= '<figure class="article_images__item">'
+            . '<a href="' . $i['src'] . '" data-fancybox="article-images-' . $gridNum . '"'
+            . ($i['caption'] !== '' ? ' data-caption="' . htmlspecialchars(strip_tags($i['caption'])) . '"' : '') . '>'
+            . '<img src="' . $i['thumb'] . '" alt="' . $i['alt'] . '" loading="lazy">'
+            . '</a>'
+            . ($i['caption'] !== '' ? '<figcaption>' . $i['caption'] . '</figcaption>' : '')
+            . '</figure>';
+    }
+    return $out . '</div>';
 }
 
 // Публичное название построенного дома: «Одноэтажный дом 14.1 на 9 м».

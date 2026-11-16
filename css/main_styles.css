@@ -3978,6 +3978,64 @@
 		    margin-bottom: 15px;
 		}
 
+		/* сетка картинок: [[images]] … [[/images]] (renderImageGrid в helpers.php) */
+		.article_images {
+		    display: grid;
+		    grid-template-columns: repeat(3, 1fr);
+		    gap: 16px 12px;
+
+		    @media (max-width: 767px) {
+		        grid-template-columns: repeat(2, 1fr);
+		        gap: 12px 8px;
+		    }
+		}
+
+		.article_images--cols-2 {
+		    grid-template-columns: repeat(2, 1fr);
+		}
+
+		.article_images .article_images__item {
+		    margin: 0;
+		}
+
+		.article_images__item > a {
+		    display: block;
+		    overflow: hidden;
+		    border-radius: 16px;
+		    cursor: zoom-in;
+
+		    @media (max-width: 767px) {
+		        border-radius: 12px;
+		    }
+		}
+
+		/* одна высота у всех картинок ряда — ряд ровный, вертикальные фото обрезаются */
+		.article_images__item img {
+		    display: block;
+		    width: 100%;
+		    aspect-ratio: 4 / 3;
+		    object-fit: cover;
+		    transition: transform 0.4s;
+		}
+
+		.article_images__item > a:hover img {
+		    transform: scale(1.03);
+		}
+
+		.article_images .article_images__item figcaption {
+		    margin-top: 8px;
+
+		    @media (max-width: 767px) {
+		        font-size: 13px;
+		    }
+		}
+
+		.article_images figcaption a {
+		    color: var(--accent-color);
+		    text-decoration: underline;
+		    text-underline-offset: 3px;
+		}
+
 		/* CTA-врезка: [[cta form=3 text="..." button="..."]] — спокойная плашка, не похожа на конец статьи */
 		.article_cta {
 		    display: flex;
