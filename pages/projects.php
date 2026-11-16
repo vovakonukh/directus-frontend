@@ -63,6 +63,7 @@ include 'includes/breadcrumbs.php';
                  data-price="<?= $item['price_tk_auto'] ?>">
                 <?php include 'includes/cards/project_card.php'; ?>
             </div>
+            <?php if ($i === 3) include 'includes/blocks/project_custom.php'; ?>
         <?php endforeach; ?>
     </div>
 

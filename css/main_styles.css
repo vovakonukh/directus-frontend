@@ -6298,6 +6298,99 @@
 	    justify-content: space-between;
 	}
 
+	/* Блок «Бесплатно доработаем любой проект» (includes/blocks/project_custom.php) — на всю ширину сетки.
+	   Картинка-макет планировки справа, текст слева на белом поле картинки */
+	.project_custom {
+	    position: relative;
+	    box-sizing: border-box;
+	    width: 100%;
+	    min-height: 320px;
+	    display: flex;
+	    align-items: center;
+	    padding: 48px 56px;
+	    border-radius: 24px;
+	    background-color: white;
+	    box-shadow: var(--box-shadow-big);
+	    overflow: hidden;
+	    color: var(--text-color);
+
+	    @media (max-width: 991px) {
+	        flex-direction: column;
+	        align-items: stretch;
+	        min-height: 0;
+	        padding: 24px 24px 28px;
+	    }
+	}
+
+	/* отдельный блок на странице (не внутри сетки каталога) — отступ от предыдущей секции */
+	.project_custom--page {
+	    margin-top: 60px;
+
+	    @media (max-width: 767px) {
+	        margin-top: 40px;
+	    }
+	}
+
+	.project_custom.hidden {
+	    display: none;
+	}
+
+	/* картинка обрезана по краям планировки — одна и та же на десктопе и мобильном */
+	.project_custom__image {
+	    position: absolute;
+	    top: 50%;
+	    right: 48px;
+	    width: 33%;
+	    height: auto;
+	    transform: translateY(-50%);
+
+	    @media (max-width: 991px) {
+	        position: static;
+	        transform: none;
+	        width: 100%;
+	        margin-bottom: 20px;
+	    }
+	}
+
+	.project_custom__body {
+	    position: relative;
+	    max-width: 62%;
+
+	    @media (max-width: 991px) {
+	        max-width: none;
+	    }
+	}
+
+	.project_custom__title {
+	    margin: 0 0 16px;
+	    font-size: 34px;
+	    font-weight: 600;
+	    line-height: 1.15;
+
+	    @media (max-width: 767px) {
+	        font-size: 26px;
+	    }
+	}
+
+	.project_custom__text {
+	    margin: 0 0 28px;
+	    font-size: 19px;
+	    line-height: 1.5;
+
+	    @media (max-width: 767px) {
+	        font-size: 17px;
+	    }
+	}
+
+	/* двойной класс — чтобы перебить .button.big */
+	.project_custom .project_custom__button {
+	    @media (max-width: 767px) {
+	        width: 100%;
+	        padding: 15px 20px;
+	        font-size: 18px;
+	    }
+	}
+
 		.project_card:hover {
 			box-shadow: 0 2px 15px #00000020;
 		}

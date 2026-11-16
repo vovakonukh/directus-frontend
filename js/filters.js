@@ -37,6 +37,7 @@ function projectsFilter(total, config, defaultSort) {
             });
             this.visibleCount = visible;
             document.getElementById('no-results').classList.toggle('hidden', visible > 0);
+            this.placeInserts();
         },
         applySort() {
             const list = document.querySelector('.projects__collection');
@@ -51,6 +52,19 @@ function projectsFilter(total, config, defaultSort) {
                 return (x - y) * sign;
             });
             items.forEach(item => list.appendChild(item));
+            this.placeInserts();
+        },
+        // Блоки с data-insert-after="N" (например, includes/blocks/project_custom.php)
+        // ставим после N-й видимой карточки; карточек меньше — в конец, ни одной — скрываем
+        placeInserts() {
+            const list = document.querySelector('.projects__collection');
+            const visible = [...list.querySelectorAll('.filter_item:not(.hidden)')];
+            list.querySelectorAll('[data-insert-after]').forEach(el => {
+                const n = parseInt(el.dataset.insertAfter, 10);
+                el.classList.toggle('hidden', !visible.length);
+                const anchor = visible[Math.min(n, visible.length) - 1];
+                if (anchor) anchor.after(el);
+            });
         }
     }
 }

@@ -319,6 +319,14 @@ if (empty($project['price_tk_auto'])) {
 
 </div></section>
 
+<section class="page__wrap">
+    <?php
+    $customTitle = 'Бесплатно доработаем этот проект под вашу семью';
+    $blockClass = 'project_custom--page';
+    include __DIR__ . '/../includes/blocks/project_custom.php';
+    ?>
+</section>
+
 <?php include __DIR__ . '/../includes/complectation.php'; // старый вариант: _archive/complectation/ ?>
 
 <!-- Дополнения -->
