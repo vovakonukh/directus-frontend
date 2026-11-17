@@ -725,6 +725,8 @@
 			font-size: 22px;
 			font-weight: 700;
 			line-height: 1;
+			position: relative;
+			top: 0.08em; /* у шрифта Circe цифры сидят выше центра строки — опускаем на ~2px */
 		}
 
 		.hdr__badge_text {
