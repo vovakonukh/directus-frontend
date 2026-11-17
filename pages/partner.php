@@ -194,7 +194,7 @@ $tourItems = [
             <button type="button" class="button" onclick="<?= $openForm ?>">Записаться на брокер-тур</button>
         </div>
     </div>
-    <div class="ipoteka__inline_cta">
+    <div class="ipoteka__inline_cta partner__excursion">
         <p>Хотите посмотреть, как мы строим? Организуем экскурсию на строящийся объект.</p>
         <button type="button" class="button" onclick="<?= $openForm ?>">Записаться на экскурсию</button>
     </div>
@@ -249,7 +249,7 @@ $tourItems = [
 
 <!-- 8. Финальный CTA -->
 <section>
-    <div class="ipoteka__final_cta"<?php if ($heroImage): ?> style="--cta-image: url('<?= asset('/assets/images/' . $heroImage) ?>')"<?php endif; ?>>
+    <div class="ipoteka__final_cta partner__final_cta"<?php if ($heroImage): ?> style="--cta-image: url('<?= asset('/assets/images/' . $heroImage) ?>')"<?php endif; ?>>
         <div class="ipoteka__final_cta_content">
             <h2>Давайте познакомимся</h2>
             <p>Оставьте контакты — менеджер расскажет об условиях и пришлёт агентский договор.</p>

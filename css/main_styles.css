@@ -4049,8 +4049,11 @@
 		    margin-top: 0;
 		}
 
-		/* цитата: <blockquote><p>текст</p><p>— автор</p></blockquote> */
-		.blog__content blockquote {
+		/* цитата: <blockquote><p>текст</p><p>— автор</p></blockquote> — в статьях блога и SEO-текстах.
+		   Ширину не задаём: цитата занимает колонку текста (960px в блоге, 820px в SEO-тексте).
+		   :not(.article_block p) нужен, чтобы перебить общие правила абзацев этих блоков */
+		.blog__content blockquote,
+		.seo_text blockquote {
 		    box-sizing: border-box;
 		    margin: 35px 0;
 		    padding: 24px 30px;
@@ -4060,11 +4063,13 @@
 		    box-shadow: 0px 2px 6px #00000010;
 
 		    @media (max-width: 767px) {
+		        margin: 28px 0;
 		        padding: 18px 20px;
 		    }
 		}
 
-		.blog__content blockquote p {
+		.blog__content blockquote p:not(.article_block p),
+		.seo_text blockquote p:not(.article_block p) {
 		    margin: 0 0 12px 0;
 		    padding: 0;
 		    font-size: 21px;
@@ -4076,12 +4081,14 @@
 		    }
 		}
 
-		.blog__content blockquote p:last-child {
+		.blog__content blockquote p:last-child:not(.article_block p),
+		.seo_text blockquote p:last-child:not(.article_block p) {
 		    margin-bottom: 0;
 		}
 
 		/* последний абзац цитаты (если абзацев больше одного) — подпись автора */
-		.blog__content blockquote p:last-child:not(:first-child) {
+		.blog__content blockquote p:last-child:not(:first-child, .article_block p),
+		.seo_text blockquote p:last-child:not(:first-child, .article_block p) {
 		    font-size: 16px;
 		    font-weight: 400;
 		    color: #06435bb3;
@@ -7810,6 +7817,22 @@
 
 	.partner__manager_phone:hover {
 		color: var(--accent-color);
+	}
+
+	/* экскурсия на стройку — только на десктопе */
+	.ipoteka__inline_cta.partner__excursion {
+		@media (max-width: 991px) {
+			display: none;
+		}
+	}
+
+	/* после финального CTA нет дисклеймера — отступ до футера */
+	.ipoteka__final_cta.partner__final_cta {
+		margin-bottom: 60px;
+
+		@media (min-width: 992px) {
+			margin-bottom: 80px;
+		}
 	}
 
 	/* Факты о компании: без карточек, чтобы не повторять плитки «Кому подходит» */
