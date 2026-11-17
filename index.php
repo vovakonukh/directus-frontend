@@ -157,7 +157,8 @@ if ($page === 'projects_item') {
         if ($l['slug'] === $slug) {
             $landing = $l;
             $page = 'projects';
-            $title = ($l['seo_title'] ?: $l['name'] . ' — проекты каркасных домов') . ' | Класс Хаус';
+            // seo_title в Directus пишут целиком, с «| Класс Хаус» — как в pages_seo
+            $title = $l['seo_title'] ?: $l['name'] . ' — проекты каркасных домов | Класс Хаус';
             break;
         }
     }
