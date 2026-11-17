@@ -1,5 +1,6 @@
 // Фильтр и сортировка карточек каталога (разметка — includes/filters.php)
-// config: { группа: { attr: 'data-атрибут обёртки', type: 'eq' | 'range' } }
+// config: { группа: { attr: 'data-атрибут обёртки', type: 'eq' | 'range' | 'all' } }
+// 'all' — в атрибуте список через пробел, карточка подходит, если в нём есть все выбранные значения
 // Сортировка: значение вида «атрибут_asc» / «атрибут_desc»; «popular» — исходный порядок с сервера
 function projectsFilter(total, config, defaultSort) {
     const emptyFilters = () => Object.fromEntries(Object.keys(config).map(k => [k, []]));
@@ -10,6 +11,12 @@ function projectsFilter(total, config, defaultSort) {
         resetFilters() {
             this.filters = emptyFilters();
             this.sort = defaultSort;
+        },
+        // кнопки-ссылки (подборки): клик включает/выключает значение вместо перехода
+        toggle(key, value) {
+            const list = this.filters[key];
+            const i = list.indexOf(value);
+            i === -1 ? list.push(value) : list.splice(i, 1);
         },
         init() {
             this.$watch('filters', () => this.applyFilters(), { deep: true });
@@ -29,6 +36,10 @@ function projectsFilter(total, config, defaultSort) {
                             const [min, max] = range.split('-').map(Number);
                             return n >= min && n <= max;
                         });
+                    }
+                    if (type === 'all') {
+                        const values = value.split(' ');
+                        return selected.every(v => values.includes(v));
                     }
                     return selected.includes(value);
                 });

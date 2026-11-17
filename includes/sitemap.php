@@ -28,6 +28,7 @@ $collections = [
     'finished' => ['finished', ['date_updated', 'date_created']],
     'blog'     => ['blog',     ['date_updated', 'date_created']],
     'video'    => ['video',    ['date_updated', 'date']],
+    'project_landings' => ['projects', []], // подборки: /projects/{slug}, полей с датой нет
 ];
 
 // Страницы, закрытые от индексации в pages_seo, в карту не попадают
@@ -47,7 +48,7 @@ foreach ($staticRoutes as $route) {
 foreach ($collections as $collection => [$prefix, $dateFields]) {
     $items = fetchItems($collection, [
         'filter[status][_eq]' => 'published',
-        'fields' => 'slug,' . implode(',', $dateFields),
+        'fields' => implode(',', array_merge(['slug'], $dateFields)),
         'limit' => -1,
     ]);
 

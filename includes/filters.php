@@ -8,8 +8,11 @@
 //   $filterHide  — (необязательно) группы, которые не показывать: ['floors', 'area', 'bedrooms', 'wc']
 // Карточки оборачиваются в <div class="filter_item" data-index="1" data-...> —
 // фильтр и сортировка читают data-атрибуты обёртки.
-// type: 'eq' — значение атрибута входит в выбранные, 'range' — число в диапазоне «min-max»
+// type: 'eq' — значение атрибута входит в выбранные, 'range' — число в диапазоне «min-max»,
+//       'all' — в атрибуте список через пробел, и в нём есть все выбранные значения («И»)
 // wide: true — группа на всю ширину блока
+// links: ['value' => '/url'] — кнопки-ссылки: поисковик переходит по адресу, а клик посетителя
+//        перехватывает JS и переключает фильтр
 $filterHide = $filterHide ?? [];
 
 $filterGroups = array_merge([
@@ -58,11 +61,19 @@ foreach ($filterGroups as $key => $group) {
                 <h3><?= $group['title'] ?></h3>
                 <div class="projects__filter_inputs_wrap">
                     <?php foreach ($group['options'] as $value => $label): ?>
-                        <?php $id = $key . '_' . preg_replace('/[^a-z0-9]/i', '', $value); ?>
-                        <span>
-                            <input type="checkbox" id="<?= $id ?>" value="<?= $value ?>" x-model="filters.<?= $key ?>">
-                            <label class="projects__filter_label" for="<?= $id ?>"><?= $label ?></label>
-                        </span>
+                        <?php if (isset($group['links'][$value])): ?>
+                            <span>
+                                <a class="projects__filter_label" href="<?= htmlspecialchars($group['links'][$value]) ?>"
+                                   :class="{ active: filters.<?= $key ?>.includes('<?= $value ?>') }"
+                                   @click.prevent="toggle('<?= $key ?>', '<?= $value ?>')"><?= htmlspecialchars($label) ?></a>
+                            </span>
+                        <?php else: ?>
+                            <?php $id = $key . '_' . preg_replace('/[^a-z0-9]/i', '', $value); ?>
+                            <span>
+                                <input type="checkbox" id="<?= $id ?>" value="<?= $value ?>" x-model="filters.<?= $key ?>">
+                                <label class="projects__filter_label" for="<?= $id ?>"><?= $label ?></label>
+                            </span>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             </div>

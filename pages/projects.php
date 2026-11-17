@@ -1,35 +1,33 @@
 <?php
+// Каталог проектов /projects и страницы подборок /projects/{slug}
+// (для подборки index.php задаёт $landing — запись из project_landings)
+require_once 'includes/landings.php';
+
 $projects = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
     'sort' => '-popular,square',
-    'fields' => 'id,name,slug,main_image,main_plan,floors,square,length,width,bedrooms,wc,price_tk_auto'
-]);
+    'fields' => 'id,name,slug,main_image,main_plan,floors,length,width,bedrooms,wc,' . LANDING_PROJECT_FIELDS
+]) ?? [];
 
-// Подборки из project_landings — пока скрыты. Чтобы включить: раскомментировать блок,
-// связать проекты с project_landings в Directus и вывести slug подборок в data-landings карточки
-/*
-$filterExtra = [
-    'landings' => [
-        'title' => 'Подборки',
-        'attr' => 'landings',
-        'type' => 'eq',
-        'wide' => true,
-        'options' => [
-            'pmzh' => 'Для постоянного проживания',
-            'second_light' => 'Со вторым светом',
-            'dacha' => 'Дачные дома',
-            'terrace' => 'С большой террасой',
-            'big' => 'Большие дома',
-            'small' => 'Маленькие дома',
-            'cheap' => 'Недорогие дома',
-            'sauna' => 'С сауной',
-            'shed_roof' => 'С односкатной кровлей',
-            'multilevel_roof' => 'С разноуровневой кровлей',
-            'panoramic' => 'С панорамными окнами',
+if (isset($landing)) {
+    $projects = array_values(array_filter($projects, fn($p) => projectInLanding($p, $landing)));
+}
+
+// Кнопки подборок: на странице подборки текущую не показываем — все проекты и так из неё
+$landings = fetchLandings();
+$filterLandings = array_filter($landings, fn($l) => !empty($l['show_in_filter']) && (!isset($landing) || $l['id'] !== $landing['id']));
+if ($filterLandings) {
+    $filterExtra = [
+        'landings' => [
+            'title' => 'Подборки',
+            'attr' => 'landings',
+            'type' => 'all',
+            'wide' => true,
+            'options' => array_column($filterLandings, 'name', 'slug'),
+            'links' => array_map(fn($slug) => '/projects/' . $slug, array_column($filterLandings, 'slug', 'slug')),
         ],
-    ],
-];
-*/
+    ];
+}
 $sortOptions = [
     'popular' => 'По популярности',
     'price_asc' => 'Сначала дешевле',
@@ -38,14 +36,18 @@ $sortOptions = [
     'area_desc' => 'Площадь сначала большие',
 ];
 
-$breadcrumbs = [
-    ['title' => 'Каталог проектов']
-];
+$breadcrumbs = isset($landing)
+    ? [['title' => 'Каталог проектов', 'url' => '/projects'], ['title' => $landing['name']]]
+    : [['title' => 'Каталог проектов']];
 include 'includes/breadcrumbs.php';
 ?>
 
 <section class="page__wrap">
-    <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : 'Проекты каркасных домов') ?></h1>
+    <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : (isset($landing) ? $landing['name'] : 'Проекты каркасных домов')) ?></h1>
+
+    <?php if (!empty($landing['intro'])): ?>
+        <div class="projects__intro"><?= $landing['intro'] ?></div>
+    <?php endif; ?>
 
     <?php
     $filterTotal = count($projects);
@@ -60,7 +62,8 @@ include 'includes/breadcrumbs.php';
                  data-area="<?= $item['square'] ?>"
                  data-bedrooms="<?= $item['bedrooms'] ?>"
                  data-wc="<?= $item['wc'] ?>"
-                 data-price="<?= $item['price_tk_auto'] ?>">
+                 data-price="<?= $item['price_tk_auto'] ?>"
+                 data-landings="<?= implode(' ', projectLandingSlugs($item, $landings)) ?>">
                 <?php include 'includes/cards/project_card.php'; ?>
             </div>
             <?php if ($i === 3) include 'includes/blocks/project_custom.php'; ?>

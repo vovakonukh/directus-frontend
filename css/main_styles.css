@@ -1730,7 +1730,8 @@
 		  display: none;
 		}
 
-		.projects__filters input[type="checkbox"]:checked + .projects__filter_label {
+		.projects__filters input[type="checkbox"]:checked + .projects__filter_label,
+		.projects__filter_label.active {
 		  color: white;
 		  background-color: var(--text-color);
 		}
@@ -1755,6 +1756,12 @@
                 font-size: 15px;
 	        }
 		  
+		}
+
+		/* кнопки-ссылки (подборки) */
+		a.projects__filter_label {
+		  text-decoration: none;
+		  cursor: pointer;
 		}
 
 		.projects__filters_end {

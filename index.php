@@ -150,6 +150,19 @@ switch (true) {
         break;
 }
 
+// /projects/{slug}: сначала ищем подборку (project_landings), не нашли — это страница проекта
+if ($page === 'projects_item') {
+    require_once 'includes/landings.php';
+    foreach (fetchLandings() as $l) {
+        if ($l['slug'] === $slug) {
+            $landing = $l;
+            $page = 'projects';
+            $title = ($l['seo_title'] ?: $l['name'] . ' — проекты каркасных домов') . ' | Класс Хаус';
+            break;
+        }
+    }
+}
+
 // Страницы элементов: существование записи проверяем до вывода HTML,
 // иначе код ответа 404 уже не отправить
 // Заодно запрашиваем поля, из которых ниже собираются title и description.
@@ -214,8 +227,15 @@ if (isset($itemCollections[$page]) && !empty($exists)) {
 
 // SEO для страниц-списков из коллекции pages_seo (route = $uri)
 $seo = null;
+if (isset($landing)) {
+    // у подборки SEO-поля в самой записи project_landings (title уже задан выше)
+    $seo = [
+        'h1' => $landing['h1'] ?? null,
+        'seo_description' => $landing['seo_description'] ?? null,
+        'seo_text' => $landing['seo_text'] ?? null,
+    ];
 // у главной в pages_seo route = «/» (фильтр по пустой строке Directus отклоняет с ошибкой 400)
-if (!isset($slug) && $page !== '404') {
+} elseif (!isset($slug) && $page !== '404') {
     $seo = fetchItems('pages_seo', [
         'filter[route][_eq]' => $uri === '' ? '/' : $uri,
         'fields' => 'h1,seo_title,seo_description,seo_image,seo_noindex,seo_text',
