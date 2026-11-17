@@ -227,9 +227,12 @@ include 'includes/breadcrumbs.php';
                     ]);
                     $form_code = $form[0]['bitrix_code'] ?? '';
                 ?>
-                <?= $form_code ?>
-                <div class="project__info_box_button">
-                    Заказать звонок
+                <div class="fav_row">
+                    <?= $form_code ?>
+                    <div class="project__info_box_button">
+                        Заказать звонок
+                    </div>
+                    <?php $favType = 'finished'; $favId = $item['id']; $favMod = 'round'; include 'includes/fav_button.php'; ?>
                 </div>
             </div>
         </div>

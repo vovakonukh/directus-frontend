@@ -1161,6 +1161,22 @@
 			font-weight: 700;
 		}
 
+		/* «Избранное»: счётчик поверх сердечка */
+		.bottom_menu__fav_icon {
+			position: relative;
+		}
+
+		.bottom_menu__fav_icon .header_fav__count {
+			position: absolute;
+			top: -6px;
+			left: 14px;
+			min-width: 18px;
+			padding: 0 4px;
+			font-size: 11px;
+			line-height: 18px;
+			color: white;
+		}
+
 		/* Центральная кнопка «Меню» */
 
 		.bottom_menu__item.accent {
@@ -9180,3 +9196,145 @@
 	.home2 .stroy__band--tight {
 		display: flow-root;
 	}
+
+	/*----------------------ИЗБРАННОЕ (js/favorites.js, includes/fav_button.php)----------------------*/
+
+		.fav_btn {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-sizing: border-box;
+			padding: 0;
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+			transition: background-color 0.2s, opacity 0.2s, transform 0.2s;
+		}
+
+		.fav_btn svg {
+			width: 55%;
+			height: 55%;
+			fill: transparent;
+			stroke: var(--text-color);
+			stroke-width: 2;
+			transition: fill 0.2s, stroke 0.2s;
+		}
+
+		.fav_btn.is-active svg {
+			fill: #e5383b;
+			stroke: #e5383b;
+		}
+
+		.fav_btn:active {
+			transform: scale(0.92);
+		}
+
+		/* на картинке карточки: полупрозрачная, при наведении на карточку — контрастная */
+		.project_card {
+			position: relative;
+		}
+
+		.fav_btn--card {
+			position: absolute;
+			top: 12px;
+			right: 12px;
+			z-index: 2;
+			width: 44px;
+			height: 44px;
+			background-color: rgba(255, 255, 255, 0.6);
+			opacity: 0.75;
+		}
+
+		.project_card:hover .fav_btn--card,
+		.fav_btn--card:focus-visible,
+		.fav_btn--card.is-active {
+			background-color: white;
+			opacity: 1;
+		}
+
+		/* на странице проекта / дома: круглая, в ряд с кнопкой заявки и той же высоты */
+		.fav_row {
+			--fav-row-height: 54px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.fav_row .project__info_box_button {
+			flex: 1;
+			width: auto;
+			height: var(--fav-row-height);
+			align-items: center;
+		}
+
+		.fav_btn--round {
+			flex: 0 0 auto;
+			width: var(--fav-row-height);
+			height: var(--fav-row-height);
+			background-color: #eef7f4;
+		}
+
+		.fav_btn--round:hover {
+			background-color: #e0f2ec;
+		}
+
+		/* ссылка в десктопном меню */
+		.header_fav {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			align-self: flex-start; /* если меню переносится на 2 строки — остаёмся в первой */
+			margin-left: auto;
+			padding: 12px 0 10px 20px;
+			color: white;
+			font-size: 18px;
+			text-decoration: none;
+			white-space: nowrap;
+		}
+
+		.header_fav svg {
+			width: 20px;
+			height: 20px;
+			fill: transparent;
+			stroke: white;
+			stroke-width: 2;
+		}
+
+		.header_fav:hover svg {
+			fill: #e5383b;
+			stroke: #e5383b;
+		}
+
+		.header_fav__count {
+			min-width: 22px;
+			padding: 1px 6px;
+			box-sizing: border-box;
+			border-radius: 11px;
+			background-color: #e5383b;
+			font-size: 14px;
+			line-height: 20px;
+			text-align: center;
+		}
+
+		/* страница /favorites */
+		.favorites__note {
+			margin: -10px 0 30px;
+			color: #6b7f88;
+			font-size: 16px;
+		}
+
+		.favorites__title {
+			margin: 10px 0 20px;
+		}
+
+		.favorites__empty p {
+			font-size: 18px;
+			margin-bottom: 20px;
+		}
+
+		.favorites__links {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+			margin-bottom: 50px;
+		}

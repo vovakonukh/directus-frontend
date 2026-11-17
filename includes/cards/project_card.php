@@ -6,6 +6,7 @@
     <a href="/projects/<?= $item['slug'] ?>">
         <img src="<?= getAssetUrl($item['main_image']) ?>" />
     </a>
+    <?php $favType = 'projects'; $favId = $item['id']; $favMod = 'card'; include __DIR__ . '/../fav_button.php'; ?>
     <div class="project_card__description_wrap">
         <div class="project_card_description">
             <span class="project_card_superscript">

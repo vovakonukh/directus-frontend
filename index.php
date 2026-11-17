@@ -20,6 +20,7 @@ if ($uri === 'robots.txt') {
     echo "User-agent: *\n";
     echo "Disallow: /thank-you\n";
     echo "Disallow: /links\n";
+    echo "Disallow: /favorites\n";
     echo "\n";
     echo "Sitemap: $siteUrl/sitemap.xml\n";
     exit;
@@ -140,6 +141,11 @@ switch (true) {
         $page = 'policy';
         $title = 'Политика обработки персональных данных';
         break;
+    case $uri === 'favorites':
+        $page = 'favorites';
+        $title = 'Избранное | Строительная компания Класс Хаус';
+        $noindex = true;
+        break;
     case $uri === 'thank-you':
         $page = 'thank-you';
         $title = 'Спасибо за заявку | Строительная компания Класс Хаус';
@@ -251,7 +257,7 @@ $canonical = $siteUrl . '/' . $uri;
 
 // Браузерный кэш HTML: 60 с без запроса к серверу, затем до 10 минут — сохранённая копия
 // с обновлением в фоне. На localhost выключен (как и кэш API).
-if (API_CACHE_TTL > 0 && http_response_code() === 200 && $page !== 'thank-you') {
+if (API_CACHE_TTL > 0 && http_response_code() === 200 && $page !== 'thank-you' && $page !== 'favorites') {
     header('Cache-Control: max-age=60, stale-while-revalidate=600');
 }
 ?>
@@ -358,6 +364,9 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
         case 'policy':
             include 'pages/policy.php';
             break;
+        case 'favorites':
+            include 'pages/favorites.php';
+            break;
         case 'thank-you':
             include 'pages/thank-you.php';
             break;
@@ -369,6 +378,8 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
     <?php include 'includes/footer.php'; ?>
     <?php include 'includes/bottom_menu.php'; ?>
 
+    <!-- избранное регистрирует Alpine.store до старта Alpine -->
+    <script src="<?= asset('/js/favorites.js') ?>"></script>
     <!-- плагин Intersect подключается до ядра Alpine -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.17.4/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>

@@ -160,5 +160,10 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
                 <?php endif; ?>
             <?php endforeach; ?>
         </ul>
+        <a class="header_fav" href="/favorites" x-data>
+            <svg viewBox="0 0.75 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.5 1.1 4.3 2.4l1 1.5 1-1.5c.8-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>
+            Избранное
+            <span class="header_fav__count" x-show="$store.fav.count" x-text="$store.fav.count" x-cloak></span>
+        </a>
     </nav>
 </section>

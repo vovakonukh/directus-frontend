@@ -216,8 +216,11 @@ if (empty($project['price_tk_auto'])) {
             </div>
             <?php endif; ?>
 
-            <?= $formCode ?>
-            <div class="project__info_box_button">Оставить заявку</div>
+            <div class="fav_row">
+                <?= $formCode ?>
+                <div class="project__info_box_button">Оставить заявку</div>
+                <?php $favType = 'projects'; $favId = $project['id']; $favMod = 'round'; include 'includes/fav_button.php'; ?>
+            </div>
         </div>
 
         <!-- Миниатюры -->
