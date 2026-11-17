@@ -2,12 +2,32 @@
 // config: { группа: { attr: 'data-атрибут обёртки', type: 'eq' | 'range' | 'all' } }
 // 'all' — в атрибуте список через пробел, карточка подходит, если в нём есть все выбранные значения
 // Сортировка: значение вида «атрибут_asc» / «атрибут_desc»; «popular» — исходный порядок с сервера
-function projectsFilter(total, config, defaultSort) {
+// nouns: формы слова для счётчика { nom: ['проект', 'проекта', 'проектов'], gen: ['проекта', 'проектов', 'проектов'] }
+function pluralRu(n, forms) {
+    const a = Math.abs(n) % 100, b = a % 10;
+    if (a > 10 && a < 20) return forms[2];
+    if (b > 1 && b < 5) return forms[1];
+    if (b === 1) return forms[0];
+    return forms[2];
+}
+
+function projectsFilter(total, config, defaultSort, nouns) {
     const emptyFilters = () => Object.fromEntries(Object.keys(config).map(k => [k, []]));
     return {
         filters: emptyFilters(),
         sort: defaultSort,
         visibleCount: total,
+        panelOpen: false,
+        // сколько значений выбрано во всех группах — для значка на кнопке
+        get activeCount() {
+            return Object.values(this.filters).reduce((sum, list) => sum + list.length, 0);
+        },
+        // «Показано 78 проектов» без фильтров, «Показано 22 из 78 проектов» с фильтрами
+        get countText() {
+            return this.activeCount
+                ? `Показано ${this.visibleCount} из ${total} ${pluralRu(total, nouns.gen)}`
+                : `Показано ${total} ${pluralRu(total, nouns.nom)}`;
+        },
         resetFilters() {
             this.filters = emptyFilters();
             this.sort = defaultSort;

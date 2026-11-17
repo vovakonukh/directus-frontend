@@ -32,8 +32,8 @@ $sortOptions = [
     'popular' => 'По популярности',
     'price_asc' => 'Сначала дешевле',
     'price_desc' => 'Сначала дороже',
-    'area_asc' => 'Площадь сначала маленькие',
-    'area_desc' => 'Площадь сначала большие',
+    'area_asc' => 'Сначала маленькие',
+    'area_desc' => 'Сначала большие',
 ];
 
 $breadcrumbs = isset($landing)

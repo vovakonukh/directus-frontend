@@ -27,8 +27,8 @@ $sortOptions = [
     'popular' => 'По популярности',
     'date_desc' => 'Сначала новые',
     'date_asc' => 'Сначала старые',
-    'area_asc' => 'Площадь сначала маленькие',
-    'area_desc' => 'Площадь сначала большие',
+    'area_asc' => 'Сначала маленькие',
+    'area_desc' => 'Сначала большие',
 ];
 
 $breadcrumbs = [
@@ -42,6 +42,10 @@ include 'includes/breadcrumbs.php';
 
     <?php
     $filterTotal = count($items);
+    $filterNouns = [
+        'nom' => ['дом', 'дома', 'домов'],
+        'gen' => ['дома', 'домов', 'домов'],
+    ];
     include 'includes/filters.php';
     ?>
 
