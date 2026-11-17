@@ -7465,6 +7465,434 @@
 		}
 
 
+/* ===== Партнёрам (pages/partner.php) — дополняет блоки ипотеки ===== */
+
+	.partner__hero {
+		background-image: linear-gradient(90deg, #06435be6 0%, #06435bb3 60%, #06435b66 100%), var(--hero-image, none);
+		background-color: var(--text-color);
+	}
+
+	.partner__hero .ipoteka__hero_inner {
+		padding-bottom: 50px;
+
+		@media (min-width: 992px) {
+			padding-bottom: 80px;
+		}
+	}
+
+	/* 5 шагов вместо 7 */
+	.ipoteka__steps.partner__steps {
+		@media (min-width: 992px) {
+			grid-template-columns: repeat(5, 1fr);
+		}
+	}
+
+	/* без картинки текст брокер-тура на всю ширину */
+	.ipoteka__land:has(> :only-child) {
+		grid-template-columns: 1fr;
+	}
+
+	/* Брокер-тур: картинка и текст разведены шире, чем на ипотеке */
+	.ipoteka__land.partner__tour {
+		gap: 24px;
+
+		@media (min-width: 992px) {
+			gap: 48px;
+		}
+	}
+
+	/* одинаковый шаг между абзацем, списком и кнопкой */
+	.partner__tour_text {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 24px;
+	}
+
+	.partner__tour_text > * {
+		margin: 0;
+	}
+
+	/* у абзаца сайта свой нижний отступ; кнопку не трогаем, иначе ломается её padding */
+	.partner__tour_text > p {
+		padding-bottom: 0;
+	}
+
+	.partner__tour_text .ipoteka__final_cta_list li:last-child {
+		margin-bottom: 0;
+	}
+
+	/* Менеджер: скругление фото = скругление карточки минус отступ, углы концентричны */
+	.ipoteka__example_card.partner__manager {
+		--card-radius: 20px;
+		--card-pad: 10px;
+		display: grid;
+		gap: 0;
+		padding: var(--card-pad);
+		border-radius: var(--card-radius);
+
+		@media (min-width: 768px) {
+			grid-template-columns: 300px 1fr;
+			align-items: stretch;
+		}
+	}
+
+	.partner__manager:has(> :only-child) {
+		grid-template-columns: 1fr;
+	}
+
+	.partner__manager_photo {
+		display: block;
+		width: 100%;
+		height: 100%;
+		aspect-ratio: 1;
+		object-fit: cover;
+		border-radius: calc(var(--card-radius) - var(--card-pad));
+
+		@media (min-width: 768px) {
+			aspect-ratio: auto;
+			min-height: 300px;
+		}
+	}
+
+	.partner__manager_text {
+		padding: 16px 10px 10px;
+
+		@media (min-width: 768px) {
+			padding: 20px 20px 20px 30px;
+		}
+	}
+
+	.partner__manager .ipoteka__h3 {
+		margin: 0;
+	}
+
+	.partner__manager_role {
+		padding: 0;
+		margin: 4px 0 12px 0;
+		color: #06435b99;
+	}
+
+	.partner__manager_contacts {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px;
+		margin-top: 20px;
+	}
+
+	.partner__manager_contacts a {
+		display: block;
+		line-height: 0;
+	}
+
+	.partner__manager_contacts img {
+		display: block;
+		width: 30px;
+		height: 30px;
+	}
+
+	.partner__manager_contacts .partner__manager_phone {
+		line-height: 1.2;
+	}
+
+	/* телефон отдельной строкой, иконки мессенджеров под ним */
+	.partner__manager_phone {
+		flex-basis: 100%;
+		color: var(--text-color);
+		font-size: 22px;
+		font-weight: 700;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.partner__manager_phone:hover {
+		color: var(--accent-color);
+	}
+
+	/* Факты о компании: без карточек, чтобы не повторять плитки «Кому подходит» */
+	.partner__facts {
+		display: grid;
+		gap: 28px 32px;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+
+		@media (min-width: 600px) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+
+		@media (min-width: 1100px) {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	.partner__facts b {
+		display: block;
+		margin-bottom: 8px;
+		font-size: 36px;
+		font-weight: 800;
+		line-height: 1;
+		color: var(--accent-color);
+		white-space: nowrap;
+
+		@media (min-width: 992px) {
+			font-size: 44px;
+		}
+	}
+
+	.partner__facts p {
+		max-width: 22em;
+		padding: 0;
+		font-size: 17px;
+		font-weight: 300;
+		line-height: 1.4;
+	}
+
+	/* Выплаты комиссии: одна сумма, две дорожки по этапам сделки.
+	   mobile — список выплат по каждой схеме, от 768 — общая шкала этапов */
+	.payout {
+		padding: 20px;
+		border-radius: 20px;
+		background-color: white;
+		border: 1px solid #00000015;
+
+		@media (min-width: 768px) {
+			padding: 36px 40px 40px;
+		}
+	}
+
+	.payout__head {
+		display: grid;
+		gap: 16px 40px;
+		padding: 20px;
+		border-radius: 14px;
+		background-color: #e6f8f2;
+
+		@media (min-width: 768px) {
+			grid-template-columns: auto auto 1fr;
+			align-items: end;
+			padding: 24px 28px;
+		}
+	}
+
+	/* два факта одного веса: ставка и сумма в рублях */
+	.payout__fact p {
+		padding: 0;
+		margin-bottom: 4px;
+		font-size: 16px;
+		font-weight: 300;
+		color: #06435b99;
+	}
+
+	.payout__fact b {
+		display: block;
+		font-size: 26px;
+		font-weight: 800;
+		line-height: 1.15;
+
+		@media (min-width: 992px) {
+			font-size: 32px;
+		}
+	}
+
+	.payout__lead {
+		align-self: center;
+		max-width: 26em;
+		padding: 0;
+		font-size: 16px;
+		font-weight: 300;
+		line-height: 1.4;
+	}
+
+	.payout__axis {
+		display: none;
+	}
+
+	.payout__lane {
+		padding-top: 24px;
+	}
+
+	.payout__lane_title h3 {
+		margin: 0;
+		font-size: 20px;
+		line-height: 1.2;
+	}
+
+	.payout__lane_title p {
+		padding: 0;
+		margin-top: 4px;
+		font-size: 15px;
+		color: #06435b99;
+	}
+
+	/* mobile: только этапы с выплатой, вертикальная линия слева */
+	.payout__cell {
+		display: none;
+	}
+
+	.payout__cell--paid {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 2px 12px;
+		margin-top: 12px;
+		padding: 12px 0 12px 22px;
+		border-left: 2px solid var(--accent-color);
+	}
+
+	.payout__cell--paid::before {
+		content: "";
+		position: absolute;
+		left: -7px;
+		top: 16px;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		background-color: var(--accent-color);
+	}
+
+	.payout__stage {
+		grid-column: 1 / -1;
+		font-size: 16px;
+		font-weight: 700;
+	}
+
+	.payout__stage small {
+		display: block;
+		font-size: 14px;
+		font-weight: 300;
+		color: #06435b99;
+	}
+
+	.payout__share {
+		font-size: 24px;
+		font-weight: 800;
+		color: var(--accent-color);
+	}
+
+	.payout__sum {
+		align-self: center;
+		font-size: 17px;
+		font-weight: 700;
+		white-space: nowrap;
+	}
+
+	@media (min-width: 768px) {
+		.payout__track {
+			display: grid;
+			grid-template-columns: minmax(180px, 1.3fr) repeat(3, 1fr);
+		}
+
+		.payout__axis,
+		.payout__lane {
+			display: grid;
+			grid-column: 1 / -1;
+			grid-template-columns: subgrid;
+		}
+
+		.payout__axis span {
+			padding: 24px 8px 8px;
+			font-size: 14px;
+			font-weight: 300;
+			line-height: 1.3;
+			text-align: center;
+			color: #06435b99;
+		}
+
+		.payout__axis b {
+			display: block;
+			margin-bottom: 2px;
+			font-size: 16px;
+			font-weight: 700;
+			color: var(--text-color);
+		}
+
+		.payout__lane {
+			align-items: center;
+			padding: 0;
+		}
+
+		.payout__lane_title {
+			padding: 24px 16px 24px 0;
+		}
+
+		/* у каждой ячейки — отрезок общей линии и точка этапа */
+		.payout__cell,
+		.payout__cell--paid {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 0;
+			min-height: 120px;
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		.payout__cell::before,
+		.payout__cell--paid::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 10px;
+			height: 10px;
+			margin: -5px 0 0 -5px;
+			border-radius: 50%;
+			background-color: #06435b33;
+		}
+
+		.payout__cell::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 50%;
+			z-index: 0;
+			height: 2px;
+			margin-top: -1px;
+			background-color: #06435b1f;
+		}
+
+		/* выплата: круг с долей вместо точки, сумма под ним */
+		.payout__cell--paid::before {
+			display: none;
+		}
+
+		.payout__stage {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+		}
+
+		.payout__share {
+			position: relative;
+			z-index: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 64px;
+			height: 64px;
+			border-radius: 50%;
+			background-color: var(--accent-color);
+			box-shadow: 0 0 0 6px white;
+			color: white;
+			font-size: 18px;
+		}
+
+		.payout__cell--paid:has(.payout__share) .payout__sum {
+			position: absolute;
+			top: calc(50% + 40px);
+			font-size: 16px;
+		}
+	}
+
+
 /* ===== КОМПОНЕНТ: Ипотечный калькулятор (includes/mortgage_calc.php) ===== */
 
 	.mortgage_calc {

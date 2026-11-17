@@ -132,6 +132,10 @@ switch (true) {
         $page = 'postavshhikam';
         $title = 'Поставщикам | Строительная компания Класс Хаус';
         break;
+    case $uri === 'partner':
+        $page = 'partner';
+        $title = 'Партнёрская программа: 5% за клиента | Строительная компания Класс Хаус';
+        break;
     case $uri === 'policy':
         $page = 'policy';
         $title = 'Политика обработки персональных данных';
@@ -326,6 +330,9 @@ $shiftTelegram = getShiftTelegramLink($contacts['telegram_message'] ?? 'https://
             break;
         case 'postavshhikam':
             include 'pages/postavshhikam.php';
+            break;
+        case 'partner':
+            include 'pages/partner.php';
             break;
         case 'policy':
             include 'pages/policy.php';

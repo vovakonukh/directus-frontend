@@ -83,6 +83,7 @@ $footer_socials = array_filter([
         <span class="footer__bottom_links">
             <a href="/contacts">Контакты</a>
             <a href="/postavshhikam">Поставщикам</a>
+            <a href="/partner">Партнёрам</a>
             <a href="/policy">Политика конфиденциальности</a>
         </span>
     </div>

@@ -18,6 +18,7 @@ $staticRoutes = [
     'video',
     'contacts',
     'postavshhikam',
+    'partner',
     'policy',
 ];
 
