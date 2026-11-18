@@ -240,6 +240,7 @@ if (isset($landing)) {
         'h1' => $landing['h1'] ?? null,
         'seo_description' => $landing['seo_description'] ?? null,
         'seo_text' => $landing['seo_text'] ?? null,
+        'seo_noindex' => $landing['seo_noindex'] ?? false,
     ];
 // у главной в pages_seo route = «/» (фильтр по пустой строке Directus отклоняет с ошибкой 400)
 } elseif (!isset($slug) && $page !== '404') {

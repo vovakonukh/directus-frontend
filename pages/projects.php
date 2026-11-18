@@ -49,10 +49,6 @@ include 'includes/breadcrumbs.php';
 <section class="page__wrap">
     <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : (isset($landing) ? $landing['name'] : 'Проекты каркасных домов')) ?></h1>
 
-    <?php if (!empty($landing['intro'])): ?>
-        <div class="projects__intro"><?= $landing['intro'] ?></div>
-    <?php endif; ?>
-
     <?php
     $filterTotal = count($projects);
     include 'includes/filters.php';

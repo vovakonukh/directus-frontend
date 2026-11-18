@@ -22,13 +22,13 @@ $staticRoutes = [
     'policy',
 ];
 
-// Коллекции с детальными страницами: коллекция => [префикс URL, поля с датой изменения]
+// Коллекции с детальными страницами: коллекция => [префикс URL, поля с датой изменения, поле «не индексировать»]
 $collections = [
     'projects' => ['projects', ['date_updated', 'date_created']],
     'finished' => ['finished', ['date_updated', 'date_created']],
     'blog'     => ['blog',     ['date_updated', 'date_created']],
     'video'    => ['video',    ['date_updated', 'date']],
-    'project_landings' => ['projects', []], // подборки: /projects/{slug}, полей с датой нет
+    'project_landings' => ['projects', [], 'seo_noindex'], // подборки: /projects/{slug}, полей с датой нет
 ];
 
 // Страницы, закрытые от индексации в pages_seo, в карту не попадают
@@ -45,10 +45,12 @@ foreach ($staticRoutes as $route) {
     $urls[] = ['loc' => $siteUrl . '/' . $route];
 }
 
-foreach ($collections as $collection => [$prefix, $dateFields]) {
+foreach ($collections as $collection => $config) {
+    [$prefix, $dateFields] = $config;
+    $noindexField = $config[2] ?? null;
     $items = fetchItems($collection, [
         'filter[status][_eq]' => 'published',
-        'fields' => implode(',', array_merge(['slug'], $dateFields)),
+        'fields' => implode(',', array_merge(['slug'], $dateFields, $noindexField ? [$noindexField] : [])),
         'limit' => -1,
     ]);
 
@@ -60,7 +62,7 @@ foreach ($collections as $collection => [$prefix, $dateFields]) {
     }
 
     foreach ($items as $item) {
-        if (empty($item['slug'])) continue;
+        if (empty($item['slug']) || ($noindexField && !empty($item[$noindexField]))) continue;
         $url = ['loc' => $siteUrl . '/' . $prefix . '/' . $item['slug']];
         foreach ($dateFields as $field) {
             if (!empty($item[$field])) {

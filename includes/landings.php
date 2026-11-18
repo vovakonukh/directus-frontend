@@ -48,8 +48,13 @@ function projectInLanding(array $project, array $landing): bool {
     }
     $square = (float) ($project['square'] ?? 0);
     $price = (float) ($project['price_tk_auto'] ?? 0);
+    // Диапазон «от 70 до 100» — 70 включительно, 100 нет: дом ровно на границе попадает только в один
+    // диапазон (как в JS-фильтре). Одиночные пороги «до 80», «от 120» — включительно
     if (isset($rules['square_min']) && $square < $rules['square_min']) return false;
-    if (isset($rules['square_max']) && $square > $rules['square_max']) return false;
+    if (isset($rules['square_max'])) {
+        $isRange = isset($rules['square_min']);
+        if ($isRange ? $square >= $rules['square_max'] : $square > $rules['square_max']) return false;
+    }
     // проект без цены в «Недорогие» не попадает
     if (isset($rules['price_max']) && ($price <= 0 || $price > $rules['price_max'])) return false;
     if (isset($rules['square_terrace_min']) && (float) ($project['square_terrace'] ?? 0) < $rules['square_terrace_min']) return false;
@@ -74,8 +79,9 @@ function filterChipRules(string $group, string $value): array {
         case 'wc':
             return [$group => (int) $value];
         case 'area':
+            // «до 50» (0-50) — подборка только с square_max, нулевую нижнюю границу не учитываем
             [$min, $max] = array_map('intval', explode('-', $value));
-            return ['square_min' => $min, 'square_max' => $max];
+            return array_filter(['square_min' => $min, 'square_max' => $max]);
     }
     return [];
 }

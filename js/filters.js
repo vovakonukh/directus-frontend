@@ -54,7 +54,8 @@ function projectsFilter(total, config, defaultSort, nouns) {
                         const n = parseFloat(value);
                         return selected.some(range => {
                             const [min, max] = range.split('-').map(Number);
-                            return n >= min && n <= max;
+                            // верхняя граница не включается: 70 м² — только в «от 70 до 100»
+                            return n >= min && n < max;
                         });
                     }
                     if (type === 'all') {
