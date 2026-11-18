@@ -3069,6 +3069,13 @@
 				}
 			}
 
+			/* Инженерка: два варианта отопления */
+			.kompl__options--2 {
+				@media (min-width: 768px) {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+
 			.kompl__option {
 				position: relative;
 				display: flex;

@@ -75,11 +75,14 @@ include 'includes/breadcrumbs.php';
             <?php if (!empty($item['original_project'])):
                 $project = fetchItems('projects', [
                     'filter[id][_eq]' => $item['original_project'],
-                    'fields' => 'id,name,slug,main_plan,price_tk_auto,price_inzhenerka,price_otdelka',
+                    'fields' => 'id,name,slug,main_plan,square,price_tk_auto,price_inzhenerka_convector,price_inzhenerka_heated_floor,price_otdelka',
                     'limit' => 1
                 ]);
                 if (!empty($project)):
                     $project = $project[0];
+                    // Инженерка «от» — самый дешёвый вариант отопления
+                    $origInzh = array_filter(inzhPrices($project, fetchItems('project_prices_global', ['fields' => '*'])));
+                    $origInzhMin = $origInzh ? min($origInzh) : 0;
                     $origProjectVisuals = fetchItems('projects_files', [
                         'filter[projects_id][_eq]' => $project['id'],
                         'filter[type][_eq]' => 'visual',
@@ -94,8 +97,8 @@ include 'includes/breadcrumbs.php';
                             <?php if (!empty($project['price_tk_auto'])): ?>
                             <div class="finished__original_project_price"><span>Теплый контур:</span> от <?= number_format($project['price_tk_auto'], 0, '', ' ') ?> ₽</div>
                             <?php endif; ?>
-                            <?php if (!empty($project['price_inzhenerka'])): ?>
-                            <div class="finished__original_project_price"><span>Инженерные сети:</span> от <?= number_format($project['price_inzhenerka'], 0, '', ' ') ?> ₽</div>
+                            <?php if ($origInzhMin > 0): ?>
+                            <div class="finished__original_project_price"><span>Инженерные сети:</span> от <?= number_format($origInzhMin, 0, '', ' ') ?> ₽</div>
                             <?php endif; ?>
                             <?php if (!empty($project['price_otdelka'])): ?>
                             <div class="finished__original_project_price"><span>Внутренняя отделка:</span> от <?= number_format($project['price_otdelka'], 0, '', ' ') ?> ₽</div>

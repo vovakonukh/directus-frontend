@@ -279,3 +279,18 @@ function renderImageGrid(string $inner): string {
 function finishedTitle(array $item): string {
     return ($item['floors'] == 1 ? 'Одноэтажный дом' : 'Двухэтажный дом') . ' ' . $item['length'] . ' на ' . $item['width'] . ' м';
 }
+
+// Цены инженерных сетей по варианту отопления: ['convector' => ₽, 'heated_floor' => ₽].
+// Ручная цена в проекте (price_inzhenerka_*) важнее расчёта.
+// Расчёт: цена за м² из project_prices_global × площадь; дом ≤ inzh_small_limit м² — «маленький».
+function inzhPrices(array $project, array $prices): array {
+    $square = (float) ($project['square'] ?? 0);
+    $size = $square <= ($prices['inzh_small_limit'] ?? 100) ? 'small' : 'big';
+    $out = [];
+    foreach (['convector', 'heated_floor'] as $type) {
+        $out[$type] = (int) (!empty($project['price_inzhenerka_' . $type])
+            ? $project['price_inzhenerka_' . $type]
+            : ($prices['inzh_' . $type . '_price_' . $size] ?? 0) * $square);
+    }
+    return $out;
+}

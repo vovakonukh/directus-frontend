@@ -1,12 +1,14 @@
 <?php
 // Блок «Комплектация» (новый дизайн). Старый вариант: _archive/complectation/
-// Использует из pages/projects_item.php: $project, $complectation, $priceSvai, $pricePlita, $priceInzhenerka, $formCode
+// Использует из pages/projects_item.php: $project, $complectation, $priceSvai, $pricePlita, $priceInzh, $formCode
 
 $kPrices = [
     'tk'    => (int) ($project['price_tk_auto'] ?? 0),
     'svai'  => (int) $priceSvai,
     'plita' => (int) $pricePlita,
-    'inzh'  => (int) $priceInzhenerka,
+    'inzh'  => min(array_filter($priceInzh) ?: [0]), // для «от» в шапке этапа
+    'inzh_convector'    => $priceInzh['convector'],
+    'inzh_heated_floor' => $priceInzh['heated_floor'],
     'otd'   => (int) ($project['price_otdelka'] ?? 0),
 ];
 
@@ -27,6 +29,9 @@ $kSpecsGrid = function ($stage) use ($kSpecs) {
     }
     echo '</dl>';
 };
+
+// Варианты отопления в инженерке: ключ => название
+$kInzhTypes = ['convector' => 'Конвекторы', 'heated_floor' => 'Тёплый пол'];
 
 // Этапы-переключатели (кроме фундамента)
 $kToggles = [
@@ -96,10 +101,26 @@ $kToggles = [
                     <input type="checkbox" class="kompl__switch" x-model="<?= $t['key'] ?>" aria-label="<?= $t['title'] ?>">
                 </label>
 
+                <?php if ($t['key'] === 'inzh'): ?>
+                <!-- Вариант отопления: виден, когда этап включён -->
+                <div class="kompl__options kompl__options--2" role="radiogroup" aria-label="Вариант отопления" x-show="inzh" x-cloak>
+                    <?php foreach ($kInzhTypes as $type => $name): if ($kPrices['inzh_' . $type] <= 0) continue; ?>
+                    <label class="kompl__option">
+                        <input type="radio" name="kompl_inzh" value="<?= $type ?>" x-model="inzhType">
+                        <span class="kompl__option_name"><?= $name ?></span>
+                        <span class="kompl__option_price"><?= $kRub($kPrices['inzh_' . $type]) ?></span>
+                    </label>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+
                 <?php if (!empty($kSpecs[$t['stage']])): ?>
                 <details class="kompl__details" <?= $t['key'] === 'tk' ? 'open' : '' ?>>
-                    <summary>Что входит</summary>
+                    <summary<?= $t['key'] === 'inzh' ? ' x-text="inzh ? \'Что ещё входит\' : \'Что входит\'"' : '' ?>>Что входит</summary>
                     <?php $kSpecsGrid($t['stage']); ?>
+                    <?php if ($t['key'] === 'inzh'): foreach ($kInzhTypes as $type => $name): ?>
+                    <div x-show="inzhType === '<?= $type ?>'" <?= $type === 'convector' ? '' : 'x-cloak' ?>><?php $kSpecsGrid('inzh_' . $type); ?></div>
+                    <?php endforeach; endif; ?>
                 </details>
                 <?php endif; ?>
             </div>
@@ -114,6 +135,9 @@ $kToggles = [
                 <li x-show="fund === 'svai'" x-cloak><span>Фундамент: ЖБ сваи</span><span><?= $kRub($kPrices['svai']) ?></span></li>
                 <li x-show="fund === 'plita'" x-cloak><span>Фундамент: ЖБ плита</span><span><?= $kRub($kPrices['plita']) ?></span></li>
                 <?php foreach ($kToggles as $t): if ($kPrices[$t['key']] <= 0) continue; ?>
+                <?php if ($t['key'] === 'inzh'): foreach ($kInzhTypes as $type => $name): if ($kPrices['inzh_' . $type] <= 0) continue; ?>
+                <li x-show="inzh && inzhType === '<?= $type ?>'" x-cloak><span><?= $t['title'] ?>: <?= mb_strtolower($name) ?></span><span><?= $kRub($kPrices['inzh_' . $type]) ?></span></li>
+                <?php endforeach; continue; endif; ?>
                 <li x-show="<?= $t['key'] ?>" <?= $t['key'] === 'tk' ? '' : 'x-cloak' ?>><span><?= $t['title'] ?></span><span><?= $kRub($kPrices[$t['key']]) ?></span></li>
                 <?php endforeach; ?>
                 <li class="is-empty" x-show="total === 0" x-cloak><span>Выберите хотя бы один этап</span></li>
@@ -156,11 +180,12 @@ function komplektaciya(prices) {
         fund: '',      // '' | 'svai' | 'plita'
         tk: true,
         inzh: false,
+        inzhType: prices.inzh_convector > 0 ? 'convector' : 'heated_floor',
         otd: false,
         get total() {
             return (this.fund ? this.prices[this.fund] : 0)
                 + (this.tk ? this.prices.tk : 0)
-                + (this.inzh ? this.prices.inzh : 0)
+                + (this.inzh ? this.prices['inzh_' + this.inzhType] : 0)
                 + (this.otd ? this.prices.otd : 0);
         },
         get totalFormatted() {

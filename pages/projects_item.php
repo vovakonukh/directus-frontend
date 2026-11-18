@@ -20,9 +20,7 @@ $prices = $pricesData; // singleton возвращает объект, не ма
 
 $priceSvai = ($prices['pile_price'] ?? 0) * ($project['piles_amount'] ?? 0);
 $pricePlita = ($prices['plita_price'] ?? 0) * $project['square'];
-$priceInzhenerka = !empty($project['price_inzhenerka'])
-    ? $project['price_inzhenerka']
-    : ($prices['inzhenerka_kvm_price'] ?? 0) * $project['square'];
+$priceInzh = inzhPrices($project, $prices);
 
 // Галереи из junction-таблицы
 $allFiles = fetchItems('projects_files', [
