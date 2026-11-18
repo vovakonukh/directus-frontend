@@ -8,7 +8,7 @@
     </a>
     <?php $favType = 'projects'; $favId = $item['id']; $favMod = 'card'; include __DIR__ . '/../fav_button.php'; ?>
     <div class="project_card__description_wrap">
-        <div class="project_card_description">
+        <a class="project_card_description" href="/projects/<?= $item['slug'] ?>">
             <span class="project_card_superscript">
                 <?= $item['floors'] == 1 ? 'Одноэтажный' : 'Двухэтажный' ?>
             </span>
@@ -36,7 +36,7 @@
                     <?= $item['wc'] ?> санузел
                 </div>
             </div>
-        </div>
+        </a>
         <?php if ($item['main_plan']): ?>
         <a class="project_card__plan_lightbox" data-fancybox="plan-<?= $item['id'] ?>" data-caption="<?= $item['name'] ?>" href="<?= getAssetUrl($item['main_plan']) ?>">
             <img src="<?= getAssetUrl($item['main_plan']) ?>" />

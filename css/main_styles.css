@@ -6756,6 +6756,8 @@
 	.project_card_description {
 		display:flex;
 		flex-direction: column;
+		color: inherit;
+		text-decoration: none;
 		width: calc(75% - 15px);
 		
 		@media (max-width: 767px) {
