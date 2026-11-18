@@ -6,7 +6,7 @@ require_once 'includes/landings.php';
 $projects = fetchItems('projects', [
     'filter[status][_eq]' => 'published',
     'sort' => '-popular,square',
-    'fields' => 'id,name,slug,main_image,main_plan,floors,length,width,bedrooms,wc,' . LANDING_PROJECT_FIELDS
+    'fields' => 'name,slug,main_image,main_plan,length,width,' . LANDING_PROJECT_FIELDS
 ]) ?? [];
 
 if (isset($landing)) {
@@ -28,6 +28,10 @@ if ($filterLandings) {
         ],
     ];
 }
+// Кнопки этажности, площади, спален и санузлов — ссылки на подборки с теми же условиями.
+// На странице подборки группы с её условиями скрываем: все проекты и так под них подходят
+$filterLinkLandings = $landings;
+$filterHide = isset($landing) ? landingHiddenGroups($landing) : [];
 $sortOptions = [
     'popular' => 'По популярности',
     'price_asc' => 'Сначала дешевле',

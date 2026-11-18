@@ -8,6 +8,8 @@
 //   $filterExtra — (необязательно) дополнительные группы в том же формате, что $filterGroups
 //   $filterHide  — (необязательно) группы, которые не показывать: ['floors', 'area', 'bedrooms', 'wc']
 //   $filterNouns — (необязательно) формы слова для счётчика, по умолчанию «проект»
+//   $filterLinkLandings — (необязательно) подборки project_landings: кнопки этажности, площади, спален
+//                  и санузлов, для которых есть подборка с теми же условиями, станут ссылками на неё
 // Карточки оборачиваются в <div class="filter_item" data-index="1" data-...> —
 // фильтр и сортировка читают data-атрибуты обёртки.
 // type: 'eq' — значение атрибута входит в выбранные, 'range' — число в диапазоне «min-max»,
@@ -49,6 +51,13 @@ $filterGroups = array_merge([
     ],
 ], $filterExtra ?? []);
 $filterGroups = array_diff_key($filterGroups, array_flip($filterHide));
+
+if (!empty($filterLinkLandings)) {
+    $chipLinks = filterChipLinks(array_map(fn($g) => array_keys($g['options']), $filterGroups), $filterLinkLandings);
+    foreach ($chipLinks as $key => $links) {
+        $filterGroups[$key]['links'] = $links + ($filterGroups[$key]['links'] ?? []);
+    }
+}
 
 $filterConfig = [];
 foreach ($filterGroups as $key => $group) {
