@@ -89,28 +89,40 @@ function shortcodeValues(): array {
     $header = fetchItems('header', ['fields' => '*,form.bitrix_code']);
     $contacts = fetchItems('contacts', ['fields' => '*']);
 
-    return $values = [
+    // 0 у глобальных значений — сбой API, а не реальный ноль: такое не выводим (null)
+    $values = array_map(fn($n) => $n ?: null, [
         'projects_count'  => $count('projects'),
         'finished_count'  => $count('finished'),
         'price_from'      => (int) ($cheapest[0]['price_tk_auto'] ?? 0),
         'yandex_reviews'  => (int) ($contacts['yandex_feedback_amount'] ?? 0),
         'stroimdom_deals' => (int) ($header['domrf_deals'] ?? 0),
-    ];
+    ]);
+    // шорткоды подборки известны всегда; значения задаёт страница подборки через pageShortcodes()
+    return $values += ['landing_count' => null, 'landing_price_from' => null];
+}
+
+// Шорткоды текущей страницы (например, подборки), дополняют глобальные.
+// Вызов с массивом — задать значения, без аргументов — получить
+function pageShortcodes(?array $set = null): array {
+    static $values = [];
+    if ($set !== null) $values = $set + $values;
+    return $values;
 }
 
 // Подставляет числа вместо {{имя}} и {{имя|форма1,форма2,форма5}}.
-// Неизвестная метка или пустое значение — метка удаляется, чтобы не попасть на сайт.
+// Неизвестная метка или нет значения (null) — метка удаляется, чтобы не попасть на сайт. 0 выводится.
 function renderVars(?string $text): string {
     $text = (string) $text;
     if (strpos($text, '{{') === false) return $text;
-    $values = shortcodeValues();
+    $values = pageShortcodes() + shortcodeValues();
 
     return preg_replace_callback('/\{\{\s*(\w+)\s*(?:\|([^}]*))?\}\}/u', function ($m) use ($values) {
-        $n = $values[$m[1]] ?? 0;
-        if (!$n) {
-            error_log('Shortcode: нет значения для ' . $m[0]);
+        if (!array_key_exists($m[1], $values)) {
+            error_log('Shortcode: неизвестная метка ' . $m[0]);
             return '';
         }
+        $n = $values[$m[1]];
+        if ($n === null) return '';
         $out = number_format($n, 0, '', ' ');
         $forms = isset($m[2]) ? array_map('trim', explode(',', $m[2])) : [];
         if (count($forms) === 3) $out .= ' ' . pluralRu($n, $forms);

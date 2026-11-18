@@ -29,6 +29,36 @@ function fetchLandings() {
 // Поля проекта, нужные для проверки условий
 const LANDING_PROJECT_FIELDS = 'id,floors,bedrooms,wc,square,price_tk_auto,square_terrace,second_light';
 
+// Опубликованные проекты каталога — список на /projects и на страницах подборок. null — API недоступен
+function fetchCatalogProjects(): ?array {
+    static $projects = false;
+    if ($projects !== false) return $projects;
+    return $projects = fetchItems('projects', [
+        'filter[status][_eq]' => 'published',
+        'sort' => '-popular,square',
+        'fields' => 'name,slug,main_image,main_plan,length,width,' . LANDING_PROJECT_FIELDS,
+        'limit' => -1,
+    ]);
+}
+
+// Проекты подборки — ровно те карточки, что выводятся на её странице. null — API недоступен
+function landingProjects(array $landing): ?array {
+    $projects = fetchCatalogProjects();
+    if ($projects === null) return null;
+    return array_values(array_filter($projects, fn($p) => projectInLanding($p, $landing)));
+}
+
+// Шорткоды подборки: {{landing_count}}, {{landing_price_from}}.
+// null — значения нет (API недоступен / ни у одного проекта нет цены), шорткод выведется пустым
+function landingShortcodeValues(array $landing): array {
+    $projects = landingProjects($landing);
+    $prices = array_filter(array_map(fn($p) => (int) ($p['price_tk_auto'] ?? 0), $projects ?? []));
+    return [
+        'landing_count'      => $projects === null ? null : count($projects),
+        'landing_price_from' => $prices ? min($prices) : null,
+    ];
+}
+
 // Заполненные условия подборки: ['floors' => 1, 'square_min' => 50, ...]
 function landingRules(array $landing): array {
     $rules = [];

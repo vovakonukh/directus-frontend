@@ -3,15 +3,8 @@
 // (для подборки index.php задаёт $landing — запись из project_landings)
 require_once 'includes/landings.php';
 
-$projects = fetchItems('projects', [
-    'filter[status][_eq]' => 'published',
-    'sort' => '-popular,square',
-    'fields' => 'name,slug,main_image,main_plan,length,width,' . LANDING_PROJECT_FIELDS
-]) ?? [];
-
-if (isset($landing)) {
-    $projects = array_values(array_filter($projects, fn($p) => projectInLanding($p, $landing)));
-}
+// та же выборка, что для шорткодов {{landing_count}} и {{landing_price_from}}
+$projects = (isset($landing) ? landingProjects($landing) : fetchCatalogProjects()) ?? [];
 
 // Кнопки подборок: на странице подборки текущую не показываем — все проекты и так из неё
 $landings = fetchLandings();
@@ -47,7 +40,7 @@ include 'includes/breadcrumbs.php';
 ?>
 
 <section class="page__wrap">
-    <h1><?= htmlspecialchars(!empty($seo['h1']) ? $seo['h1'] : (isset($landing) ? $landing['name'] : 'Проекты каркасных домов')) ?></h1>
+    <h1><?= htmlspecialchars(!empty($seo['h1']) ? renderVars($seo['h1']) : (isset($landing) ? $landing['name'] : 'Проекты каркасных домов')) ?></h1>
 
     <?php
     $filterTotal = count($projects);

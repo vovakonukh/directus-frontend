@@ -163,6 +163,7 @@ if ($page === 'projects_item') {
         if ($l['slug'] === $slug) {
             $landing = $l;
             $page = 'projects';
+            pageShortcodes(landingShortcodeValues($l));
             // seo_title в Directus пишут целиком, с «| Класс Хаус» — как в pages_seo
             $title = $l['seo_title'] ?: $l['name'] . ' — проекты каркасных домов | Класс Хаус';
             break;
@@ -251,7 +252,9 @@ if (isset($landing)) {
     ])[0] ?? null;
 }
 if (!empty($seo['seo_title'])) $title = $seo['seo_title'];
-$description = $seo['seo_description'] ?? $itemDescription;
+// шорткоды {{...}} в title и description — до вывода в <head>
+$title = renderVars($title);
+$description = renderVars($seo['seo_description'] ?? $itemDescription);
 $ogImage = !empty($seo['seo_image']) ? getAssetUrl($seo['seo_image']) . '?width=1200&height=630&fit=cover' : '';
 $siteUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
 $canonical = $siteUrl . '/' . $uri;
