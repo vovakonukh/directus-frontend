@@ -19,8 +19,7 @@ $pricesData = fetchItems('project_prices_global', ['fields' => '*']);
 $prices = $pricesData; // singleton возвращает объект, не массив
 
 $priceSvai = ($prices['pile_price'] ?? 0) * ($project['piles_amount'] ?? 0);
-$floors = max(1, (int) ($project['floors'] ?? 1)); // не заполнено или 0 → 1
-$pricePlita = ($prices['plita_price'] ?? 0) * ($project['square'] ?? 0) / $floors;
+$pricePlita = ($prices['plita_price'] ?? 0) * (float) ($project['length'] ?? 0) * (float) ($project['width'] ?? 0);
 $priceInzh = inzhPrices($project, $prices);
 
 // Галереи из junction-таблицы
