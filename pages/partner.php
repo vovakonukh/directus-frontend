@@ -6,14 +6,15 @@
 // TODO: id формы Bitrix24 в коллекции forms. Пока null — кнопки ведут в Telegram менеджера
 $partnerFormId = 11;
 
-// TODO: менеджер по работе с партнёрами
+// Менеджер по работе с партнёрами — из Directus (contacts, группа partner_*). $contacts загружен в index.php
 $manager = [
-    'name'     => 'Ольга Кузьмина',
+    'name'     => $contacts['partner_name'] ?? '',
     'role'     => 'Менеджер по работе с партнёрами',
-    'phone'    => '+7 (921) 570-21-46',
-    'telegram' => 'https://t.me/Oly_Kuzmina',
-    'max'      => 'https://max.ru/u/f9LHodD0cOLfjwmIF07nhicM2NREJTkh77E7POqcHTI87Zpq_bIrb_yGffs', // TODO: ссылка на MAX менеджера; пусто — иконки нет
-    'photo'    => 'partner_manager.webp', // имя файла в /assets/images/, например 'partner_manager.webp'
+    'phone'    => $contacts['partner_phone'] ?? '',
+    'email'    => $contacts['partner_email'] ?? '',
+    'telegram' => $contacts['partner_telegram'] ?? '',
+    'max'      => $contacts['partner_max'] ?? '', // пусто — иконки нет
+    'photo'    => !empty($contacts['partner_photo']) ? getAssetUrl($contacts['partner_photo']) . '?width=600&format=webp' : '',
 ];
 
 // TODO: картинки (имена файлов в /assets/images/). Пустая строка — блок без картинки
@@ -218,7 +219,7 @@ $tourItems = [
     <h2>Ваш менеджер</h2>
     <div class="ipoteka__example_card partner__manager">
         <?php if (!empty($manager['photo'])): ?>
-        <img class="partner__manager_photo" src="<?= asset('/assets/images/' . $manager['photo']) ?>" alt="<?= htmlspecialchars($manager['name']) ?>" loading="lazy">
+        <img class="partner__manager_photo" src="<?= htmlspecialchars($manager['photo']) ?>" alt="<?= htmlspecialchars($manager['name']) ?>" loading="lazy">
         <?php endif; ?>
         <div class="partner__manager_text">
             <h3 class="ipoteka__h3"><?= htmlspecialchars($manager['name']) ?></h3>
@@ -226,11 +227,18 @@ $tourItems = [
             <p class="ipoteka__lead">Отвечает на вопросы, готовит договор, сопровождает ваших клиентов и следит за выплатами.</p>
             <div class="partner__manager_contacts">
                 <a class="partner__manager_phone" href="tel:<?= htmlspecialchars(preg_replace('/[^\d+]/', '', $manager['phone'])) ?>"><?= htmlspecialchars($manager['phone']) ?></a>
-                <?php if (!empty($manager['telegram'])): ?>
-                <a href="<?= htmlspecialchars($manager['telegram']) ?>" target="_blank" rel="noopener" aria-label="Написать в Telegram"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="" width="30" height="30"></a>
+                <?php if (!empty($manager['email'])): ?>
+                <a class="partner__manager_email" href="mailto:<?= htmlspecialchars($manager['email']) ?>"><?= htmlspecialchars($manager['email']) ?></a>
                 <?php endif; ?>
-                <?php if (!empty($manager['max'])): ?>
-                <a href="<?= htmlspecialchars($manager['max']) ?>" target="_blank" rel="noopener" aria-label="Написать в MAX"><img src="<?= asset('/assets/icons/max_colored_no_bg.svg') ?>" alt="" width="30" height="30"></a>
+                <?php if (!empty($manager['telegram']) || !empty($manager['max'])): ?>
+                <div class="partner__manager_messengers">
+                    <?php if (!empty($manager['telegram'])): ?>
+                    <a href="<?= htmlspecialchars($manager['telegram']) ?>" target="_blank" rel="noopener" aria-label="Написать в Telegram"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="" width="36" height="36"></a>
+                    <?php endif; ?>
+                    <?php if (!empty($manager['max'])): ?>
+                    <a href="<?= htmlspecialchars($manager['max']) ?>" target="_blank" rel="noopener" aria-label="Написать в MAX"><img src="<?= asset('/assets/icons/max_colored_no_bg.svg') ?>" alt="" width="36" height="36"></a>
+                    <?php endif; ?>
+                </div>
                 <?php endif; ?>
             </div>
         </div>

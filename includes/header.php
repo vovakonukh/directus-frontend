@@ -7,6 +7,13 @@ $menu = fetchItems('menu', [
 ]);
 $topItems = array_filter($menu, fn($item) => $item['parent'] === null);
 $children = array_filter($menu, fn($item) => $item['parent'] !== null);
+
+// Контакты в шапке. На /partner — менеджер по партнёрам (contacts.partner_*), VK не показываем
+$isPartnerPage = ($page ?? '') === 'partner';
+$hdrPhone    = $isPartnerPage ? ($contacts['partner_phone'] ?? '') : ($contacts['phone'] ?? '');
+$hdrEmail    = $isPartnerPage ? ($contacts['partner_email'] ?? '') : ($contacts['email'] ?? '');
+$hdrTelegram = $isPartnerPage ? ($contacts['partner_telegram'] ?? '') : $shiftTelegram;
+$hdrMax      = $isPartnerPage ? ($contacts['partner_max'] ?? '') : ($contacts['max'] ?? '');
 ?>
 
 
@@ -124,16 +131,18 @@ _tmr.push({id: "3324398", type: "pageView", start: (new Date()).getTime(), pid: 
                 <i></i><span x-text="night ? 'Пишите, ответим утром' : 'Пишите, мы онлайн'"><?= $isNight ? 'Пишите, ответим утром' : 'Пишите, мы онлайн' ?></span>
             </span>
             <div class="hdr__icons">
+                <?php if (!$isPartnerPage): ?>
                 <a href="<?= $contacts['vk_message'] ?? '' ?>" aria-label="Написать во ВКонтакте" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="<?= asset('/assets/icons/vk-colored-bg.webp') ?>" alt="" /></a>
-                <a href="<?= $shiftTelegram ?>" aria-label="Написать в Telegram" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="" /></a>
-                <a href="<?= $contacts['max'] ?? '' ?>" aria-label="Написать в MAX" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" alt="" /></a>
+                <?php endif; ?>
+                <a href="<?= htmlspecialchars($hdrTelegram) ?>" aria-label="Написать в Telegram" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="" /></a>
+                <a href="<?= htmlspecialchars($hdrMax) ?>" aria-label="Написать в MAX" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" alt="" /></a>
             </div>
         </div>
 
         <!-- Телефон и почта -->
         <div class="hdr__contacts">
-            <a class="hdr__phone" href="tel:<?= $contacts['phone'] ?? '' ?>"><?= $contacts['phone'] ?? '' ?></a>
-            <a class="hdr__email" href="mailto:<?= $contacts['email'] ?? '' ?>"><?= $contacts['email'] ?? '' ?></a>
+            <a class="hdr__phone" href="tel:<?= preg_replace('/[^\d+]/', '', $hdrPhone) ?>"><?= htmlspecialchars($hdrPhone) ?></a>
+            <a class="hdr__email" href="mailto:<?= htmlspecialchars($hdrEmail) ?>"><?= htmlspecialchars($hdrEmail) ?></a>
         </div>
 
         <!-- Кнопка расчёта (низкий приоритет). Скрипт Bitrix должен стоять прямо перед кнопкой -->

@@ -41,13 +41,16 @@ $bottomMenuSection = explode('/', $uri)[0];
 
         <div class="bottom_menu__contacts_row">
             <div class="bottom_menu__contacts">
-                <a href="tel:<?= $contacts['phone'] ?? '' ?>"><?= $contacts['phone'] ?? '' ?></a>
-                <a href="mailto:<?= $contacts['email'] ?? '' ?>"><?= $contacts['email'] ?? '' ?></a>
+                <!-- $hdr* и $isPartnerPage заданы в includes/header.php (на /partner — менеджер по партнёрам) -->
+                <a href="tel:<?= preg_replace('/[^\d+]/', '', $hdrPhone) ?>"><?= htmlspecialchars($hdrPhone) ?></a>
+                <a href="mailto:<?= htmlspecialchars($hdrEmail) ?>"><?= htmlspecialchars($hdrEmail) ?></a>
             </div>
             <div class="bottom_menu__messengers">
+                <?php if (!$isPartnerPage): ?>
                 <a href="<?= $contacts['vk_message'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-vk'); return true;"><img src="<?= asset('/assets/icons/vk-colored-bg.webp') ?>" alt="VK" /></a>
-                <a href="<?= $shiftTelegram ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="Telegram" /></a>
-                <a href="<?= $contacts['max'] ?? '' ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" alt="MAX" /></a>
+                <?php endif; ?>
+                <a href="<?= htmlspecialchars($hdrTelegram) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-telegram'); return true;"><img src="<?= asset('/assets/icons/telegram-colored-bg.svg') ?>" alt="Telegram" /></a>
+                <a href="<?= htmlspecialchars($hdrMax) ?>" onclick="ym(62605987, 'reachGoal', 'messenger-max'); return true;"><img src="<?= asset('/assets/icons/max.svg') ?>" alt="MAX" /></a>
             </div>
         </div>
 
